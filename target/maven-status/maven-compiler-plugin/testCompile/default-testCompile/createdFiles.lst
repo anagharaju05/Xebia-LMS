@@ -1,0 +1,3 @@
+com\xebia\lms\course\CourseServiceUnitTest.class
+com\xebia\lms\SecurityAndTenantIntegrationTest.class
+com\xebia\lms\content\ContentServiceUnitTest.class
