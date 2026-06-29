@@ -54,6 +54,8 @@ public class Course {
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 
+    private String metadata;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

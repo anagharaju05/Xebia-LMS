@@ -51,7 +51,7 @@ public class CourseServiceImpl implements CourseService {
         }
 
         Course course = Course.builder()
-                .id(UUID.randomUUID())
+                .id(request.getId() != null ? request.getId() : UUID.randomUUID())
                 .organizationId(orgId)
                 .categoryId(request.getCategoryId())
                 .trainerId(request.getTrainerId())
@@ -60,8 +60,9 @@ public class CourseServiceImpl implements CourseService {
                 .shortDescription(request.getShortDescription())
                 .durationMinutes(0)
                 .difficulty(request.getDifficulty())
-                .status(CourseStatus.DRAFT)
+                .status(request.getStatus() != null ? request.getStatus() : CourseStatus.DRAFT)
                 .thumbnailUrl(request.getThumbnailUrl())
+                .metadata(request.getMetadata())
                 .build();
 
         Course saved = courseRepository.save(course);
@@ -93,6 +94,10 @@ public class CourseServiceImpl implements CourseService {
         course.setShortDescription(request.getShortDescription());
         course.setDifficulty(request.getDifficulty());
         course.setThumbnailUrl(request.getThumbnailUrl());
+        if (request.getStatus() != null) {
+            course.setStatus(request.getStatus());
+        }
+        course.setMetadata(request.getMetadata());
 
         Course updated = courseRepository.save(course);
         return courseMapper.toResponse(updated);

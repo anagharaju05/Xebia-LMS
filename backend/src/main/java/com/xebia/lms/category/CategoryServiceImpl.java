@@ -44,12 +44,13 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         Category category = Category.builder()
-                .id(UUID.randomUUID())
+                .id(request.getId() != null ? request.getId() : UUID.randomUUID())
                 .organizationId(orgId)
                 .parentCategoryId(request.getParentCategoryId())
                 .name(request.getName())
                 .description(request.getDescription())
-                .status("ACTIVE")
+                .status(request.getStatus() != null ? request.getStatus() : "ACTIVE")
+                .metadata(request.getMetadata())
                 .build();
 
         Category saved = categoryRepository.save(category);
@@ -82,6 +83,10 @@ public class CategoryServiceImpl implements CategoryService {
         category.setName(request.getName());
         category.setDescription(request.getDescription());
         category.setParentCategoryId(request.getParentCategoryId());
+        if (request.getStatus() != null) {
+            category.setStatus(request.getStatus());
+        }
+        category.setMetadata(request.getMetadata());
 
         Category updated = categoryRepository.save(category);
         return categoryMapper.toResponse(updated);

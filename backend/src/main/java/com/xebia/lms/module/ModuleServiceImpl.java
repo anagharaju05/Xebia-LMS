@@ -44,11 +44,12 @@ public class ModuleServiceImpl implements ModuleService {
         int count = moduleRepository.countByCourseId(request.getCourseId());
 
         Module module = Module.builder()
-                .id(UUID.randomUUID())
+                .id(request.getId() != null ? request.getId() : UUID.randomUUID())
                 .courseId(request.getCourseId())
                 .name(request.getName())
                 .description(request.getDescription())
                 .position(count + 1)
+                .metadata(request.getMetadata())
                 .build();
 
         Module saved = moduleRepository.save(module);
@@ -84,6 +85,7 @@ public class ModuleServiceImpl implements ModuleService {
 
         module.setName(request.getName());
         module.setDescription(request.getDescription());
+        module.setMetadata(request.getMetadata());
 
         Module updated = moduleRepository.save(module);
         ModuleResponse response = moduleMapper.toResponse(updated);

@@ -26,6 +26,7 @@ public class CourseResponse {
     private CourseDifficulty difficulty;
     private CourseStatus status;
     private String thumbnailUrl;
+    private String metadata;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

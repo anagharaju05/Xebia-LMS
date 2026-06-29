@@ -15,6 +15,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CategoryRequest {
     
+    private UUID id;
+    
     private UUID parentCategoryId;
 
     @NotBlank(message = "Category name is required")
@@ -22,4 +24,8 @@ public class CategoryRequest {
     private String name;
 
     private String description;
+
+    private String status;
+
+    private String metadata;
 }

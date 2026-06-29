@@ -50,11 +50,12 @@ public class SubmoduleServiceImpl implements SubmoduleService {
         int count = submoduleRepository.countByModuleId(request.getModuleId());
 
         Submodule submodule = Submodule.builder()
-                .id(UUID.randomUUID())
+                .id(request.getId() != null ? request.getId() : UUID.randomUUID())
                 .moduleId(request.getModuleId())
                 .name(request.getName())
                 .description(request.getDescription())
                 .position(count + 1)
+                .metadata(request.getMetadata())
                 .build();
 
         Submodule saved = submoduleRepository.save(submodule);
@@ -92,6 +93,7 @@ public class SubmoduleServiceImpl implements SubmoduleService {
 
         submodule.setName(request.getName());
         submodule.setDescription(request.getDescription());
+        submodule.setMetadata(request.getMetadata());
 
         Submodule updated = submoduleRepository.save(submodule);
         return submoduleMapper.toResponse(updated);

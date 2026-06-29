@@ -19,6 +19,7 @@ public class CategoryResponse {
     private String name;
     private String description;
     private String status;
+    private String metadata;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

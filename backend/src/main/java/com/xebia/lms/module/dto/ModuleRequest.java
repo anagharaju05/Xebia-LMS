@@ -16,6 +16,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ModuleRequest {
 
+    private UUID id;
+
     @NotNull(message = "Course ID is required")
     private UUID courseId;
 
@@ -24,4 +26,6 @@ public class ModuleRequest {
     private String name;
 
     private String description;
+
+    private String metadata;
 }

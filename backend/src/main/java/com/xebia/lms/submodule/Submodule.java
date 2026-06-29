@@ -33,6 +33,8 @@ public class Submodule {
     @Column(nullable = false)
     private int position;
 
+    private String metadata;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

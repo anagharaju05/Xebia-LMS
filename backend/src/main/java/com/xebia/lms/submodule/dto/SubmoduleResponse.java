@@ -18,6 +18,7 @@ public class SubmoduleResponse {
     private String name;
     private String description;
     private int position;
+    private String metadata;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -1,6 +1,7 @@
 package com.xebia.lms.course.dto;
 
 import com.xebia.lms.course.CourseDifficulty;
+import com.xebia.lms.course.CourseStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -16,6 +17,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourseRequest {
+
+    private UUID id;
 
     @NotNull(message = "Category ID is required")
     private UUID categoryId;
@@ -37,4 +40,8 @@ public class CourseRequest {
     private CourseDifficulty difficulty;
 
     private String thumbnailUrl;
+
+    private CourseStatus status;
+
+    private String metadata;
 }

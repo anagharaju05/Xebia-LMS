@@ -36,6 +36,8 @@ public class Category {
     @Column(nullable = false)
     private String status; // ACTIVE, INACTIVE
 
+    private String metadata;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
