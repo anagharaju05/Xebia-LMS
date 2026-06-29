@@ -4,12 +4,12 @@ import StatusBadge from "../common/StatusBadge.jsx";
 import { brand } from "../../utils/data.js";
 import { createSlug } from "../../utils/slug.utils.js";
 
-export default function CategoryCard({ category, onEdit, onDelete, preview }) {
+export default function CategoryCard({ category, courses, onEdit, onDelete, preview }) {
   return (
     <article className="category-card" style={{ "--accent": category.accentColor || brand.teal }}>
       <div className="card-accent" />
       <div className="category-top">
-        <CategoryThumb category={category} />
+        <CategoryThumb category={category} courses={courses} />
         <StatusBadge active={category.status === "Active"} label={category.status || "Active"} />
       </div>
       <h3>{category.name || "Untitled Category"}</h3>

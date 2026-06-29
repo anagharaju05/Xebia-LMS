@@ -2,6 +2,7 @@ import { ArrowRight, CircleGauge, Eye, Globe2, Pencil, Trash2 } from "lucide-rea
 import StatusBadge from "../common/StatusBadge.jsx";
 import { brand } from "../../utils/data.js";
 import { createSlug } from "../../utils/slug.utils.js";
+import { getCategoryImage } from "../../utils/categoryImage.utils.js";
 
 export default function CourseCard({
   course,
@@ -15,16 +16,14 @@ export default function CourseCard({
   previewActions
 }) {
   const accent = course.accentColor || category?.accentColor || brand.velvet;
+  const courseImage = course.thumbnail || getCategoryImage(category);
+
   return (
     <article className="course-card" style={{ "--accent": accent }}>
       <div className="card-accent" />
       <div className="course-art" style={{ "--accent": accent }}>
-        {course.thumbnail ? (
-          <img src={course.thumbnail} alt="" />
-        ) : (
-          <div className="course-art-fallback"><span>{course.icon || "📘"}</span></div>
-        )}
-        <span className="course-icon">{course.icon || "📘"}</span>
+        <img src={courseImage} alt="" />
+        <span className="course-icon"><img src={courseImage} alt="" /></span>
         {!preview && course.isFeatured && <span className="featured-dot" title="Featured" />}
       </div>
       <div className="course-body">
@@ -43,11 +42,7 @@ export default function CourseCard({
         <div className="card-footer">
           <div className="badge-row">
             <StatusBadge active={course.isActive} label={course.isActive ? "Active" : "Inactive"} />
-            <StatusBadge
-              active={course.isPublished}
-              label={course.isPublished ? "Published" : "Draft"}
-              muted={!course.isPublished}
-            />
+            <StatusBadge active={course.isPublished} label={course.isPublished ? "Published" : "Draft"} muted={!course.isPublished} />
           </div>
           {!preview && !previewActions && (
             <div className="card-actions">

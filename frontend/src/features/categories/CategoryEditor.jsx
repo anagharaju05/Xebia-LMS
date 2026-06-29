@@ -1,14 +1,5 @@
 import { useState } from "react";
-import {
-  CheckCircle2,
-  FileText,
-  Palette,
-  Plus,
-  Save,
-  ShieldCheck,
-  Smile,
-  Tags
-} from "lucide-react";
+import { CheckCircle2, FileText, Image as ImageIcon, Palette, Plus, Save, ShieldCheck, Tags } from "lucide-react";
 
 import PageTitle from "../../components/common/PageTitle.jsx";
 import SectionHeader from "../../components/common/SectionHeader.jsx";
@@ -20,7 +11,6 @@ import ColorDots from "../../components/common/ColorDots.jsx";
 import CategoryThumb from "../../components/common/CategoryThumb.jsx";
 import CategoryPreview from "../../components/preview/CategoryPreview.jsx";
 import FieldSummary from "../../components/preview/FieldSummary.jsx";
-import EmojiPicker from "../../components/common/EmojiPicker.jsx";
 import { createEmptyCategory } from "./category.defaults.js";
 import { hasDuplicateCategoryName } from "./category.helpers.js";
 import { createSlug } from "../../utils/slug.utils.js";
@@ -29,19 +19,21 @@ export default function CategoryEditor({ initial, categories, onCancel, onSave }
   const [form, setForm] = useState(initial || createEmptyCategory());
   const isEdit = Boolean(initial?.id);
   const duplicate = hasDuplicateCategoryName(categories, form);
-  const completed = [
-    form.name,
-    form.iconType === "emoji" ? form.icon : form.imageUrl,
-    form.description,
-    form.accentColor,
-    form.status
-  ].filter(Boolean).length;
+  const completed = [form.name, true, form.description, form.accentColor, form.status].filter(Boolean).length;
 
   function patch(key, value) {
     setForm((current) => ({
       ...current,
       [key]: value,
       ...(key === "name" && !isEdit ? { slug: createSlug(value) } : {})
+    }));
+  }
+
+  function updateImage(imageUrl) {
+    setForm((current) => ({
+      ...current,
+      imageUrl,
+      iconType: imageUrl ? "image" : "emoji"
     }));
   }
 
@@ -65,24 +57,15 @@ export default function CategoryEditor({ initial, categories, onCancel, onSave }
           </p>
         </section>
         <section className="form-section top-accent-purple">
-          <SectionHeader icon={Smile} title="Icon / Thumbnail" />
-          <Segmented
-            value={form.iconType}
-            onChange={(value) => patch("iconType", value)}
-            options={[["emoji", "Emoji"], ["image", "Image URL"]]}
-          />
+          <SectionHeader icon={ImageIcon} title="Thumbnail" />
           <div className="inline-media-row">
             <CategoryThumb category={form} large />
-            {form.iconType === "emoji" ? (
-              <EmojiPicker label="Emoji" value={form.icon} onChange={(value) => patch("icon", value)} required />
-            ) : (
-              <div className="field-stack">
-                <Field label="Image URL" value={form.imageUrl} onChange={(value) => patch("imageUrl", value)} placeholder="https://cdn.example.com/category.png" />
-                <UploadControl onFile={(value) => patch("imageUrl", value)} />
-              </div>
-            )}
+            <div className="field-stack">
+              <Field label="Optional image URL" value={form.imageUrl || ""} onChange={updateImage} placeholder="https://cdn.example.com/category.png" />
+              <UploadControl onFile={updateImage} />
+            </div>
           </div>
-          <p className="field-note">CDN URLs supported. Emoji or image will appear as the category thumbnail.</p>
+          <p className="field-note">A matching icon is selected automatically from the name and description. Uploading an image overrides it.</p>
         </section>
         <section className="form-section">
           <SectionHeader icon={FileText} title="Description" />
@@ -120,7 +103,7 @@ export default function CategoryEditor({ initial, categories, onCancel, onSave }
         <CategoryPreview category={{ ...form, name: form.name || "Web Development", description: form.description || "Learn the fundamentals of building modern web applications using industry-standard tools and best practices.", courses: form.courses || 0, learners: form.learners || 0 }} />
         <FieldSummary items={[
           ["Name", form.name || "Not filled", Boolean(form.name)],
-          ["Icon", form.iconType === "emoji" ? "Emoji" : "Image", Boolean(form.iconType === "emoji" ? form.icon : form.imageUrl)],
+          ["Icon", form.imageUrl ? "Custom image" : "Automatic", true],
           ["Description", form.description ? "Filled" : "Not filled", Boolean(form.description)],
           ["Color", form.accentColor, Boolean(form.accentColor)],
           ["Status", form.status, Boolean(form.status)]

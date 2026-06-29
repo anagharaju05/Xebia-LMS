@@ -1,10 +1,15 @@
 import { brand } from "../../utils/data.js";
+import { getCategoryImage } from "../../utils/categoryImage.utils.js";
 
-export default function CategoryThumb({ category, large }) {
-  const image = category.iconType === "image" && category.imageUrl;
+export default function CategoryThumb({ category, courses = [], large }) {
+  const image = getCategoryImage(category, courses);
+
   return (
-    <div className={`category-thumb ${large ? "large" : ""}`} style={{ "--accent": category.accentColor || brand.teal }}>
-      {image ? <img src={image} alt="" /> : <span>{category.icon || "💡"}</span>}
+    <div
+      className={`category-thumb ${large ? "large" : ""}`}
+      style={{ "--accent": category.accentColor || brand.teal }}
+    >
+      <img src={image} alt="" />
     </div>
   );
 }

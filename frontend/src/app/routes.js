@@ -5,7 +5,8 @@ export const VIEWS = {
   COURSES: "courses",
   COURSE_FORM: "course-form",
   CURRICULUM: "curriculum",
-  CONTENT: "content"
+  CONTENT: "content",
+  STUDENTS: "students"
 };
 
 export function getActiveNavigationView(view) {

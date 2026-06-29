@@ -148,3 +148,31 @@
   margin: 0 auto;
   padding: 36px 40px 48px;
 }
+
+.sidebar-footer > div:nth-child(2) {
+  min-width: 0;
+}
+
+.sidebar-footer > div:nth-child(2) span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-logout {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-left: auto;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius);
+  color: rgba(255, 255, 255, 0.78);
+  background: transparent;
+}
+
+.sidebar-logout:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}

@@ -16,18 +16,12 @@ export default function CategoriesPage({ store, onCreate, onEdit, onDelete }) {
     () => filterAndSortCategories(store.categories, query, status, sort),
     [store.categories, query, status, sort]
   );
-
   const active = store.categories.filter((item) => item.status === "Active").length;
   const inactive = store.categories.filter((item) => item.status !== "Active").length;
 
   return (
     <section className="page">
-      <PageTitle
-        icon={Tags}
-        title="Categories"
-        subtitle="Manage all learning categories on the platform."
-        action={<button className="primary" onClick={onCreate}><Plus size={18} /> Create Category</button>}
-      />
+      <PageTitle icon={Tags} title="Categories" subtitle="Manage all learning categories on the platform." action={<button className="primary" onClick={onCreate}><Plus size={18} /> Create Category</button>} />
       <div className="stat-grid four">
         <Metric icon={Tags} value={store.categories.length} label="Total Categories" />
         <Metric icon={CheckCircle2} value={active} label="Active" tone="teal" />
@@ -42,7 +36,7 @@ export default function CategoriesPage({ store, onCreate, onEdit, onDelete }) {
       </Toolbar>
       <div className="card-grid">
         {categories.map((category) => (
-          <CategoryCard key={category.id} category={category} onEdit={() => onEdit(category.id)} onDelete={() => onDelete(category.id)} />
+          <CategoryCard key={category.id} category={category} courses={store.courses} onEdit={() => onEdit(category.id)} onDelete={() => onDelete(category.id)} />
         ))}
       </div>
     </section>

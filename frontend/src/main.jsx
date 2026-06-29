@@ -8,9 +8,10 @@ import "./styles/components.css";
 import "./styles/forms.css";
 import "./styles/pages.css";
 import "./styles/responsive.css";
+import "./styles/student.css";
+import "./styles/students.css";
+import "./styles/auth.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <React.StrictMode><App /></React.StrictMode>
 );
