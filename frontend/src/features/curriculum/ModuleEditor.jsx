@@ -6,11 +6,17 @@ import Toggle from "../../components/common/Toggle.jsx";
 import AccentColorControl from "../../components/common/AccentColorControl.jsx";
 import { brand } from "../../utils/data.js";
 import { createSlug } from "../../utils/slug.utils.js";
+import { getLearningIcon } from "../../utils/learningIcon.utils.js";
 
 export default function ModuleEditor({ form, setForm, onSave }) {
+  const ModuleIcon = getLearningIcon(form.title, form.description, "module");
   return (
     <section className="form-section compact-form top-accent-teal">
       <SectionHeader icon={Pencil} title={form.id ? "Edit Module" : "Create Module"} />
+      <div className="editor-icon-context">
+        <span style={{ "--editor-accent": form.accentColor || brand.velvet }}><ModuleIcon /></span>
+        <p>The module icon updates automatically from its title and description.</p>
+      </div>
       <Field label="Title" required value={form.title} onChange={(value) => setForm({ ...form, title: value, slug: form.slug || createSlug(value) })} />
       <TextArea label="Description" value={form.description} onChange={(value) => setForm({ ...form, description: value })} rows={3} />
       <SectionHeader icon={Palette} title="Accent Color" />
@@ -19,9 +25,7 @@ export default function ModuleEditor({ form, setForm, onSave }) {
         <Field label="Module Order" type="number" value={form.order} onChange={(value) => setForm({ ...form, order: Number(value) })} />
         <Toggle label="Active" checked={form.isActive} onChange={(value) => setForm({ ...form, isActive: value })} />
       </div>
-      <div className="action-row">
-        <button className="primary" disabled={!form.title} onClick={onSave}><Save size={18} /> Save Module</button>
-      </div>
+      <div className="action-row"><button className="primary" disabled={!form.title} onClick={onSave}><Save size={18} /> Save Module</button></div>
     </section>
   );
 }

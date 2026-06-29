@@ -20,21 +20,6 @@ export function mapFormToCourse(form) {
   };
 }
 
-export function calculateSeoScore(form) {
-  const fields = [
-    "metaTitle",
-    "metaDescription",
-    "primaryKeyword",
-    "metaKeywords",
-    "seoTags",
-    "ogTitle",
-    "ogImage",
-    "faqContent"
-  ];
-  const completedFields = fields.filter((field) => Boolean(form[field])).length;
-  return Math.round((completedFields / fields.length) * 100);
-}
-
 export function filterCourses(courses, query, level, status) {
   return courses
     .filter((course) => course.title.toLowerCase().includes(query.toLowerCase()))
