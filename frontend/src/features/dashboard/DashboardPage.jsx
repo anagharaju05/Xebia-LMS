@@ -98,7 +98,7 @@ export default function DashboardPage({ store, stats, go }) {
           </div>
           <div className="category-rank-list">
             {topCategories.map((category, index) => (
-              <button key={category.id} onClick={() => go("categories")} style={{ "--accent": category.accentColor }}>
+              <button key={category.id} onClick={() => go("/categories")} style={{ "--accent": category.accentColor }}>
                 <span>{index + 1}</span>
                 <CategoryThumb category={category} />
                 <strong>{category.name}</strong>
@@ -113,10 +113,10 @@ export default function DashboardPage({ store, stats, go }) {
             <span>Create and review</span>
           </div>
           {[
-            { label: "Manage Categories", icon: Tags, view: "categories" },
-            { label: "Build Courses", icon: BookOpen, view: "courses" },
-            { label: "Edit Curriculum", icon: Layers3, view: "curriculum" },
-            { label: "Review Content", icon: Boxes, view: "content" }
+            { label: "Manage Categories", icon: Tags, view: "/categories" },
+            { label: "Build Courses", icon: BookOpen, view: "/courses" },
+            { label: "Review Content", icon: Boxes, view: "/content" },
+            { label: "Review Students", icon: Users, view: "/students" }
           ].map((item) => {
             const Icon = item.icon;
             return (

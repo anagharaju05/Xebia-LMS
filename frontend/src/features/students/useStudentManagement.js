@@ -1,127 +1,125 @@
 import { useEffect, useState } from "react";
-import { INITIAL_STUDENT_MANAGEMENT, STUDENT_MANAGEMENT_KEY } from "./studentManagement.data.js";
+import { INITIAL_STUDENT_MANAGEMENT } from "./studentManagement.data.js";
 
-export function readStudentManagement() {
-  try {
-    const stored = localStorage.getItem(STUDENT_MANAGEMENT_KEY);
-    return stored ? { ...INITIAL_STUDENT_MANAGEMENT, ...JSON.parse(stored) } : INITIAL_STUDENT_MANAGEMENT;
-  } catch {
-    return INITIAL_STUDENT_MANAGEMENT;
-  }
-}
+const BASE_URL = "http://localhost:8080/api/management/students";
+const DEFAULT_HEADERS = {
+  "Content-Type": "application/json",
+  "X-Organization-ID": "123e4567-e89b-12d3-a456-426614174000",
+  "X-User-Id": "admin-1",
+  "X-User-Role": "ADMIN"
+};
 
 export function useStudentManagement() {
-  const [management, setManagement] = useState(readStudentManagement);
+  const [management, setManagement] = useState({ students: [], assignments: [] });
+  const [loading, setLoading] = useState(true);
+
+  async function fetchAll() {
+    try {
+      const [studentsRes, assignmentsRes] = await Promise.all([
+        fetch(BASE_URL, { headers: DEFAULT_HEADERS }).then(res => res.json()),
+        fetch(`${BASE_URL}/assignments`, { headers: DEFAULT_HEADERS }).then(res => res.json())
+      ]);
+      setManagement({
+        students: Array.isArray(studentsRes) ? studentsRes : [],
+        assignments: Array.isArray(assignmentsRes) ? assignmentsRes : []
+      });
+    } catch (e) {
+      console.error("Failed to fetch students/assignments", e);
+      setManagement(INITIAL_STUDENT_MANAGEMENT);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    localStorage.setItem(STUDENT_MANAGEMENT_KEY, JSON.stringify(management));
-  }, [management]);
+    fetchAll();
+  }, []);
 
-  function addStudent(student) {
-    const record = {
-      id: `student-${Date.now()}`,
-      name: student.name.trim(),
-      email: student.email.trim(),
-      cohort: student.cohort.trim() || "General Learning",
-      status: "Active",
-      courseSlugs: []
-    };
-    setManagement((current) => ({ ...current, students: [...current.students, record] }));
-    return record;
+  async function addStudent(studentData) {
+    try {
+      const res = await fetch(BASE_URL, {
+        method: "POST",
+        headers: DEFAULT_HEADERS,
+        body: JSON.stringify(studentData)
+      });
+      if (res.ok) {
+        fetchAll();
+        return await res.json();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return null;
   }
 
-  function toggleStudentStatus(studentId) {
-    setManagement((current) => ({
-      ...current,
-      students: current.students.map((student) =>
-        student.id === studentId
-          ? { ...student, status: student.status === "Active" ? "Inactive" : "Active" }
-          : student
-      )
-    }));
+  async function toggleStudentStatus(studentId) {
+    try {
+      await fetch(`${BASE_URL}/${studentId}/toggle-status`, { 
+        method: "PUT",
+        headers: DEFAULT_HEADERS
+      });
+      fetchAll();
+    } catch (e) {
+      console.error(e);
+    }
   }
 
-  function assignCourse(studentId, courseSlug) {
-    if (!courseSlug) return false;
-    setManagement((current) => ({
-      ...current,
-      students: current.students.map((student) =>
-        student.id === studentId && !student.courseSlugs.includes(courseSlug)
-          ? { ...student, courseSlugs: [...student.courseSlugs, courseSlug] }
-          : student
-      )
-    }));
-    return true;
+  async function assignCourse(studentId, courseSlug) {
+    try {
+      await fetch(`${BASE_URL}/${studentId}/courses/${courseSlug}`, { 
+        method: "POST",
+        headers: DEFAULT_HEADERS 
+      });
+      fetchAll();
+      return true;
+    } catch (e) {
+      console.error(e);
+    }
+    return false;
   }
 
-  function createAssignment(assignment) {
-    const record = {
-      id: `task-${Date.now()}`,
-      studentId: assignment.studentId,
-      courseSlug: assignment.courseSlug,
-      title: assignment.title.trim(),
-      instructions: assignment.instructions.trim(),
-      dueDate: assignment.dueDate,
-      status: "Assigned",
-      submission: "",
-      submittedAt: "",
-      score: "",
-      reviewNotes: ""
-    };
-    setManagement((current) => ({
-      ...current,
-      assignments: [record, ...current.assignments],
-      students: current.students.map((student) =>
-        student.id === record.studentId && !student.courseSlugs.includes(record.courseSlug)
-          ? { ...student, courseSlugs: [...student.courseSlugs, record.courseSlug] }
-          : student
-      )
-    }));
-    return record;
+  async function createAssignment(assignmentData) {
+    try {
+      await fetch(`${BASE_URL}/assignments`, {
+        method: "POST",
+        headers: DEFAULT_HEADERS,
+        body: JSON.stringify(assignmentData)
+      });
+      fetchAll();
+      return true;
+    } catch (e) {
+      console.error(e);
+    }
+    return false;
   }
 
-  function submitAssignment(assignmentId, submission) {
-    if (!submission.trim()) return false;
-    setManagement((current) => ({
-      ...current,
-      assignments: current.assignments.map((assignment) =>
-        assignment.id === assignmentId
-          ? {
-              ...assignment,
-              submission: submission.trim(),
-              submittedAt: new Date().toLocaleString(),
-              status: "Submitted"
-            }
-          : assignment
-      )
-    }));
-    return true;
+  async function reviewAssignment(assignmentId, score, notes) {
+    try {
+      await fetch(`${BASE_URL}/assignments/${assignmentId}/review`, {
+        method: "PUT",
+        headers: DEFAULT_HEADERS,
+        body: JSON.stringify({ score, notes })
+      });
+      fetchAll();
+      return true;
+    } catch (e) {
+      console.error(e);
+    }
+    return false;
   }
-
-  function reviewAssignment(assignmentId, score, reviewNotes) {
-    setManagement((current) => ({
-      ...current,
-      assignments: current.assignments.map((assignment) =>
-        assignment.id === assignmentId
-          ? {
-              ...assignment,
-              score: Number(score),
-              reviewNotes: reviewNotes.trim(),
-              status: "Reviewed"
-            }
-          : assignment
-      )
-    }));
+  
+  async function submitAssignment(assignmentId, submission) {
     return true;
   }
 
   return {
     management,
+    loading,
     addStudent,
     toggleStudentStatus,
     assignCourse,
     createAssignment,
-    submitAssignment,
-    reviewAssignment
+    reviewAssignment,
+    submitAssignment
   };
 }

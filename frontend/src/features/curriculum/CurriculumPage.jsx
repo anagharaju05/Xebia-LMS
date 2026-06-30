@@ -5,7 +5,7 @@ import CourseCard from "../../components/cards/CourseCard.jsx";
 import CurriculumManager from "./CurriculumManager.jsx";
 import ContentBlockEditor from "../content/ContentBlockEditor.jsx";
 
-export default function CurriculumPage({ store, selectedCourseId, setSelectedCourseId, selectedModuleId, setSelectedModuleId, selectedSubmoduleId, setSelectedSubmoduleId, upsert, removeModule, removeSubmodule, removeContentBlock, toggleEntity }) {
+export default function CurriculumPage({ store, selectedCourseId, setSelectedCourseId, selectedModuleId, setSelectedModuleId, selectedSubmoduleId, setSelectedSubmoduleId, upsert, removeModule, removeSubmodule, removeContentBlock, toggleEntity, onBack }) {
   const categoriesById = Object.fromEntries(store.categories.map((item) => [item.id, item]));
   const selectedCourse = store.courses.find((item) => item.id === selectedCourseId);
   const [curriculumStep, setCurriculumStep] = useState("modules");
@@ -17,26 +17,8 @@ export default function CurriculumPage({ store, selectedCourseId, setSelectedCou
   if (!selectedCourse) {
     return (
       <section className="page">
-        <PageTitle icon={Layers3} title="Curriculum" subtitle="Select a course below to manage its modules, submodules and content." />
-        <div className="course-grid">
-          {store.courses.map((course) => (
-            <CourseCard
-              key={course.id}
-              course={course}
-              category={categoriesById[course.categoryId]}
-              moduleCount={store.modules.filter((item) => item.courseId === course.id).length}
-              onOpen={() => {
-                setSelectedCourseId(course.id);
-                setCurriculumStep("modules");
-                const firstModule = store.modules.find((item) => item.courseId === course.id);
-                setSelectedModuleId(firstModule?.id || "");
-                const firstSubmodule = firstModule ? store.submodules.find((item) => item.moduleId === firstModule.id) : null;
-                setSelectedSubmoduleId(firstSubmodule?.id || "");
-              }}
-              previewActions
-            />
-          ))}
-        </div>
+        <PageTitle icon={Layers3} title="Course Not Found" subtitle="Please select a valid course from the courses page." />
+        <button className="ghost icon-text" onClick={onBack}><ArrowLeft size={16} /> Back to Courses</button>
       </section>
     );
   }
@@ -44,7 +26,7 @@ export default function CurriculumPage({ store, selectedCourseId, setSelectedCou
   return (
     <section className="page">
       <div className="curriculum-heading">
-        <button className="ghost icon-text" onClick={() => setSelectedCourseId("")}><ArrowLeft size={16} /> All Courses</button>
+        <button className="ghost icon-text" onClick={onBack}><ArrowLeft size={16} /> All Courses</button>
         <div>
           <span>Curriculum</span>
           <h2>{selectedCourse.title}</h2>

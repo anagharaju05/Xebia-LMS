@@ -1,9 +1,11 @@
 import { CheckCircle2, ChevronRight, Moon, RotateCcw, Sun } from "lucide-react";
 
-function getViewLabel(view) {
-  if (view.includes("category")) return "Categories";
-  if (view.includes("course")) return "Courses";
-  return view[0].toUpperCase() + view.slice(1);
+function getViewLabel(pathname) {
+  if (pathname === "/") return "Dashboard";
+  const path = pathname.split("/")[1] || "";
+  if (path.includes("category")) return "Categories";
+  if (path.includes("course")) return "Courses";
+  return path.charAt(0).toUpperCase() + path.slice(1);
 }
 
 export default function Topbar({ view, stats, theme, onThemeToggle, onReset, user }) {

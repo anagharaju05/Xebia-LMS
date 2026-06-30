@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar.jsx";
 import Topbar from "../components/layout/Topbar.jsx";
 import Toast from "../components/common/Toast.jsx";
@@ -17,7 +18,7 @@ import { useLmsStore } from "../hooks/useLmsStore.js";
 import { useTheme } from "../hooks/useTheme.js";
 import { useToast } from "../hooks/useToast.js";
 import { createSlug } from "../utils/slug.utils.js";
-import { getActiveNavigationView, VIEWS } from "./routes.js";
+import { APP_ROUTES } from "./routes.js";
 
 function toUUID(str) {
   if (!str) return "00000000-0000-0000-0000-000000000000";
@@ -39,7 +40,8 @@ const INITIAL_SELECTION = {
 
 export default function App() {
   const auth = useAuth();
-  const [view, setView] = useState(VIEWS.DASHBOARD);
+  const navigate = useNavigate();
+  const location = useLocation();
   const [editing, setEditing] = useState({ type: "", id: "" });
   const [selectedCourseId, setSelectedCourseId] = useState(INITIAL_SELECTION.courseId);
   const [selectedModuleId, setSelectedModuleId] = useState(INITIAL_SELECTION.moduleId);
@@ -80,22 +82,22 @@ export default function App() {
     submodules: store.submodules.length
   }), [store]);
 
-  function handleNavigate(targetView) {
-    setView(targetView);
+  function handleNavigate(targetPath) {
+    navigate(targetPath);
     setEditing({ type: "", id: "" });
   }
 
   function handleSaveCategory(record) {
     const category = { ...record, slug: record.slug || createSlug(record.name) };
     upsertEntity("categories", category, category.id ? "Category updated" : "Category created");
-    handleNavigate(VIEWS.CATEGORIES);
+    handleNavigate(APP_ROUTES.CATEGORIES);
   }
 
   function handleSaveCourse(record) {
     const course = { ...record, slug: record.slug || createSlug(record.title) };
     const id = upsertEntity("courses", course, course.id ? "Course updated" : "Course created");
     setSelectedCourseId(id);
-    handleNavigate(VIEWS.COURSES);
+    handleNavigate(APP_ROUTES.COURSES);
   }
 
   function handleOpenCurriculum(courseId) {
@@ -106,36 +108,7 @@ export default function App() {
     setSelectedCourseId(courseId);
     setSelectedModuleId(firstModule?.id || "");
     setSelectedSubmoduleId(firstSubmodule?.id || "");
-    handleNavigate(VIEWS.CURRICULUM);
-  }
-
-  function renderSelectedPage() {
-    if (view === VIEWS.DASHBOARD) return <DashboardPage store={store} stats={stats} go={handleNavigate} />;
-    if (view === VIEWS.STUDENTS) return <StudentsPage store={store} showToast={showToast} />;
-
-    if (view === VIEWS.CATEGORY_FORM) {
-      const category = store.categories.find((item) => item.id === editing.id);
-      return <CategoryEditor key={editing.id || "new-category"} initial={category} categories={store.categories} onCancel={() => handleNavigate(VIEWS.CATEGORIES)} onSave={handleSaveCategory} />;
-    }
-
-    if (view === VIEWS.COURSE_FORM) {
-      const course = store.courses.find((item) => item.id === editing.id);
-      return <CourseEditor key={editing.id || "new-course"} initial={course} categories={store.categories} onCancel={() => handleNavigate(VIEWS.COURSES)} onSave={handleSaveCourse} />;
-    }
-
-    if (view === VIEWS.COURSES) {
-      return <CoursesPage store={store} onCreate={() => { setEditing({ type: "course", id: "" }); setView(VIEWS.COURSE_FORM); }} onEdit={(id) => { setEditing({ type: "course", id }); setView(VIEWS.COURSE_FORM); }} onDelete={handleDeleteCourse} onToggle={(id, field) => handleToggleEntity("courses", id, field)} onOpenCurriculum={handleOpenCurriculum} />;
-    }
-
-    if (view === VIEWS.CURRICULUM) {
-      return <CurriculumPage store={store} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId} selectedModuleId={selectedModuleId} setSelectedModuleId={setSelectedModuleId} selectedSubmoduleId={selectedSubmoduleId} setSelectedSubmoduleId={setSelectedSubmoduleId} upsert={upsertEntity} removeModule={handleDeleteModule} removeSubmodule={handleDeleteSubmodule} removeContentBlock={handleDeleteContentBlock} toggleEntity={handleToggleEntity} />;
-    }
-
-    if (view === VIEWS.CONTENT) {
-      return <ContentLibraryPage store={store} upsert={upsertEntity} removeContentBlock={handleDeleteContentBlock} toggleEntity={handleToggleEntity} />;
-    }
-
-    return <CategoriesPage store={store} onCreate={() => { setEditing({ type: "category", id: "" }); setView(VIEWS.CATEGORY_FORM); }} onEdit={(id) => { setEditing({ type: "category", id }); setView(VIEWS.CATEGORY_FORM); }} onDelete={handleDeleteCategory} />;
+    handleNavigate(`/courses/${courseId}/curriculum`);
   }
 
   if (!auth.session) {
@@ -153,11 +126,22 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <Sidebar active={getActiveNavigationView(view)} onNavigate={handleNavigate} user={auth.session} onLogout={auth.logout} />
+      <Sidebar user={auth.session} onLogout={auth.logout} />
       <main className="app-main">
-        <Topbar view={view} stats={stats} theme={theme} onThemeToggle={toggleTheme} onReset={handleResetStore} user={auth.session} />
+        <Topbar view={location.pathname} stats={stats} theme={theme} onThemeToggle={toggleTheme} onReset={handleResetStore} user={auth.session} />
         <Toast message={toastMessage} />
-        {renderSelectedPage()}
+        
+        <Routes>
+          <Route path={APP_ROUTES.DASHBOARD} element={<DashboardPage store={store} stats={stats} go={handleNavigate} />} />
+          <Route path={APP_ROUTES.CATEGORIES} element={<CategoriesPage store={store} onCreate={() => { setEditing({ type: "category", id: "" }); handleNavigate("/categories/new"); }} onEdit={(id) => { setEditing({ type: "category", id }); handleNavigate(`/categories/${id}`); }} onDelete={handleDeleteCategory} />} />
+          <Route path="/categories/:id" element={<CategoryEditor key={editing.id || "new-category"} initial={store.categories.find((item) => item.id === editing.id)} categories={store.categories} onCancel={() => handleNavigate(APP_ROUTES.CATEGORIES)} onSave={handleSaveCategory} />} />
+          <Route path={APP_ROUTES.COURSES} element={<CoursesPage store={store} onCreate={() => { setEditing({ type: "course", id: "" }); handleNavigate("/courses/new"); }} onEdit={(id) => { setEditing({ type: "course", id }); handleNavigate(`/courses/${id}`); }} onDelete={handleDeleteCourse} onToggle={(id, field) => handleToggleEntity("courses", id, field)} onOpenCurriculum={handleOpenCurriculum} />} />
+          <Route path="/courses/:id" element={<CourseEditor key={editing.id || "new-course"} initial={store.courses.find((item) => item.id === editing.id)} categories={store.categories} onCancel={() => handleNavigate(APP_ROUTES.COURSES)} onSave={handleSaveCourse} />} />
+          <Route path={APP_ROUTES.CURRICULUM} element={<CurriculumPage store={store} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId} selectedModuleId={selectedModuleId} setSelectedModuleId={setSelectedModuleId} selectedSubmoduleId={selectedSubmoduleId} setSelectedSubmoduleId={setSelectedSubmoduleId} upsert={upsertEntity} removeModule={handleDeleteModule} removeSubmodule={handleDeleteSubmodule} removeContentBlock={handleDeleteContentBlock} toggleEntity={handleToggleEntity} onBack={() => handleNavigate(APP_ROUTES.COURSES)} />} />
+          <Route path={APP_ROUTES.CONTENT} element={<ContentLibraryPage store={store} upsert={upsertEntity} removeContentBlock={handleDeleteContentBlock} toggleEntity={handleToggleEntity} />} />
+          <Route path={APP_ROUTES.STUDENTS} element={<StudentsPage store={store} showToast={showToast} />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
       </main>
     </div>
   );

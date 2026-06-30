@@ -1,7 +1,11 @@
 import { LogOut } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { NAV_ITEMS } from "../../app/constants.js";
 
-export default function Sidebar({ active, onNavigate, user, onLogout }) {
+export default function Sidebar({ user, onLogout }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   return (
     <aside className="sidebar">
       <div className="brand-block">
@@ -12,8 +16,9 @@ export default function Sidebar({ active, onNavigate, user, onLogout }) {
       <nav className="side-nav">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
+          const isActive = location.pathname === item.path || (item.path !== "/" && location.pathname.startsWith(item.path));
           return (
-            <button key={item.id} aria-label={item.label} className={active === item.id ? "active" : ""} onClick={() => onNavigate(item.id)}>
+            <button key={item.id} aria-label={item.label} className={isActive ? "active" : ""} onClick={() => navigate(item.path)}>
               <Icon size={20} /><span>{item.label}</span>
             </button>
           );

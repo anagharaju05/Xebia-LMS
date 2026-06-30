@@ -1,5 +1,5 @@
 .login-shell {
-  min-height: 100vh;
+  min-height: 125vh;
   display: grid;
   grid-template-columns: minmax(360px, 0.92fr) minmax(460px, 1.08fr);
   color: var(--ink);
@@ -11,7 +11,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 100vh;
+  min-height: 125vh;
   padding: 46px;
   overflow: hidden;
   color: #fff;

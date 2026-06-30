@@ -45,40 +45,55 @@ export default function StudentsPage({ store, showToast }) {
   const reviewed = assignments.filter((assignment) => assignment.status === "Reviewed");
 
   const courseOptions = useMemo(
-    () => store.courses.map((course) => [course.slug, course.title]),
+    () => [["", "Select a course..."], ...store.courses.map((course) => [course.slug, course.title])],
     [store.courses]
   );
 
-  function handleAddStudent() {
+  async function handleAddStudent() {
     if (!studentForm.name.trim() || !studentForm.email.trim()) return;
-    const student = studentStore.addStudent(studentForm);
-    setSelectedStudentId(student.id);
-    setStudentForm(EMPTY_STUDENT);
-    setShowAddStudent(false);
-    showToast("Student added");
-  }
-
-  function handleAssignCourse() {
-    if (studentStore.assignCourse(selectedStudent.id, courseSlug)) {
-      showToast("Course assigned");
+    const student = await studentStore.addStudent(studentForm);
+    if (student) {
+      setSelectedStudentId(student.id);
+      setStudentForm(EMPTY_STUDENT);
+      setShowAddStudent(false);
+      showToast("Student added");
+    } else {
+      showToast("Failed to add student. Check console.");
     }
   }
 
-  function handleCreateTask() {
+  async function handleAssignCourse() {
+    const success = await studentStore.assignCourse(selectedStudent.id, courseSlug);
+    if (success) {
+      showToast("Course assigned");
+    } else {
+      showToast("Failed to assign course");
+    }
+  }
+
+  async function handleCreateTask() {
     if (!taskForm.title.trim() || !taskForm.courseSlug || !taskForm.dueDate) return;
-    studentStore.createAssignment({
+    const success = await studentStore.createAssignment({
       ...taskForm,
       studentId: selectedStudent.id
     });
-    setTaskForm({ title: "", instructions: "", dueDate: "", courseSlug: taskForm.courseSlug });
-    showToast("Task assigned");
+    if (success) {
+      setTaskForm({ title: "", instructions: "", dueDate: "", courseSlug: taskForm.courseSlug });
+      showToast("Task assigned");
+    } else {
+      showToast("Failed to assign task");
+    }
   }
 
-  function handleReview(assignmentId) {
+  async function handleReview(assignmentId) {
     const draft = reviewDrafts[assignmentId] || {};
     if (draft.score === undefined || draft.score === "" || !draft.notes?.trim()) return;
-    studentStore.reviewAssignment(assignmentId, draft.score, draft.notes);
-    showToast("Submission reviewed");
+    const success = await studentStore.reviewAssignment(assignmentId, draft.score, draft.notes);
+    if (success) {
+      showToast("Submission reviewed");
+    } else {
+      showToast("Failed to submit review");
+    }
   }
 
   return (
@@ -147,7 +162,7 @@ export default function StudentsPage({ store, showToast }) {
               <section>
                 <h3>Assign Course</h3>
                 <SelectField label="Course" value={courseSlug} onChange={setCourseSlug} options={courseOptions} />
-                <button className="secondary" onClick={handleAssignCourse}><BookOpenCheck size={17} /> Assign Course</button>
+                <button className="secondary" disabled={!courseSlug} onClick={handleAssignCourse}><BookOpenCheck size={17} /> Assign Course</button>
               </section>
               <section>
                 <h3>Assign Task</h3>
@@ -155,7 +170,7 @@ export default function StudentsPage({ store, showToast }) {
                 <Field label="Task Title" value={taskForm.title} onChange={(value) => setTaskForm({ ...taskForm, title: value })} />
                 <TextArea label="Instructions" value={taskForm.instructions} onChange={(value) => setTaskForm({ ...taskForm, instructions: value })} rows={4} />
                 <Field label="Due Date" type="date" value={taskForm.dueDate} onChange={(value) => setTaskForm({ ...taskForm, dueDate: value })} />
-                <button className="primary" disabled={!taskForm.title || !taskForm.dueDate} onClick={handleCreateTask}><Send size={17} /> Assign Task</button>
+                <button className="primary" disabled={!taskForm.title || !taskForm.dueDate || !taskForm.courseSlug} onClick={handleCreateTask}><Send size={17} /> Assign Task</button>
               </section>
               <section>
                 <h3>Current Learning</h3>
