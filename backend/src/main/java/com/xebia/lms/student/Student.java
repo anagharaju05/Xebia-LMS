@@ -45,6 +45,31 @@ public class Student {
     @Column(name = "lesson_id")
     private Set<String> completedLessonIds = new HashSet<>();
 
+    private String region;
+    private String location;
+    
+    @Column(name = "business_unit")
+    private String businessUnit;
+    
+    private String department;
+    private String project;
+    private String practice;
+    
+    @Column(name = "employee_grade")
+    private String employeeGrade;
+    
+    @Column(name = "employment_type")
+    private String employmentType;
+    
+    @Column(name = "joining_date")
+    private LocalDateTime joiningDate;
+    
+    @Column(name = "project_allocation_date")
+    private LocalDateTime projectAllocationDate;
+    
+    @Column(name = "billable_deployment_date")
+    private LocalDateTime billableDeploymentDate;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

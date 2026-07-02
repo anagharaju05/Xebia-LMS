@@ -32,6 +32,15 @@ public class StudentFeedback {
     @Column(name = "submitted_at")
     private String submittedAt;
 
+    @Column(name = "trainer_rating")
+    private Integer trainerRating;
+
+    @Column(name = "session_rating")
+    private Integer sessionRating;
+
+    @Column(name = "recommendation_answer")
+    private Boolean recommendationAnswer;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

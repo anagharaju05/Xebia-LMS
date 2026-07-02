@@ -56,6 +56,27 @@ public class Course {
 
     private String metadata;
 
+    @Column(name = "learning_pillar")
+    private String learningPillar;
+
+    @Column(name = "is_ai_training")
+    private boolean isAiTraining;
+
+    @Column(name = "is_flagship_program")
+    private boolean isFlagshipProgram;
+
+    @Column(name = "certification_available")
+    private boolean certificationAvailable;
+
+    @Column(name = "estimated_learning_hours")
+    private Integer estimatedLearningHours;
+
+    @Column(name = "delivery_type")
+    private String deliveryType;
+
+    @Column(name = "program_name")
+    private String programName;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

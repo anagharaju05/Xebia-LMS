@@ -1,21 +1,19 @@
 .app-shell {
-  display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
-  min-height: 125vh;
-  width: min(100%, 1960px);
-  max-width: 1960px;
-  margin: 0 auto;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 .sidebar {
-  position: sticky;
-  top: 0;
   display: flex;
   flex-direction: column;
-  height: 125vh;
-  background: linear-gradient(180deg, var(--velvet-dark), #531b50);
+  width: var(--sidebar-width-expanded);
+  flex-shrink: 0;
+  height: 100%;
+  background: var(--color-primary-dark);
   color: #fff;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid var(--color-border);
 }
 
 .brand-block {
@@ -57,9 +55,26 @@
 }
 
 .side-nav {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 8px;
   padding: 0 16px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Thin Scrollbar for Sidebar */
+.side-nav::-webkit-scrollbar {
+  width: 4px;
+}
+.side-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+.side-nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
 }
 
 .side-nav button {
@@ -74,12 +89,79 @@
   background: transparent;
   text-align: left;
   font-weight: 650;
+  overflow: hidden;
+}
+
+.side-nav button > svg {
+  flex-shrink: 0;
+}
+
+.side-nav button span {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .side-nav button.active,
-.side-nav button:hover {
+.side-nav button:hover,
+.folder-btn.active-folder,
+.folder-btn:hover {
   background: var(--bright-velvet);
   color: #fff;
+}
+
+.nav-folder {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.folder-btn {
+  justify-content: space-between;
+}
+
+.folder-icon-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.folder-icon-label > svg {
+  flex-shrink: 0;
+}
+
+.folder-icon-label span {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sub-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-left: 28px;
+  margin-top: 4px;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  padding-left: 8px;
+}
+
+.sub-item {
+  min-height: 38px !important;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.sub-item:hover,
+.sub-item.active {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
 }
 
 .sidebar-footer {
@@ -104,8 +186,13 @@
 }
 
 .app-main {
+  flex: 1;
   min-width: 0;
-  background: var(--soft);
+  max-width: 100%;
+  background: var(--color-background);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
 .topbar {

@@ -19,6 +19,21 @@ import { useTheme } from "../hooks/useTheme.js";
 import { useToast } from "../hooks/useToast.js";
 import { createSlug } from "../utils/slug.utils.js";
 import { APP_ROUTES } from "./routes.js";
+import "../styles/analytics.css";
+
+// Analytics Pages
+import ExecutiveSummary from "../features/analytics/components/sections/ExecutiveSummary.jsx";
+import LearningCoverage from "../features/analytics/components/sections/LearningCoverage.jsx";
+import LearningHours from "../features/analytics/components/sections/LearningHours.jsx";
+import LearningPillars from "../features/analytics/components/sections/LearningPillars.jsx";
+import AiTransformation from "../features/analytics/components/sections/AiTransformation.jsx";
+import Certifications from "../features/analytics/components/sections/Certifications.jsx";
+import FlagshipPrograms from "../features/analytics/components/sections/FlagshipPrograms.jsx";
+import LearningTrends from "../features/analytics/components/sections/LearningTrends.jsx";
+import TrainingEffectiveness from "../features/analytics/components/sections/TrainingEffectiveness.jsx";
+import LearningChampions from "../features/analytics/components/sections/LearningChampions.jsx";
+import ProjectInvestment from "../features/analytics/components/sections/ProjectInvestment.jsx";
+import FresherJourney from "../features/analytics/components/sections/FresherJourney.jsx";
 
 function toUUID(str) {
   if (!str) return "00000000-0000-0000-0000-000000000000";
@@ -140,7 +155,22 @@ export default function App() {
           <Route path={APP_ROUTES.CURRICULUM} element={<CurriculumPage store={store} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId} selectedModuleId={selectedModuleId} setSelectedModuleId={setSelectedModuleId} selectedSubmoduleId={selectedSubmoduleId} setSelectedSubmoduleId={setSelectedSubmoduleId} upsert={upsertEntity} removeModule={handleDeleteModule} removeSubmodule={handleDeleteSubmodule} removeContentBlock={handleDeleteContentBlock} toggleEntity={handleToggleEntity} onBack={() => handleNavigate(APP_ROUTES.COURSES)} />} />
           <Route path={APP_ROUTES.CONTENT} element={<ContentLibraryPage store={store} upsert={upsertEntity} removeContentBlock={handleDeleteContentBlock} toggleEntity={handleToggleEntity} />} />
           <Route path={APP_ROUTES.STUDENTS} element={<StudentsPage store={store} showToast={showToast} />} />
-          <Route path="*" element={<Navigate to="/" />} />
+              
+          {/* Analytics Routes */}
+          <Route path={APP_ROUTES.ANALYTICS_EXEC_SUMMARY} element={<ExecutiveSummary />} />
+          <Route path={APP_ROUTES.ANALYTICS_COVERAGE} element={<LearningCoverage />} />
+          <Route path={APP_ROUTES.ANALYTICS_HOURS} element={<LearningHours />} />
+          <Route path={APP_ROUTES.ANALYTICS_PILLARS} element={<LearningPillars />} />
+          <Route path={APP_ROUTES.ANALYTICS_AI} element={<AiTransformation />} />
+          <Route path={APP_ROUTES.ANALYTICS_CERTS} element={<Certifications />} />
+          <Route path={APP_ROUTES.ANALYTICS_FLAGSHIP} element={<FlagshipPrograms />} />
+          <Route path={APP_ROUTES.ANALYTICS_TRENDS} element={<LearningTrends />} />
+          <Route path={APP_ROUTES.ANALYTICS_EFFECTIVENESS} element={<TrainingEffectiveness />} />
+          <Route path={APP_ROUTES.ANALYTICS_CHAMPIONS} element={<LearningChampions />} />
+          <Route path={APP_ROUTES.ANALYTICS_INVESTMENT} element={<ProjectInvestment />} />
+          <Route path={APP_ROUTES.ANALYTICS_FRESHER} element={<FresherJourney />} />
+
+          <Route path="*" element={<Navigate to={APP_ROUTES.DASHBOARD} replace />} />
         </Routes>
       </main>
     </div>

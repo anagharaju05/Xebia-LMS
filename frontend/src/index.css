@@ -8,9 +8,6 @@ html {
 
 body {
   min-width: 320px;
-  min-height: 125vh;
-  margin: 0;
-  zoom: 0.8;
 }
 
 button,
