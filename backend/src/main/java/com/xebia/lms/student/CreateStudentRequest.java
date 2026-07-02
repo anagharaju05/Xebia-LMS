@@ -7,4 +7,5 @@ public class CreateStudentRequest {
     private String name;
     private String email;
     private String cohort;
+    private String password;
 }

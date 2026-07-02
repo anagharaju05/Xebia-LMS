@@ -34,15 +34,12 @@ const STUDENT_VIEWS = {
 };
 
 function getAssignedCourses(store, assignedCourseSlugs) {
-  const assigned = store.courses.filter(
+  return store.courses.filter(
     (course) =>
       assignedCourseSlugs.includes(course.slug) &&
       course.isActive &&
       course.isPublished
   );
-  if (assigned.length) return assigned;
-  const published = store.courses.filter((course) => course.isActive && course.isPublished);
-  return published.slice(0, 4);
 }
 
 function getCourseLessons(store, courseId) {

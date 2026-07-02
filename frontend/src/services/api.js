@@ -11,10 +11,22 @@ const headers = {
 };
 
 async function request(url, options = {}) {
+  let dynamicHeaders = { ...headers };
+  
+  try {
+    const sessionStr = localStorage.getItem("xebia-lms-auth-session-v1");
+    if (sessionStr) {
+      const session = JSON.parse(sessionStr);
+      if (session.id) dynamicHeaders["X-User-Id"] = session.id;
+      if (session.role) dynamicHeaders["X-User-Role"] = session.role.toUpperCase();
+      if (session.organizationId) dynamicHeaders["X-Organization-ID"] = session.organizationId;
+    }
+  } catch (e) {}
+
   const finalOptions = {
     ...options,
     headers: {
-      ...headers,
+      ...dynamicHeaders,
       ...options.headers
     }
   };

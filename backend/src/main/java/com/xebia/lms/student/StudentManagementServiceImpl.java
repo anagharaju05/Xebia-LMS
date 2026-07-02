@@ -24,6 +24,7 @@ public class StudentManagementServiceImpl implements StudentManagementService {
         student.setName(request.getName());
         student.setEmail(request.getEmail());
         student.setCohort(request.getCohort());
+        student.setPassword(request.getPassword());
         student = studentRepository.save(student);
         return mapToDto(student);
     }

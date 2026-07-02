@@ -17,7 +17,7 @@ import SelectField from "../../components/common/SelectField.jsx";
 import StatusBadge from "../../components/common/StatusBadge.jsx";
 import { useStudentManagement } from "./useStudentManagement.js";
 
-const EMPTY_STUDENT = { name: "", email: "", cohort: "" };
+const EMPTY_STUDENT = { name: "", email: "", cohort: "", password: "" };
 
 function getCourseTitle(courses, slug) {
   return courses.find((course) => course.slug === slug)?.title || slug;
@@ -118,9 +118,10 @@ export default function StudentsPage({ store, showToast }) {
           <div className="field-grid">
             <Field label="Full Name" value={studentForm.name} onChange={(value) => setStudentForm({ ...studentForm, name: value })} />
             <Field label="Email" type="email" value={studentForm.email} onChange={(value) => setStudentForm({ ...studentForm, email: value })} />
+            <Field label="Password" type="text" value={studentForm.password} onChange={(value) => setStudentForm({ ...studentForm, password: value })} />
             <Field label="Cohort" value={studentForm.cohort} onChange={(value) => setStudentForm({ ...studentForm, cohort: value })} />
           </div>
-          <div className="action-row"><button className="primary" disabled={!studentForm.name || !studentForm.email} onClick={handleAddStudent}><Plus size={17} /> Add Student</button></div>
+          <div className="action-row"><button className="primary" disabled={!studentForm.name || !studentForm.email || !studentForm.password} onClick={handleAddStudent}><Plus size={17} /> Add Student</button></div>
         </section>
       )}
 

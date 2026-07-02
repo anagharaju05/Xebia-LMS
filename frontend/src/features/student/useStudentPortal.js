@@ -13,12 +13,22 @@ export function useStudentPortal(user) {
   const studentId = user?.studentId || user?.id || "student-aarav"; // Fallback for mock user id if missing
   const BASE_URL = `http://localhost:8080/api/portal/students/${studentId}`;
   
-  const DEFAULT_HEADERS = {
+  let DEFAULT_HEADERS = {
     "Content-Type": "application/json",
     "X-Organization-ID": "123e4567-e89b-12d3-a456-426614174000",
     "X-User-Id": studentId,
     "X-User-Role": "STUDENT"
   };
+
+  try {
+    const sessionStr = localStorage.getItem("xebia-lms-auth-session-v1");
+    if (sessionStr) {
+      const session = JSON.parse(sessionStr);
+      if (session.id) DEFAULT_HEADERS["X-User-Id"] = session.id;
+      if (session.role) DEFAULT_HEADERS["X-User-Role"] = session.role.toUpperCase();
+      if (session.organizationId) DEFAULT_HEADERS["X-Organization-ID"] = session.organizationId;
+    }
+  } catch (e) {}
 
   async function fetchState() {
     try {

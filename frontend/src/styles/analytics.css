@@ -180,3 +180,87 @@ html[data-theme="dark"] .recharts-tooltip-wrapper .recharts-default-tooltip {
   border-color: var(--color-border) !important;
   color: var(--color-text-primary) !important;
 }
+
+/* New Grid Layouts for Sections */
+.analytics-grid-kpi {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.analytics-grid-main {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) 2fr;
+  gap: 24px;
+}
+
+@media (max-width: 1200px) {
+  .analytics-grid-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+.data-list-card {
+  background: var(--color-surface);
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.data-list-header {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.data-list-header h3 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-primary-dark);
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+html[data-theme="dark"] .data-list-header h3 {
+  color: var(--color-primary-bright);
+}
+
+.data-list-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--color-border);
+  font-size: 14px;
+}
+
+.data-list-row:last-child {
+  border-bottom: none;
+}
+
+.data-list-title {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.data-list-value {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.flex-gap-24 {
+  display: flex;
+  gap: 24px;
+}
+.flex-gap-24 > * {
+  flex: 1;
+  min-width: 0;
+}
+

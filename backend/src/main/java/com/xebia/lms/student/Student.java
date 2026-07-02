@@ -32,6 +32,9 @@ public class Student {
 
     private String cohort;
 
+    @Column(name = "password")
+    private String password;
+
     @Column(nullable = false)
     private String status = "Active";
 

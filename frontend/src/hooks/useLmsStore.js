@@ -195,17 +195,20 @@ export function useLmsStore(showToast) {
       try {
         if (course.metadata) extra = JSON.parse(course.metadata);
       } catch {}
-      return {
-        ...extra,
-        id: course.id,
-        categoryId: course.categoryId,
-        title: course.courseName,
-        shortDescription: course.shortDescription || "",
-        duration: course.durationMinutes ? `${course.durationMinutes} hrs` : extra.duration || "0 hrs",
-        level: course.difficulty ? capitalizeWord(course.difficulty) : extra.level || "Beginner",
-        thumbnail: course.thumbnailUrl || extra.thumbnail || "",
-        status: course.status === "PUBLISHED" ? "Active" : "Draft"
-      };
+        return {
+          ...extra,
+          id: course.id,
+          categoryId: course.categoryId,
+          title: course.courseName,
+          slug: extra.slug || course.courseCode || course.courseName.toLowerCase().replace(/\s+/g, '-'),
+          shortDescription: course.shortDescription || "",
+          duration: course.durationMinutes ? `${course.durationMinutes} hrs` : extra.duration || "0 hrs",
+          level: course.difficulty ? capitalizeWord(course.difficulty) : extra.level || "Beginner",
+          thumbnail: course.thumbnailUrl || extra.thumbnail || "",
+          status: course.status === "PUBLISHED" ? "Active" : "Draft",
+          isActive: extra.isActive !== undefined ? extra.isActive : course.status === "PUBLISHED",
+          isPublished: extra.isPublished !== undefined ? extra.isPublished : course.status === "PUBLISHED"
+        };
     });
 
     const modules = pgModules.map(mod => {

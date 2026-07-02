@@ -14,8 +14,12 @@ import PageTitle from "../../components/common/PageTitle.jsx";
 import Metric from "../../components/common/Metric.jsx";
 import CategoryThumb from "../../components/common/CategoryThumb.jsx";
 import { blockTypes } from "../../utils/data.js";
+import { useStudentManagement } from "../students/useStudentManagement.js";
 
 export default function DashboardPage({ store, stats, go }) {
+  const studentStore = useStudentManagement();
+  const totalStudents = studentStore.management.students.length;
+
   const inactiveCategories = store.categories.length - stats.activeCategories;
   const draftCourses = store.courses.filter((course) => !course.isPublished).length;
   const publishedRate = store.courses.length ? Math.round((stats.publishedCourses / store.courses.length) * 100) : 0;
@@ -25,10 +29,19 @@ export default function DashboardPage({ store, stats, go }) {
     count: store.contentBlocks.filter((block) => block.type === type).length
   })).filter((item) => item.count > 0);
   const maxContent = Math.max(1, ...contentCounts.map((item) => item.count));
-  const topCategories = [...store.categories].sort((a, b) => b.courses - a.courses).slice(0, 4);
+  
+  const categoryCourseCounts = {};
+  store.courses.forEach(c => {
+    categoryCourseCounts[c.categoryId] = (categoryCourseCounts[c.categoryId] || 0) + 1;
+  });
+  const topCategories = [...store.categories].map(cat => ({
+    ...cat,
+    courses: categoryCourseCounts[cat.id] || 0
+  })).sort((a, b) => b.courses - a.courses).slice(0, 4);
+
   const statCards = [
     { label: "Published Rate", value: `${publishedRate}%`, icon: TrendingUp, tone: "teal", help: `${stats.publishedCourses} of ${store.courses.length} courses live` },
-    { label: "Learner Reach", value: store.categories.reduce((sum, item) => sum + Number(item.learners || 0), 0).toLocaleString(), icon: Users, tone: "purple", help: "Aggregated category learners" },
+    { label: "Learner Reach", value: totalStudents.toLocaleString(), icon: Users, tone: "purple", help: "Registered platform learners" },
     { label: "Curriculum Depth", value: curriculumDepth, icon: Layers3, tone: "orange", help: "Submodules per module" },
     { label: "Active Blocks", value: stats.activeBlocks, icon: Boxes, tone: "teal", help: `${store.contentBlocks.length} total content items` }
   ];
