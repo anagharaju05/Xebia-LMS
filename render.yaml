@@ -1,7 +1,5 @@
 services:
   - type: web
     name: xebia-backend
-    runtime: java
+    env: docker
     rootDir: backend
-    buildCommand: mvn clean install
-    startCommand: java -jar target/*.jar
