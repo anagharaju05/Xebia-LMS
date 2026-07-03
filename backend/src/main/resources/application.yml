@@ -4,9 +4,9 @@ spring:
   application:
     name: lms-course-module
   datasource:
-    url: jdbc:postgresql://localhost:5432/lms_course
-    username: postgres
-    password: ANAGHA2005
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:lms_course}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
