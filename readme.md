@@ -169,13 +169,13 @@ mvn spring-boot:run
 Backend Server:
 
 ```text
-http://localhost:8080
+https://xebia-lms-backend.up.railway.app
 ```
 
 Swagger Documentation:
 
 ```text
-http://localhost:8080/swagger-ui.html
+https://xebia-lms-backend.up.railway.app/swagger-ui.html
 ```
 
 ---
