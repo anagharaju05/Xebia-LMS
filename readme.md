@@ -1,19 +1,5 @@
 # Xebia LMS Portal
 
-<p align="center">
-  <img src="./Workflow.png" width="100%" alt="Xebia LMS Architecture"/>
-</p>
-
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=react,vite,java,spring,postgres,maven" />
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/github/stars/anagharaju05/Xebia-LMS?style=flat-square" />
-  <img src="https://img.shields.io/github/forks/anagharaju05/Xebia-LMS?style=flat-square" />
-  <img src="https://img.shields.io/github/issues/anagharaju05/Xebia-LMS?style=flat-square" />
-  <img src="https://img.shields.io/github/license/anagharaju05/Xebia-LMS?style=flat-square" />
-</p>
 
 ---
 
