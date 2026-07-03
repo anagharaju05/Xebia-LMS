@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { INITIAL_STUDENT_MANAGEMENT } from "./studentManagement.data.js";
 
-const BASE_URL = "https://xebia-lms-backend.up.railway.app/api/management/students";
+const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8080";
+const BASE_URL = `${baseUrl}/api/management/students`;
 let DEFAULT_HEADERS = {
   "Content-Type": "application/json",
   "X-Organization-ID": "123e4567-e89b-12d3-a456-426614174000",
