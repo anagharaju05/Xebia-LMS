@@ -1,4 +1,4 @@
-const BASE_URL = "https://xebia-lms-backend.up.railway.app";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 const ORG_ID = "123e4567-e89b-12d3-a456-426614174000";
 const USER_ID = "123e4567-e89b-12d3-a456-426614174000";
 const USER_ROLE = "ADMIN";
