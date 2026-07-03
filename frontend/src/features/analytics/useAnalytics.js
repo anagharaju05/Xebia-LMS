@@ -16,8 +16,8 @@ export function useAnalytics(endpoint, filters = {}) {
         if (filters.region) queryParams.append('region', filters.region);
         if (filters.businessUnit) queryParams.append('businessUnit', filters.businessUnit);
         
-        // Use hardcoded headers for testing if needed
-        const res = await fetch(`https://xebia-lms-backend.up.railway.app/api/analytics/${endpoint}?${queryParams.toString()}`, {
+        const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8080";
+        const res = await fetch(`${baseUrl}/api/analytics/${endpoint}?${queryParams.toString()}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
