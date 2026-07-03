@@ -1,6 +1,5 @@
 # Xebia LMS Portal
 
-
 ---
 
 ## Overview
@@ -25,29 +24,10 @@ The project integrates PostgreSQL, Flyway migrations, Spring Security, MapStruct
 
 ## Frontend
 
-<table>
-<tr>
-<td align="center" width="120">
-<img src="https://skillicons.dev/icons?i=react" width="48"/><br/>
-React 18
-</td>
-
-<td align="center" width="120">
-<img src="https://skillicons.dev/icons?i=vite" width="48"/><br/>
-Vite
-</td>
-
-<td align="center" width="120">
-<img src="https://skillicons.dev/icons?i=css" width="48"/><br/>
-Vanilla CSS
-</td>
-
-<td align="center" width="120">
-<img src="https://skillicons.dev/icons?i=javascript" width="48"/><br/>
-JavaScript
-</td>
-</tr>
-</table>
+* React 18
+* Vite
+* Vanilla CSS
+* JavaScript
 
 ### Additional Libraries
 
@@ -59,29 +39,10 @@ JavaScript
 
 ## Backend
 
-<table>
-<tr>
-<td align="center" width="120">
-<img src="https://skillicons.dev/icons?i=java" width="48"/><br/>
-Java 17
-</td>
-
-<td align="center" width="120">
-<img src="https://skillicons.dev/icons?i=spring" width="48"/><br/>
-Spring Boot
-</td>
-
-<td align="center" width="120">
-<img src="https://skillicons.dev/icons?i=postgres" width="48"/><br/>
-PostgreSQL
-</td>
-
-<td align="center" width="120">
-<img src="https://skillicons.dev/icons?i=maven" width="48"/><br/>
-Maven
-</td>
-</tr>
-</table>
+* Java 17
+* Spring Boot
+* PostgreSQL
+* Maven
 
 ### Backend Features
 
@@ -145,15 +106,11 @@ DB_PASSWORD=your_postgres_password
 
 ## Prerequisites
 
-<table>
-<tr>
-<td>Java 17</td>
-<td>Node.js v18+</td>
-<td>PostgreSQL v14+</td>
-<td>Maven</td>
-<td>Git</td>
-</tr>
-</table>
+* Java 17
+* Node.js v18+
+* PostgreSQL v14+
+* Maven
+* Git
 
 ---
 
@@ -285,25 +242,15 @@ PostgreSQL Database
 
 # Core Features
 
-<table>
-<tr>
-<td>Secure Authentication</td>
-<td>RESTful APIs</td>
-<td>Analytics Dashboard</td>
-</tr>
-
-<tr>
-<td>Course Management</td>
-<td>Student Portal</td>
-<td>Flyway Migration</td>
-</tr>
-
-<tr>
-<td>Modular Architecture</td>
-<td>Swagger Documentation</td>
-<td>Scalable Backend</td>
-</tr>
-</table>
+* Secure Authentication
+* RESTful APIs
+* Analytics Dashboard
+* Course Management
+* Student Portal
+* Flyway Migration
+* Modular Architecture
+* Swagger Documentation
+* Scalable Backend
 
 ---
 
