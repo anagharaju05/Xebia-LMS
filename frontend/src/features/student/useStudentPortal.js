@@ -11,7 +11,7 @@ export function useStudentPortal(user) {
   });
   
   const studentId = user?.studentId || user?.id || "student-aarav"; // Fallback for mock user id if missing
-  const BASE_URL = `http://localhost:8080/api/portal/students/${studentId}`;
+  const BASE_URL = `https://xebia-lms-backend.up.railway.app/api/portal/students/${studentId}`;
   
   let DEFAULT_HEADERS = {
     "Content-Type": "application/json",

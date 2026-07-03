@@ -17,7 +17,7 @@ export function useAnalytics(endpoint, filters = {}) {
         if (filters.businessUnit) queryParams.append('businessUnit', filters.businessUnit);
         
         // Use hardcoded headers for testing if needed
-        const res = await fetch(`http://localhost:8080/api/analytics/${endpoint}?${queryParams.toString()}`, {
+        const res = await fetch(`https://xebia-lms-backend.up.railway.app/api/analytics/${endpoint}?${queryParams.toString()}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
