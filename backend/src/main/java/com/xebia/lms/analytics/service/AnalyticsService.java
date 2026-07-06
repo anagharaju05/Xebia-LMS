@@ -52,6 +52,7 @@ public class AnalyticsService {
         return where.toString();
     }
 
+    @org.springframework.cache.annotation.Cacheable("analytics_filters")
     public Map<String, Object> getFilters() {
         Map<String, Object> filters = new HashMap<>();
         filters.put("regions", List.of("Global", "North America", "Europe", "APAC"));
@@ -59,6 +60,7 @@ public class AnalyticsService {
         return filters;
     }
 
+    @org.springframework.cache.annotation.Cacheable("analytics_executive_summary")
     public Map<String, Object> getExecutiveSummary(AnalyticsFilterRequest request) {
         Map<String, Object> data = new HashMap<>();
         

@@ -35,6 +35,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
+    @org.springframework.cache.annotation.CacheEvict(value = "courses", allEntries = true)
     public CourseResponse createCourse(CourseRequest request) {
         UUID orgId = TenantContext.getCurrentTenant();
         if (orgId == null) {
@@ -71,6 +72,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
+    @org.springframework.cache.annotation.CacheEvict(value = "courses", allEntries = true)
     public CourseResponse updateCourse(UUID id, CourseRequest request) {
         UUID orgId = TenantContext.getCurrentTenant();
         Course course = courseRepository.findByIdAndOrganizationId(id, orgId)
@@ -105,6 +107,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
+    @org.springframework.cache.annotation.CacheEvict(value = "courses", allEntries = true)
     public void deleteCourse(UUID id) {
         UUID orgId = TenantContext.getCurrentTenant();
         Course course = courseRepository.findByIdAndOrganizationId(id, orgId)
@@ -125,6 +128,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional(readOnly = true)
+    @org.springframework.cache.annotation.Cacheable("courses")
     public List<CourseResponse> getAllCourses() {
         UUID orgId = TenantContext.getCurrentTenant();
         List<Course> courses = courseRepository.findAllByOrganizationId(orgId);

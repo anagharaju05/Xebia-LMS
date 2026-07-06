@@ -26,6 +26,10 @@ spring:
     enabled: true
     baseline-on-migrate: true
 
+  data:
+    redis:
+      url: ${REDIS_URL:redis://localhost:6379}
+
 springdoc:
   api-docs:
     path: /v3/api-docs
