@@ -30,6 +30,7 @@ public class StudentManagementServiceImpl implements StudentManagementService {
     }
 
     @Override
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public List<StudentDto> getAllStudents(UUID organizationId) {
         return studentRepository.findAllByOrganizationId(organizationId).stream()
                 .map(this::mapToDto)
