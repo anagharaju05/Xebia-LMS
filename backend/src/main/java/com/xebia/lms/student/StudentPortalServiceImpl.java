@@ -22,6 +22,7 @@ public class StudentPortalServiceImpl implements StudentPortalService {
     private final LessonCommentReplyRepository replyRepository;
     private final StudentFeedbackRepository feedbackRepository;
     private final StudentAssignmentRepository assignmentRepository;
+    private final com.xebia.lms.assessment.AssessmentRepository assessmentRepository;
 
     @Override
     public StudentStateDto getStudentState(UUID studentId) {
@@ -126,11 +127,56 @@ public class StudentPortalServiceImpl implements StudentPortalService {
     @Override
     @Transactional
     public void submitTask(UUID studentId, String taskId, String submission) {
-        StudentAssignment assignment = assignmentRepository.findById(taskId).orElseThrow();
+        StudentAssignment assignment = assignmentRepository.findById(taskId)
+                .orElseGet(() -> {
+                    StudentAssignment newAssignment = new StudentAssignment();
+                    newAssignment.setId(taskId);
+                    newAssignment.setStudentId(studentId);
+                    
+                    // Attempt to parse assessmentId from composite taskId (studentId-assessmentId)
+                    try {
+                        String[] parts = taskId.split("-");
+                        if (parts.length >= 10) {
+                            String uuidStr = String.join("-", java.util.Arrays.copyOfRange(parts, 5, 10));
+                            UUID assessmentId = java.util.UUID.fromString(uuidStr);
+                            assessmentRepository.findById(assessmentId).ifPresent(a -> {
+                                newAssignment.setTitle(a.getTitle());
+                                newAssignment.setCourseSlug(a.getSubject().toLowerCase().replace(" ", "-"));
+                            });
+                        }
+                    } catch (Exception e) {
+                        // ignore
+                    }
+                    
+                    if (newAssignment.getTitle() == null) {
+                        newAssignment.setTitle("Course Assessment");
+                        newAssignment.setCourseSlug("general");
+                    }
+                    
+                    return newAssignment;
+                });
+
         if (assignment.getStudentId().equals(studentId)) {
             assignment.setSubmission(submission);
             assignment.setStatus("Submitted");
             assignment.setSubmittedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM d, yyyy, h:mm a")));
+            
+            // Try to extract auto-graded score and status from JSON payload
+            try {
+                if (submission != null && submission.contains("\"score\":")) {
+                    com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
+                    com.fasterxml.jackson.databind.JsonNode node = objectMapper.readTree(submission);
+                    if (node.has("score")) {
+                        assignment.setScore(node.get("score").asInt());
+                        if (node.has("type") && "quiz".equals(node.get("type").asText())) {
+                            assignment.setStatus("Graded");
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                // ignore
+            }
+            
             assignmentRepository.save(assignment);
         }
     }

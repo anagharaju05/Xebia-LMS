@@ -250,7 +250,45 @@ function ReviewModal({ submission, assessment, onClose, onGrade, showToast }) {
   return <Modal title={`Review ${submission.studentName}`} subtitle={assessment.title} onClose={onClose} wide>
     <form className="submission-review" onSubmit={save}>
       <section className="submission-preview"><header><TypeBadge type={submission.type} /><span>Submitted {formatDate(submission.submittedAt)}</span></header>
-        {submission.type === "file" && <div className="submitted-file"><FileText /><span><strong>{submission.fileName}</strong><small>{submission.fileSize || "Uploaded file"}</small></span><button type="button"><ExternalLink /> Preview</button></div>}
+        {submission.type === "file" && <div className="submitted-file"><FileText /><span><strong>{submission.fileName}</strong><small>{submission.fileSize || "Uploaded file"}</small></span><button type="button" onClick={() => {
+          if (submission.fileUrl) {
+            window.open(submission.fileUrl, "_blank");
+          } else {
+            const win = window.open("", "_blank");
+            if (win) {
+              win.document.write(`
+                <html>
+                  <head>
+                    <title>Preview - ${submission.fileName}</title>
+                    <style>
+                      body { font-family: system-ui, -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f3f4f6; color: #1f2937; }
+                      .card { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); max-width: 500px; text-align: center; }
+                      h1 { color: #8b5cf6; margin-top: 0; }
+                      p { line-height: 1.6; }
+                      .meta { background: #f3f4f6; padding: 1rem; border-radius: 8px; font-size: 0.875rem; margin: 1.5rem 0; text-align: left; }
+                      button { background: #8b5cf6; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 500; }
+                      button:hover { background: #7c3aed; }
+                    </style>
+                  </head>
+                  <body>
+                    <div class="card">
+                      <h1>Mock Document Viewer</h1>
+                      <p>This submission was uploaded in an earlier session without a physical file attachment. Below are the submission details:</p>
+                      <div class="meta">
+                        <div><strong>Student:</strong> ${submission.studentName}</div>
+                        <div><strong>File Name:</strong> ${submission.fileName}</div>
+                        <div><strong>File Size:</strong> ${submission.fileSize || "119 KB"}</div>
+                        <div><strong>Note:</strong> ${submission.note || "No notes provided"}</div>
+                      </div>
+                      <button onclick="window.close()">Close Preview</button>
+                    </div>
+                  </body>
+                </html>
+              `);
+              win.document.close();
+            }
+          }
+        }}><ExternalLink /> Preview</button></div>}
         {submission.type === "quiz" && <div className="quiz-review"><div><FileSpreadsheet /><span><strong>{submission.quizResults?.correct || 0} of {submission.quizResults?.total || 0} correct</strong><small>Automatically scored {submission.score}/{assessment.points}</small></span></div>{assessment.quizQuestions?.map((question, index) => { const answer = submission.quizAnswers?.[question.id]; const correct = answer === question.answer; return <article className={correct ? "correct" : "incorrect"} key={question.id}><span>{correct ? <CheckCircle2 /> : <XCircle />}</span><div><strong>{index + 1}. {question.prompt}</strong><small>Student: {answer || "No answer"} • Correct: {question.answer}</small></div></article>; })}</div>}
         {submission.type === "coding" && <><pre><code>{submission.code}</code></pre><div className="test-summary"><CheckCircle2 /><strong>{submission.testResults?.passed || 0} of {submission.testResults?.total || 0} automated tests passed</strong></div></>}
         {submission.note && <blockquote>{submission.note}</blockquote>}

@@ -12,6 +12,9 @@ const headers = {
 
 async function request(url, options = {}) {
   let dynamicHeaders = { ...headers };
+  if (options.body instanceof FormData) {
+    delete dynamicHeaders["Content-Type"];
+  }
   
   try {
     const sessionStr = localStorage.getItem("xebia-lms-auth-session-v1");
@@ -50,5 +53,6 @@ export const api = {
   get: (url) => request(url, { method: "GET" }),
   post: (url, body) => request(url, { method: "POST", body: JSON.stringify(body) }),
   put: (url, body) => request(url, { method: "PUT", body: JSON.stringify(body) }),
-  delete: (url) => request(url, { method: "DELETE" })
+  delete: (url) => request(url, { method: "DELETE" }),
+  upload: (url, formData) => request(url, { method: "POST", body: formData })
 };
