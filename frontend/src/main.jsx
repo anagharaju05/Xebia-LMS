@@ -11,6 +11,8 @@ import "./styles/responsive.css";
 import "./styles/student.css";
 import "./styles/students.css";
 import "./styles/auth.css";
+import "./styles/assessments.css";
+import "./styles/batches.css";
 
 import { BrowserRouter } from "react-router-dom";
 

@@ -3,6 +3,7 @@ import { INITIAL_STUDENT_MANAGEMENT } from "./studentManagement.data.js";
 
 const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8080";
 const BASE_URL = `${baseUrl}/api/management/students`;
+const API_ENABLED = import.meta.env.VITE_ENABLE_API === "true";
 let DEFAULT_HEADERS = {
   "Content-Type": "application/json",
   "X-Organization-ID": "123e4567-e89b-12d3-a456-426614174000",
@@ -21,8 +22,8 @@ try {
 } catch (e) {}
 
 export function useStudentManagement() {
-  const [management, setManagement] = useState({ students: [], assignments: [] });
-  const [loading, setLoading] = useState(true);
+  const [management, setManagement] = useState(INITIAL_STUDENT_MANAGEMENT);
+  const [loading, setLoading] = useState(API_ENABLED);
 
   async function fetchAll() {
     try {
@@ -43,7 +44,7 @@ export function useStudentManagement() {
   }
 
   useEffect(() => {
-    fetchAll();
+    if (API_ENABLED) fetchAll();
   }, []);
 
   async function addStudent(studentData) {

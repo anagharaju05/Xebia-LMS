@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { AUTH_SESSION_KEY, AUTH_USERS } from "./auth.data.js";
-import { api } from "../../services/api.js";
 
 function readSession() {
   try {
@@ -14,24 +13,16 @@ export function useAuth() {
   const [session, setSession] = useState(readSession);
 
   async function login(role, email, password) {
-    try {
-      const user = await api.post("/api/auth/login", { email, password, role });
-      
-      const authenticatedUser = {
-        id: user.id,
-        studentId: user.studentId,
-        organizationId: user.organizationId,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      };
-
-      localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(authenticatedUser));
-      setSession(authenticatedUser);
-      return { ok: true, user: authenticatedUser };
-    } catch (e) {
-      return { ok: false, error: e.message || "Email, password, or selected role is incorrect." };
-    }
+    const user = AUTH_USERS.find((candidate) =>
+      candidate.role === role
+      && candidate.email.toLowerCase() === email.trim().toLowerCase()
+      && candidate.password === password
+    );
+    if (!user) return { ok: false, error: "Email, password, or selected role is incorrect." };
+    const { password: _password, ...authenticatedUser } = user;
+    localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(authenticatedUser));
+    setSession(authenticatedUser);
+    return { ok: true, user: authenticatedUser };
   }
 
   function logout() {
