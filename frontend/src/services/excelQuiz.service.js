@@ -53,7 +53,13 @@ export async function parseQuizSpreadsheet(file) {
   if (extension === "csv") rows = csvRows(await file.text());
   else if (extension === "xlsx") {
     const { default: readXlsxFile } = await import("read-excel-file/browser");
-    rows = await readXlsxFile(file);
+    const result = await readXlsxFile(file);
+    // Handle both older 2D array output and modern sheet object list output
+    if (Array.isArray(result) && result.length > 0 && !Array.isArray(result[0]) && result[0].data) {
+      rows = result[0].data;
+    } else {
+      rows = result;
+    }
   } else throw new Error("Choose an .xlsx or .csv file.");
   const questions = rowsToQuestions(rows);
   return { questions, totalMarks: questions.reduce((sum, question) => sum + question.marks, 0) };

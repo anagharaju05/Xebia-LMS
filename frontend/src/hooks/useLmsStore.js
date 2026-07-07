@@ -56,6 +56,21 @@ export function useLmsStore(showToast) {
   }, []);
 
   async function syncAndMergeDatabase() {
+    let isStudent = false;
+    try {
+      const sessionStr = localStorage.getItem("xebia-lms-auth-session-v1");
+      if (sessionStr) {
+        const session = JSON.parse(sessionStr);
+        if (session.role?.toUpperCase() === "STUDENT") {
+          isStudent = true;
+        }
+      }
+    } catch {}
+
+    if (isStudent) {
+      return;
+    }
+
     let pgCategories = await api.get("/api/categories");
     let pgCourses = await api.get("/api/courses");
     let pgModules = await api.get("/api/modules/course/all");

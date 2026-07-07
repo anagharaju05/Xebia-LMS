@@ -40,6 +40,17 @@ public class AuthController {
                         "123e4567-e89b-12d3-a456-426614174000"
                 ));
             }
+        } else if ("teacher".equals(role) && "teacher@xebia.com".equalsIgnoreCase(email)) {
+            if ("Teacher@123".equals(password)) {
+                return ResponseEntity.ok(new AuthResponse(
+                        "teacher-user-1",
+                        "Meera Thomas",
+                        "teacher@xebia.com",
+                        "teacher",
+                        null,
+                        "123e4567-e89b-12d3-a456-426614174000"
+                ));
+            }
         } else if ("student".equals(role)) {
             Optional<Student> studentOpt = studentRepository.findByEmail(email);
             if (studentOpt.isPresent()) {

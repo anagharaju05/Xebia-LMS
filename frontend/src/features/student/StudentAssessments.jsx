@@ -62,16 +62,17 @@ function FileSubmission({ assessment, onSubmit, showToast }) {
     const next = event.target.files?.[0];
     if (!next) return;
     const extension = next.name.split(".").pop().toLowerCase();
-    if (!assessment.allowedFileTypes.includes(extension)) { setError(`Please select a ${assessment.allowedFileTypes.join(" or ").toUpperCase()} file.`); return; }
+    const allowed = assessment.allowedFileTypes || ["pdf", "docx"];
+    if (!allowed.includes(extension)) { setError(`Please select a ${allowed.join(" or ").toUpperCase()} file.`); return; }
     setFile(next); setError("");
   }
   function submit() {
     if (!file) return;
-    onSubmit({ type: "file", fileName: file.name, fileSize: file.size > 1024 * 1024 ? `${(file.size / 1024 / 1024).toFixed(1)} MB` : `${Math.ceil(file.size / 1024)} KB`, note });
+    onSubmit({ type: "file", file: file, fileName: file.name, fileSize: file.size > 1024 * 1024 ? `${(file.size / 1024 / 1024).toFixed(1)} MB` : `${Math.ceil(file.size / 1024)} KB`, note });
     showToast?.("Assessment submitted successfully");
   }
-  return <section className="student-submit-panel"><header><Upload /><div><h3>Upload your work</h3><p>One {assessment.allowedFileTypes.map((type) => type.toUpperCase()).join(" or ")} file, up to 25 MB.</p></div></header>
-    <label className={`student-file-drop ${file ? "selected" : ""}`}><input type="file" accept={assessment.allowedFileTypes.map((type) => `.${type}`).join(",")} onChange={choose} />{file ? <><CheckCircle2 /><strong>{file.name}</strong><span>{(file.size / 1024).toFixed(0)} KB • Click to replace</span></> : <><Upload /><strong>Choose a file</strong><span>or drag and drop it here</span></>}</label>
+  return <section className="student-submit-panel"><header><Upload /><div><h3>Upload your work</h3><p>One ${(assessment.allowedFileTypes || ["pdf", "docx"]).map((type) => type.toUpperCase()).join(" or ")} file, up to 25 MB.</p></div></header>
+    <label className={`student-file-drop ${file ? "selected" : ""}`}><input type="file" accept={(assessment.allowedFileTypes || ["pdf", "docx"]).map((type) => `.${type}`).join(",")} onChange={choose} />{file ? <><CheckCircle2 /><strong>{file.name}</strong><span>{(file.size / 1024).toFixed(0)} KB • Click to replace</span></> : <><Upload /><strong>Choose a file</strong><span>or drag and drop it here</span></>}</label>
     {error && <p className="student-submit-error"><XCircle />{error}</p>}
     <label><span>Private note to teacher <small>(optional)</small></span><textarea rows="3" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Add context about your submission..." /></label>
     <button className="primary student-submit-button" disabled={!file} onClick={submit}><Send /> Turn in assessment</button>
