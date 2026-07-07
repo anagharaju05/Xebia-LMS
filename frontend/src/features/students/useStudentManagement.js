@@ -3,33 +3,34 @@ import { INITIAL_STUDENT_MANAGEMENT } from "./studentManagement.data.js";
 
 const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8080";
 const BASE_URL = `${baseUrl}/api/management/students`;
-const API_ENABLED = import.meta.env.VITE_ENABLE_API === "true";
-let DEFAULT_HEADERS = {
-  "Content-Type": "application/json",
-  "X-Organization-ID": "123e4567-e89b-12d3-a456-426614174000",
-  "X-User-Id": "admin-1",
-  "X-User-Role": "ADMIN"
-};
-
-try {
-  const sessionStr = localStorage.getItem("xebia-lms-auth-session-v1");
-  if (sessionStr) {
-    const session = JSON.parse(sessionStr);
-    if (session.id) DEFAULT_HEADERS["X-User-Id"] = session.id;
-    if (session.role) DEFAULT_HEADERS["X-User-Role"] = session.role.toUpperCase();
-    if (session.organizationId) DEFAULT_HEADERS["X-Organization-ID"] = session.organizationId;
-  }
-} catch (e) {}
+function getHeaders() {
+  const headers = {
+    "Content-Type": "application/json",
+    "X-Organization-ID": "123e4567-e89b-12d3-a456-426614174000",
+    "X-User-Id": "admin-1",
+    "X-User-Role": "ADMIN"
+  };
+  try {
+    const sessionStr = localStorage.getItem("xebia-lms-auth-session-v1");
+    if (sessionStr) {
+      const session = JSON.parse(sessionStr);
+      if (session.id) headers["X-User-Id"] = session.id;
+      if (session.role) headers["X-User-Role"] = session.role.toUpperCase();
+      if (session.organizationId) headers["X-Organization-ID"] = session.organizationId;
+    }
+  } catch (e) {}
+  return headers;
+}
 
 export function useStudentManagement() {
   const [management, setManagement] = useState(INITIAL_STUDENT_MANAGEMENT);
-  const [loading, setLoading] = useState(API_ENABLED);
+  const [loading, setLoading] = useState(true);
 
   async function fetchAll() {
     try {
       const [studentsRes, assignmentsRes] = await Promise.all([
-        fetch(BASE_URL, { headers: DEFAULT_HEADERS }).then(res => res.json()),
-        fetch(`${BASE_URL}/assignments`, { headers: DEFAULT_HEADERS }).then(res => res.json())
+        fetch(BASE_URL, { headers: getHeaders() }).then(res => res.json()),
+        fetch(`${BASE_URL}/assignments`, { headers: getHeaders() }).then(res => res.json())
       ]);
       setManagement({
         students: Array.isArray(studentsRes) ? studentsRes : [],
@@ -44,14 +45,14 @@ export function useStudentManagement() {
   }
 
   useEffect(() => {
-    if (API_ENABLED) fetchAll();
+    fetchAll();
   }, []);
 
   async function addStudent(studentData) {
     try {
       const res = await fetch(BASE_URL, {
         method: "POST",
-        headers: DEFAULT_HEADERS,
+        headers: getHeaders(),
         body: JSON.stringify(studentData)
       });
       if (res.ok) {
@@ -69,7 +70,7 @@ export function useStudentManagement() {
     try {
       const res = await fetch(`${BASE_URL}/${studentId}/toggle-status`, { 
         method: "PUT",
-        headers: DEFAULT_HEADERS
+        headers: getHeaders()
       });
       if (res.ok) {
         await fetchAll();
@@ -83,7 +84,7 @@ export function useStudentManagement() {
     try {
       const res = await fetch(`${BASE_URL}/${studentId}/courses/${courseSlug}`, { 
         method: "POST",
-        headers: DEFAULT_HEADERS 
+        headers: getHeaders() 
       });
       if (res.ok) {
         await fetchAll();
@@ -99,7 +100,7 @@ export function useStudentManagement() {
     try {
       const res = await fetch(`${BASE_URL}/assignments`, {
         method: "POST",
-        headers: DEFAULT_HEADERS,
+        headers: getHeaders(),
         body: JSON.stringify(assignmentData)
       });
       if (res.ok) {
@@ -116,7 +117,7 @@ export function useStudentManagement() {
     try {
       const res = await fetch(`${BASE_URL}/assignments/${assignmentId}/review`, {
         method: "PUT",
-        headers: DEFAULT_HEADERS,
+        headers: getHeaders(),
         body: JSON.stringify({ score, notes })
       });
       if (res.ok) {

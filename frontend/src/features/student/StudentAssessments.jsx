@@ -142,8 +142,7 @@ export default function StudentAssessments({ assessmentStore, batchStore, user, 
     if (item.status !== "Published") return false;
     const scope = item.assignmentScope || "selected_students";
     if (scope === "entire_course") return true;
-    if (scope === "selected_batch") return (item.assignedBatchIds || []).some((id) => studentBatchIds.includes(id));
-    return (item.assignedStudentIds || []).includes(studentId);
+    return (item.assignedStudentIds || []).includes(studentId) || (item.assignedBatchIds || []).some((id) => studentBatchIds.includes(id));
   }), [assessmentStore.state.assessments, studentId, studentBatchIds.join("|")]);
   const selected = assessments.find((item) => item.id === selectedId);
   const mySubmissions = assessmentStore.state.submissions.filter((item) => item.studentId === studentId);

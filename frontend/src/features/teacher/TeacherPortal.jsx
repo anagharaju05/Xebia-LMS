@@ -6,9 +6,10 @@ import {
   Layers3, Paperclip, Pencil, Plus, RotateCcw, Search, Send, Sun, Trash2, Upload, Users,
   X, XCircle
 } from "lucide-react";
-import { ASSESSMENT_TYPES, createBlankAssessment, DEMO_STUDENTS } from "../assessments/assessment.data.js";
+import { ASSESSMENT_TYPES, createBlankAssessment } from "../assessments/assessment.data.js";
 import { parseQuizSpreadsheet, QUIZ_EXCEL_COLUMNS } from "../../services/excelQuiz.service.js";
 import TeacherBatchWorkspace from "./TeacherBatchWorkspace.jsx";
+import { useStudentManagement } from "../students/useStudentManagement.js";
 
 const VIEWS = {
   DASHBOARD: "dashboard",
@@ -60,7 +61,7 @@ function Modal({ children, title, subtitle, onClose, wide = false }) {
   );
 }
 
-function AssessmentEditor({ initial, onClose, onSave, showToast, batchStore }) {
+function AssessmentEditor({ initial, onClose, onSave, showToast, batchStore, students }) {
   const [form, setForm] = useState(() => ({ ...createBlankAssessment(), ...initial }));
   const [error, setError] = useState("");
   const [importingQuiz, setImportingQuiz] = useState(false);
@@ -105,7 +106,7 @@ function AssessmentEditor({ initial, onClose, onSave, showToast, batchStore }) {
       return;
     }
     const assignedStudentIds = form.assignmentScope === "entire_course"
-      ? DEMO_STUDENTS.map((student) => student.id)
+      ? students.map((student) => student.id)
       : form.assignmentScope === "selected_batch"
         ? [...new Set(batchStore.state.batches.filter((batch) => form.assignedBatchIds.includes(batch.id)).flatMap((batch) => batch.studentIds))]
         : form.assignedStudentIds;
@@ -169,7 +170,7 @@ function AssessmentEditor({ initial, onClose, onSave, showToast, batchStore }) {
 
         <fieldset className="allocation-picker"><legend>Who should receive this assessment?</legend><div>{[["entire_course", BookOpenCheck, "Entire course", "All enrolled students"], ["selected_batch", Users, "Selected batch", "One or more cohorts"], ["selected_students", GraduationCap, "Selected students", "Individual allocation"]].map(([value, Icon, label, hint]) => <button type="button" className={form.assignmentScope === value ? "active" : ""} key={value} onClick={() => update("assignmentScope", value)}><Icon /><span><strong>{label}</strong><small>{hint}</small></span>{form.assignmentScope === value && <Check />}</button>)}</div></fieldset>
         {form.assignmentScope === "selected_batch" && <fieldset className="student-picker"><legend>Select batches</legend><p>{form.assignedBatchIds.length} selected</p><div>{batchStore.state.batches.filter((batch) => batch.status === "Active").map((batch) => <label key={batch.id}><input type="checkbox" checked={form.assignedBatchIds.includes(batch.id)} onChange={(e) => update("assignedBatchIds", e.target.checked ? [...form.assignedBatchIds, batch.id] : form.assignedBatchIds.filter((id) => id !== batch.id))} /><span>{batch.name}<small>{batch.studentIds.length} students</small></span></label>)}</div></fieldset>}
-        {form.assignmentScope === "selected_students" && <fieldset className="student-picker"><legend>Assign to students</legend><p>{form.assignedStudentIds.length} of {DEMO_STUDENTS.length} selected</p><div>{DEMO_STUDENTS.map((student) => <label key={student.id}><input type="checkbox" checked={form.assignedStudentIds.includes(student.id)} onChange={(e) => update("assignedStudentIds", e.target.checked ? [...form.assignedStudentIds, student.id] : form.assignedStudentIds.filter((id) => id !== student.id))} /><span>{student.name}<small>{student.email}</small></span></label>)}</div></fieldset>}
+        {form.assignmentScope === "selected_students" && <fieldset className="student-picker"><legend>Assign to students</legend><p>{form.assignedStudentIds.length} of {students.length} selected</p><div>{students.map((student) => <label key={student.id}><input type="checkbox" checked={form.assignedStudentIds.includes(student.id)} onChange={(e) => update("assignedStudentIds", e.target.checked ? [...form.assignedStudentIds, student.id] : form.assignedStudentIds.filter((id) => id !== student.id))} /><span>{student.name}<small>{student.email}</small></span></label>)}</div></fieldset>}
 
         {error && <p className="assessment-form-error"><XCircle />{error}</p>}
         <footer className="assessment-modal-actions"><button type="button" className="secondary" onClick={onClose}>Cancel</button><button type="button" className="secondary" onClick={(event) => submit(event, "Draft")}>Save draft</button><button className="primary" type="button" onClick={(event) => submit(event, "Published")}><Send /> Publish assessment</button></footer>
@@ -298,20 +299,20 @@ function ReviewModal({ submission, assessment, onClose, onGrade, showToast }) {
   </Modal>;
 }
 
-function SubmissionsPage({ state, onGrade, showToast }) {
+function SubmissionsPage({ state, onGrade, showToast, students }) {
   const [assessmentId, setAssessmentId] = useState(state.assessments.find((item) => item.status === "Published")?.id || "");
   const [tab, setTab] = useState("submitted");
   const [reviewing, setReviewing] = useState(null);
   const assessment = state.assessments.find((item) => item.id === assessmentId);
   const submissions = state.submissions.filter((item) => item.assessmentId === assessmentId);
   const submittedIds = new Set(submissions.map((item) => item.studentId));
-  const missing = DEMO_STUDENTS.filter((student) => assessment?.assignedStudentIds.includes(student.id) && !submittedIds.has(student.id));
+  const missing = students.filter((student) => assessment?.assignedStudentIds.includes(student.id) && !submittedIds.has(student.id));
   return <section className="teacher-page">
     <div className="teacher-page-heading"><div><span>Review centre</span><h1>Student submissions</h1><p>Track completion, evaluate work, and return feedback.</p></div></div>
     <div className="submission-assessment-picker"><label><span>Assessment</span><select value={assessmentId} onChange={(e) => setAssessmentId(e.target.value)}>{state.assessments.filter((item) => item.status === "Published").map((item) => <option value={item.id} key={item.id}>{item.title}</option>)}</select></label>{assessment && <div><span><strong>{submissions.length}</strong> Submitted</span><span><strong>{missing.length}</strong> Not submitted</span><span><strong>{submissions.filter((item) => item.status === "Graded").length}</strong> Graded</span></div>}</div>
     <div className="submission-tabs"><button className={tab === "submitted" ? "active" : ""} onClick={() => setTab("submitted")}>Submitted <span>{submissions.length}</span></button><button className={tab === "missing" ? "active" : ""} onClick={() => setTab("missing")}>Not submitted <span>{missing.length}</span></button></div>
     <section className="submission-table">
-      {tab === "submitted" ? <><header><span>Student</span><span>Submission</span><span>Submitted on</span><span>Status / marks</span><span /></header>{submissions.map((submission) => <article key={submission.id}><span className="submission-student"><b>{submission.studentName.split(" ").map((w) => w[0]).join("")}</b><span><strong>{submission.studentName}</strong><small>{DEMO_STUDENTS.find((s) => s.id === submission.studentId)?.email}</small></span></span><span><TypeBadge type={submission.type} /><small>{submission.fileName || submission.formReceipt || `${submission.testResults?.passed || 0}/${submission.testResults?.total || 0} tests`}</small></span><time>{formatDate(submission.submittedAt)}</time><span>{submission.status === "Graded" ? <><strong className="score-text">{submission.score}/{assessment?.points}</strong><StatusPill status="Graded" /></> : <StatusPill status="Submitted" />}</span><button className="review-button" onClick={() => setReviewing(submission)}>{submission.status === "Graded" ? "Edit grade" : "Review"}<ChevronRight /></button></article>)}</> : <><header className="missing"><span>Student</span><span>Email</span><span>Deadline</span><span>Action</span></header>{missing.map((student) => <article className="missing" key={student.id}><span className="submission-student"><b>{student.name.split(" ").map((w) => w[0]).join("")}</b><strong>{student.name}</strong></span><span>{student.email}</span><time>{formatDate(assessment?.dueAt)}</time><button className="remind-button" onClick={() => showToast?.(`Reminder queued for ${student.name}`)}><Bell /> Send reminder</button></article>)}</>}
+      {tab === "submitted" ? <><header><span>Student</span><span>Submission</span><span>Submitted on</span><span>Status / marks</span><span /></header>{submissions.map((submission) => <article key={submission.id}><span className="submission-student"><b>{submission.studentName.split(" ").map((w) => w[0]).join("")}</b><span><strong>{submission.studentName}</strong><small>{students.find((s) => s.id === submission.studentId)?.email}</small></span></span><span><TypeBadge type={submission.type} /><small>{submission.fileName || submission.formReceipt || `${submission.testResults?.passed || 0}/${submission.testResults?.total || 0} tests`}</small></span><time>{formatDate(submission.submittedAt)}</time><span>{submission.status === "Graded" ? <><strong className="score-text">{submission.score}/{assessment?.points}</strong><StatusPill status="Graded" /></> : <StatusPill status="Submitted" />}</span><button className="review-button" onClick={() => setReviewing(submission)}>{submission.status === "Graded" ? "Edit grade" : "Review"}<ChevronRight /></button></article>)}</> : <><header className="missing"><span>Student</span><span>Email</span><span>Deadline</span><span>Action</span></header>{missing.map((student) => <article className="missing" key={student.id}><span className="submission-student"><b>{student.name.split(" ").map((w) => w[0]).join("")}</b><strong>{student.name}</strong></span><span>{student.email}</span><time>{formatDate(assessment?.dueAt)}</time><button className="remind-button" onClick={() => showToast?.(`Reminder queued for ${student.name}`)}><Bell /> Send reminder</button></article>)}</>}
       {((tab === "submitted" && !submissions.length) || (tab === "missing" && !missing.length)) && <div className="teacher-empty"><CheckCircle2 /><h2>{tab === "missing" ? "Everyone has submitted" : "No submissions yet"}</h2></div>}
     </section>
     {reviewing && <ReviewModal submission={reviewing} assessment={assessment} onClose={() => setReviewing(null)} onGrade={onGrade} showToast={showToast} />}
@@ -331,6 +332,7 @@ function QuestionsPage({ state, onAnswer, showToast }) {
 }
 
 export default function TeacherPortal({ assessmentStore, batchStore, theme, onThemeToggle, user, onLogout, showToast }) {
+  const { management: { students } } = useStudentManagement();
   const [view, setView] = useState(VIEWS.DASHBOARD);
   const [editor, setEditor] = useState(null);
   const [mobileNav, setMobileNav] = useState(false);
@@ -359,7 +361,7 @@ export default function TeacherPortal({ assessmentStore, batchStore, theme, onTh
       <main>
         {view === VIEWS.DASHBOARD && <TeacherDashboard state={assessmentStore.state} onNavigate={setView} onCreate={() => setEditor(createBlankAssessment())} />}
         {view === VIEWS.ASSESSMENTS && <AssessmentsPage state={assessmentStore.state} onCreate={() => setEditor(createBlankAssessment())} onEdit={setEditor} onDelete={requestDelete} onStatus={(id, status) => { assessmentStore.setAssessmentStatus(id, status); showToast?.(status === "Published" ? "Assessment published" : "Moved to drafts"); }} />}
-        {view === VIEWS.SUBMISSIONS && <SubmissionsPage state={assessmentStore.state} onGrade={assessmentStore.gradeSubmission} showToast={showToast} />}
+        {view === VIEWS.SUBMISSIONS && <SubmissionsPage state={assessmentStore.state} onGrade={assessmentStore.gradeSubmission} showToast={showToast} students={students} />}
         {view === VIEWS.QUESTIONS && <QuestionsPage state={assessmentStore.state} onAnswer={assessmentStore.answerQuestion} showToast={showToast} />}
         {view === VIEWS.BATCHES && <TeacherBatchWorkspace mode="batches" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
         {view === VIEWS.SUBJECTS && <TeacherBatchWorkspace mode="subjects" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
@@ -367,6 +369,6 @@ export default function TeacherPortal({ assessmentStore, batchStore, theme, onTh
         {view === VIEWS.ANALYTICS && <TeacherBatchWorkspace mode="analytics" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
       </main>
     </div>
-    {editor && <AssessmentEditor initial={editor} onClose={() => setEditor(null)} onSave={assessmentStore.saveAssessment} showToast={showToast} batchStore={batchStore} />}
+    {editor && <AssessmentEditor initial={editor} onClose={() => setEditor(null)} onSave={assessmentStore.saveAssessment} showToast={showToast} batchStore={batchStore} students={students} />}
   </div>;
 }
