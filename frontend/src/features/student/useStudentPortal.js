@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { INITIAL_NOTIFICATIONS, INITIAL_COMMENTS } from "./student.data.js";
 
+const API_ENABLED = import.meta.env.VITE_ENABLE_API === "true";
+
 export function useStudentPortal(user) {
   const [studentState, setStudentState] = useState({
     completedLessonIds: [],
@@ -50,7 +52,7 @@ export function useStudentPortal(user) {
   }
 
   useEffect(() => {
-    fetchState();
+    if (API_ENABLED) fetchState();
   }, [studentId]);
 
   async function markLessonComplete(lessonId) {

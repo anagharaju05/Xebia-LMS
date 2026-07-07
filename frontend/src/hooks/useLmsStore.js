@@ -7,6 +7,7 @@ import { api } from "../services/api.js";
 import { readStorageValue, writeStorageValue } from "../services/storage.service.js";
 
 const EXTRA_KEY = "lms_extra_fields";
+const API_ENABLED = import.meta.env.VITE_ENABLE_API === "true";
 
 function toUUID(str) {
   if (!str) return null;
@@ -32,7 +33,7 @@ function getRecordLabel(record) {
 
 export function useLmsStore(showToast) {
   const [store, setStore] = useState(() => readStorageValue(STORAGE_KEY, seedState));
-  const [isOffline, setIsOffline] = useState(false);
+  const [isOffline, setIsOffline] = useState(!API_ENABLED);
 
   // Sync to local storage as offline backup
   useEffect(() => {
@@ -41,6 +42,7 @@ export function useLmsStore(showToast) {
 
   // Initial load
   useEffect(() => {
+    if (!API_ENABLED) return;
     async function loadData() {
       try {
         await syncAndMergeDatabase();

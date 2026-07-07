@@ -1,27 +1,36 @@
 import { useMemo, useState } from "react";
 import {
+  Activity,
   Bell,
+  BarChart3,
   BookOpen,
+  CalendarDays,
   CheckCircle2,
   ChevronLeft,
   Clock3,
+  CalendarClock,
   ClipboardList,
   GraduationCap,
+  Flame,
   Home,
   LogOut,
+  Layers3,
   MessageCircle,
   Moon,
   PlayCircle,
   Send,
   Star,
+  Sparkles,
   Sun,
   Trophy
 } from "lucide-react";
 import StudentContentRenderer from "./StudentContentRenderer.jsx";
 import { useStudentPortal } from "./useStudentPortal.js";
 import { ASSESSMENTS } from "./student.data.js";
+import StudentAssessments from "./StudentAssessments.jsx";
 import { getLearningIcon } from "../../utils/learningIcon.utils.js";
 import { useStudentManagement } from "../students/useStudentManagement.js";
+import StudentBatchWorkspace from "./StudentBatchWorkspace.jsx";
 
 const STUDENT_VIEWS = {
   HOME: "home",
@@ -29,6 +38,9 @@ const STUDENT_VIEWS = {
   COURSE: "course",
   TASKS: "tasks",
   ASSESSMENTS: "assessments",
+  BATCHES: "batches",
+  CALENDAR: "calendar",
+  ANALYTICS: "analytics",
   NOTIFICATIONS: "notifications",
   FEEDBACK: "feedback"
 };
@@ -67,10 +79,10 @@ function StudentCourseCard({ course, progress, onOpen }) {
   return (
     <article className="student-course-card" style={{ "--student-accent": course.accentColor || "#6C1D5F" }}>
       <div className="student-course-art">
-        {course.thumbnail ? <img src={course.thumbnail} alt="" /> : <LearningIcon aria-hidden="true" />}
+        {course.thumbnail ? <img src={course.thumbnail} alt="" loading="lazy" decoding="async" /> : <LearningIcon aria-hidden="true" />}
       </div>
       <div className="student-course-card-body">
-        <LearningIcon className="student-course-symbol" aria-hidden="true" />
+        <div className="student-course-label"><LearningIcon className="student-course-symbol" aria-hidden="true" /><span>{course.level || "Course"}</span></div>
         <h3>{course.title}</h3>
         <p>{course.shortDescription}</p>
         <div className="student-progress">
@@ -85,11 +97,15 @@ function StudentCourseCard({ course, progress, onOpen }) {
   );
 }
 
-function StudentHome({ store, courses, studentState, tasks, user, onOpenCourse, onNavigate }) {
+function StudentHome({ store, courses, studentState, tasks, user, onOpenCourse, onNavigate, batchStore, assessmentStore }) {
   const completed = studentState.completedLessonIds.length;
   const unread = studentState.notifications.filter((item) => !item.read).length;
   const openTasks = tasks.filter((task) => task.status === "Assigned").length;
   const nextCourse = courses[0];
+  const studentId = user?.studentId || user?.id;
+  const myBatchIds = batchStore.state.batches.filter((batch) => batch.studentIds.includes(studentId)).map((batch) => batch.id);
+  const deadlines = assessmentStore.state.assessments.filter((item) => item.status === "Published" && ((item.assignmentScope === "entire_course") || (item.assignedStudentIds || []).includes(studentId) || (item.assignedBatchIds || []).some((id) => myBatchIds.includes(id)))).sort((a, b) => new Date(a.dueAt) - new Date(b.dueAt)).slice(0, 3);
+  const recentAnnouncements = batchStore.state.announcements.filter((item) => myBatchIds.includes(item.batchId)).slice(0, 2);
 
   return (
     <>
@@ -145,9 +161,31 @@ function StudentHome({ store, courses, studentState, tasks, user, onOpenCourse, 
           <button className="secondary">View session details</button>
         </section>
       </div>
+
+      <div className="student-dashboard-lower">
+        <section className="student-panel student-activity-panel">
+          <header><div><span>Timeline</span><h2>Recent activity</h2></div><Activity /></header>
+          <div>{recentAnnouncements.map((item) => <article key={item.id}><i><MegaphoneIcon /></i><span><strong>{item.title}</strong><small>{item.message}</small></span><time>Recent</time></article>)}<article><i><CheckCircle2 /></i><span><strong>Assessment feedback received</strong><small>Your REST API Design Brief has been graded.</small></span><time>Today</time></article></div>
+        </section>
+        <section className="student-panel student-deadline-panel">
+          <header><div><span>Plan ahead</span><h2>Upcoming deadlines</h2></div><CalendarClock /></header>
+          <div>{deadlines.map((item) => <article key={item.id}><time><strong>{new Date(item.dueAt).getDate()}</strong><small>{new Date(item.dueAt).toLocaleString("en", { month: "short" })}</small></time><span><strong>{item.title}</strong><small>{item.subject} • {item.points} marks</small></span></article>)}</div>
+        </section>
+        <section className="student-panel student-streak-panel">
+          <header><div><span>Consistency</span><h2>Learning streak</h2></div><Flame /></header>
+          <div className="streak-count"><Flame /><span><strong>6 days</strong><small>Your best streak is 11 days</small></span></div><div className="streak-days">{["M", "T", "W", "T", "F", "S", "S"].map((day, index) => <span className={index < 6 ? "active" : ""} key={`${day}-${index}`}>{index < 6 && <CheckCircle2 />}<small>{day}</small></span>)}</div>
+        </section>
+      </div>
+
+      <section className="student-recommended">
+        <header><div><span>Future-ready learning</span><h2>Recommended for you</h2><p>Personalized recommendations will appear as your learning profile grows.</p></div><Sparkles /></header>
+        <div>{["Cloud Native Foundations", "Practical AI for Engineers", "Communication for Tech Leads"].map((title, index) => <article key={title}><span><Sparkles /></span><div><small>{["Cloud", "Artificial Intelligence", "Leadership"][index]}</small><h3>{title}</h3><p>Recommendation preview based on your active learning path.</p></div><button disabled>Coming soon</button></article>)}</div>
+      </section>
     </>
   );
 }
+
+function MegaphoneIcon() { return <Bell />; }
 
 function LearningView({ store, courses, studentState, onOpenCourse }) {
   return (
@@ -433,7 +471,7 @@ function FeedbackView({ courses, submitted, onSubmit }) {
   );
 }
 
-export default function StudentPortal({ store, theme, onThemeToggle, user, onLogout, showToast }) {
+export default function StudentPortal({ store, theme, onThemeToggle, user, onLogout, showToast, assessmentStore, batchStore }) {
   const [view, setView] = useState(STUDENT_VIEWS.HOME);
   const studentManagement = useStudentManagement();
   const studentRecord = studentManagement.management.students.find(
@@ -482,8 +520,11 @@ export default function StudentPortal({ store, theme, onThemeToggle, user, onLog
   const navItems = [
     [STUDENT_VIEWS.HOME, Home, "Home"],
     [STUDENT_VIEWS.LEARNING, BookOpen, "My Learning"],
+    [STUDENT_VIEWS.BATCHES, Layers3, "My Batches"],
     [STUDENT_VIEWS.TASKS, ClipboardList, "Tasks"],
     [STUDENT_VIEWS.ASSESSMENTS, Trophy, "Assessments"],
+    [STUDENT_VIEWS.CALENDAR, CalendarDays, "Calendar"],
+    [STUDENT_VIEWS.ANALYTICS, BarChart3, "Analytics"],
     [STUDENT_VIEWS.NOTIFICATIONS, Bell, "Notifications"],
     [STUDENT_VIEWS.FEEDBACK, MessageCircle, "Feedback"]
   ];
@@ -512,7 +553,7 @@ export default function StudentPortal({ store, theme, onThemeToggle, user, onLog
           </div>
         </header>
         <main className="student-content">
-          {view === STUDENT_VIEWS.HOME && <StudentHome store={store} courses={courses} studentState={portal.studentState} tasks={tasks} user={user} onOpenCourse={openCourse} onNavigate={navigate} />}
+          {view === STUDENT_VIEWS.HOME && <StudentHome store={store} courses={courses} studentState={portal.studentState} tasks={tasks} user={user} onOpenCourse={openCourse} onNavigate={navigate} batchStore={batchStore} assessmentStore={assessmentStore} />}
           {view === STUDENT_VIEWS.LEARNING && <LearningView store={store} courses={courses} studentState={portal.studentState} onOpenCourse={openCourse} />}
           {view === STUDENT_VIEWS.TASKS && <TasksView tasks={tasks} courses={courses} onSubmit={(taskId, submission) => {
             const saved = studentManagement.submitAssignment(taskId, submission);
@@ -520,7 +561,10 @@ export default function StudentPortal({ store, theme, onThemeToggle, user, onLog
             return saved;
           }} />}
           {view === STUDENT_VIEWS.COURSE && course && <CourseView store={store} course={course} studentState={portal.studentState} onBack={() => navigate(STUDENT_VIEWS.LEARNING)} onComplete={completeLesson} onComment={portal.addComment} onReply={portal.addReply} />}
-          {view === STUDENT_VIEWS.ASSESSMENTS && <AssessmentsView courses={courses} results={portal.studentState.assessmentResults} onSubmit={submitAssessment} />}
+          {view === STUDENT_VIEWS.ASSESSMENTS && <StudentAssessments assessmentStore={assessmentStore} batchStore={batchStore} user={user} showToast={showToast} />}
+          {view === STUDENT_VIEWS.BATCHES && <StudentBatchWorkspace mode="batches" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
+          {view === STUDENT_VIEWS.CALENDAR && <StudentBatchWorkspace mode="calendar" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
+          {view === STUDENT_VIEWS.ANALYTICS && <StudentBatchWorkspace mode="analytics" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
           {view === STUDENT_VIEWS.NOTIFICATIONS && <NotificationsView notifications={portal.studentState.notifications} onRead={portal.markNotificationRead} />}
           {view === STUDENT_VIEWS.FEEDBACK && <FeedbackView courses={courses} submitted={portal.studentState.feedback} onSubmit={submitFeedback} />}
         </main>

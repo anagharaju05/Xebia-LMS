@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar.jsx";
 import Topbar from "../components/layout/Topbar.jsx";
@@ -11,8 +11,9 @@ import CourseEditor from "../features/courses/CourseEditor.jsx";
 import CurriculumPage from "../features/curriculum/CurriculumPage.jsx";
 import ContentLibraryPage from "../features/content/ContentLibraryPage.jsx";
 import StudentsPage from "../features/students/StudentsPage.jsx";
-import StudentPortal from "../features/student/StudentPortal.jsx";
 import LoginPage from "../features/auth/LoginPage.jsx";
+import { useAssessmentStore } from "../features/assessments/useAssessmentStore.js";
+import { useBatchStore } from "../features/batches/useBatchStore.js";
 import { useAuth } from "../features/auth/useAuth.js";
 import { useLmsStore } from "../hooks/useLmsStore.js";
 import { useTheme } from "../hooks/useTheme.js";
@@ -34,6 +35,13 @@ import TrainingEffectiveness from "../features/analytics/components/sections/Tra
 import LearningChampions from "../features/analytics/components/sections/LearningChampions.jsx";
 import ProjectInvestment from "../features/analytics/components/sections/ProjectInvestment.jsx";
 import FresherJourney from "../features/analytics/components/sections/FresherJourney.jsx";
+
+const StudentPortal = lazy(() => import("../features/student/StudentPortal.jsx"));
+const TeacherPortal = lazy(() => import("../features/teacher/TeacherPortal.jsx"));
+
+function PortalLoading() {
+  return <main className="portal-loading" aria-live="polite"><span /><strong>Preparing your learning workspace…</strong></main>;
+}
 
 function toUUID(str) {
   if (!str) return "00000000-0000-0000-0000-000000000000";
@@ -63,6 +71,8 @@ export default function App() {
   const [selectedSubmoduleId, setSelectedSubmoduleId] = useState(INITIAL_SELECTION.submoduleId);
   const { message: toastMessage, showToast } = useToast();
   const { theme, toggleTheme } = useTheme();
+  const assessmentStore = useAssessmentStore();
+  const batchStore = useBatchStore();
   const {
     store,
     upsertEntity,
@@ -133,7 +143,16 @@ export default function App() {
   if (auth.session.role === "student") {
     return (
       <>
-        <StudentPortal store={store} theme={theme} onThemeToggle={toggleTheme} user={auth.session} onLogout={auth.logout} showToast={showToast} />
+        <Suspense fallback={<PortalLoading />}><StudentPortal store={store} theme={theme} onThemeToggle={toggleTheme} user={auth.session} onLogout={auth.logout} showToast={showToast} assessmentStore={assessmentStore} batchStore={batchStore} /></Suspense>
+        <Toast message={toastMessage} />
+      </>
+    );
+  }
+
+  if (auth.session.role === "teacher") {
+    return (
+      <>
+        <Suspense fallback={<PortalLoading />}><TeacherPortal assessmentStore={assessmentStore} batchStore={batchStore} theme={theme} onThemeToggle={toggleTheme} user={auth.session} onLogout={auth.logout} showToast={showToast} /></Suspense>
         <Toast message={toastMessage} />
       </>
     );

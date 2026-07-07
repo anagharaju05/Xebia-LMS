@@ -4,6 +4,7 @@ import {
   Eye,
   EyeOff,
   GraduationCap,
+  Presentation,
   LockKeyhole,
   Mail,
   ShieldCheck
@@ -22,15 +23,18 @@ export default function LoginPage({ onLogin }) {
     if (nextRole === "admin") {
       setEmail("admin@xebia.com");
       setPassword("Admin@123");
+    } else if (nextRole === "teacher") {
+      setEmail("teacher@xebia.com");
+      setPassword("Teacher@123");
     } else {
       setEmail("learner1@example.com");
       setPassword("password123");
     }
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    const result = onLogin(role, email, password);
+    const result = await onLogin(role, email, password);
     if (!result.ok) setError(result.error);
   }
 
@@ -58,6 +62,9 @@ export default function LoginPage({ onLogin }) {
             <button type="button" className={role === "student" ? "active" : ""} onClick={() => selectRole("student")}>
               <GraduationCap /><span><strong>Student</strong><small>Continue learning</small></span>
             </button>
+            <button type="button" className={role === "teacher" ? "active" : ""} onClick={() => selectRole("teacher")}>
+              <Presentation /><span><strong>Teacher</strong><small>Assess & grade</small></span>
+            </button>
           </div>
 
           <label className="login-field">
@@ -78,7 +85,7 @@ export default function LoginPage({ onLogin }) {
 
           {error && <p className="login-error" role="alert">{error}</p>}
           <button className="primary login-submit" type="submit">
-            Sign in as {role === "admin" ? "Admin" : "Student"} <ArrowRight />
+            Sign in as {role === "admin" ? "Admin" : role === "teacher" ? "Teacher" : "Student"} <ArrowRight />
           </button>
         </form>
       </section>

@@ -15,5 +15,12 @@ export const AUTH_USERS = [
     email: "student@xebia.com",
     password: "Student@123",
     role: "student"
+  },
+  {
+    id: "teacher-user-1",
+    name: "Meera Thomas",
+    email: "teacher@xebia.com",
+    password: "Teacher@123",
+    role: "teacher"
   }
 ];
