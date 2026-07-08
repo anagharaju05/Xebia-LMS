@@ -26,8 +26,8 @@ public class TenantFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Skip tenant validation for swagger and api docs
-        if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
+        // Skip tenant validation for swagger, api docs, and health checks
+        if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs") || path.equals("/api/health")) {
             filterChain.doFilter(request, response);
             return;
         }
