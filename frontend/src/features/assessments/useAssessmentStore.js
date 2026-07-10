@@ -38,6 +38,8 @@ export function useAssessmentStore() {
         questions: (questions || []).map(q => ({
           id: q.id,
           studentId: q.studentId,
+          studentName: q.studentName || "Student",
+          assessmentId: q.assessmentId || "",
           subject: q.subject,
           text: q.content,
           answer: q.answer || "",
