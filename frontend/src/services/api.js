@@ -28,6 +28,7 @@ async function request(url, options = {}) {
 
   const finalOptions = {
     ...options,
+    cache: "no-store",
     headers: {
       ...dynamicHeaders,
       ...options.headers
