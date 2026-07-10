@@ -121,7 +121,7 @@ function AssessmentEditor({ initial, onClose, onSave, showToast, batchStore, stu
         <div className="assessment-form-grid">
           <label className="assessment-field span-2"><span>Assessment title *</span><input value={form.title} onChange={(e) => update("title", e.target.value)} placeholder="e.g. REST API Design Brief" /></label>
           <label className="assessment-field"><span>Subject / course *</span><input value={form.subject} onChange={(e) => update("subject", e.target.value)} placeholder="Spring Boot Masterclass" /></label>
-          <label className="assessment-field"><span>Class</span><select value={form.className} onChange={(e) => update("className", e.target.value)}><option>Backend Engineering - Cohort 7</option><option>Frontend Engineering - Cohort 4</option><option>Data Academy - Cohort 3</option></select></label>
+          <label className="assessment-field"><span>Class</span><select value={form.className} onChange={(e) => update("className", e.target.value)}>{batchStore.state.batches.map(batch => <option key={batch.id} value={batch.name}>{batch.name}</option>)}</select></label>
         </div>
 
         <fieldset className="assessment-type-picker">
