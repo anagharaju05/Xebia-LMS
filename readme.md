@@ -169,13 +169,13 @@ mvn spring-boot:run
 Backend Server:
 
 ```text
-https://xebia-lms-backend.up.render.app
+https://xebia-lms-backend.onrender.com
 ```
 
 Swagger Documentation:
 
 ```text
-https://xebia-lms-backend.up.render.app/swagger-ui.html
+https://xebia-lms-backend.onrender.com/swagger-ui.html
 ```
 
 ---
@@ -247,6 +247,8 @@ PostgreSQL Database
 * Analytics Dashboard
 * Course Management
 * Student Portal
+* Native PDF Certificate Generation
+* Advanced Quiz Assessment Logic
 * Flyway Migration
 * Modular Architecture
 * Swagger Documentation

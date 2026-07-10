@@ -186,23 +186,27 @@ export function useAssessmentStore() {
       }
     },
 
-    async submitWork(payload) {
-      if (!API_ENABLED) {
-        const autoGraded = payload.type === "quiz";
-        const submission = {
-          ...payload,
-          id: `sub-${Date.now()}`,
-          submittedAt: new Date().toISOString(),
-          status: autoGraded ? "Graded" : "Submitted",
-          score: autoGraded ? Number(payload.score) : null,
-          feedback: autoGraded ? "Automatically graded." : ""
-        };
-        setState((current) => ({
-          ...current,
-          submissions: [submission, ...current.submissions.filter((item) => !(item.assessmentId === payload.assessmentId && item.studentId === payload.studentId))]
-        }));
-        return submission;
-      }
+  async submitWork(payload) {
+    const existing = state.submissions.find((item) => item.assessmentId === payload.assessmentId && item.studentId === payload.studentId);
+    const attemptCount = (existing?.attemptCount || 0) + 1;
+
+    if (!API_ENABLED) {
+      const autoGraded = payload.type === "quiz";
+      const submission = {
+        ...payload,
+        id: `sub-${Date.now()}`,
+        submittedAt: new Date().toISOString(),
+        status: autoGraded ? "Graded" : "Submitted",
+        score: autoGraded ? Number(payload.score) : null,
+        feedback: autoGraded ? "Automatically graded." : "",
+        attemptCount
+      };
+      setState((current) => ({
+        ...current,
+        submissions: [submission, ...current.submissions.filter((item) => !(item.assessmentId === payload.assessmentId && item.studentId === payload.studentId))]
+      }));
+      return submission;
+    }
 
       try {
         const studentId = ensureUUID(payload.studentId);
@@ -230,7 +234,8 @@ export function useAssessmentStore() {
         const serialized = JSON.stringify({
           ...submissionData,
           fileUrl,
-          assessmentId: payload.assessmentId
+          assessmentId: payload.assessmentId,
+          attemptCount
         });
 
         await api.post(`/api/portal/students/${studentId}/tasks/${taskId}/submit`, {
