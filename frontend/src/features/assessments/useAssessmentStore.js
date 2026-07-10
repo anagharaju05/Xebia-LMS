@@ -39,7 +39,7 @@ export function useAssessmentStore() {
           id: q.id,
           studentId: q.studentId,
           studentName: q.studentName || "Student",
-          assessmentId: q.assessmentId || "",
+          assessmentId: q.subject || "",
           subject: q.subject,
           text: q.content,
           answer: q.answer || "",
@@ -281,7 +281,7 @@ export function useAssessmentStore() {
       try {
         const res = await api.post("/api/assessments/questions", {
           studentId: ensureUUID(payload.studentId),
-          subject: payload.subject || "General",
+          subject: payload.assessmentId || "General",
           content: payload.text
         });
         await syncStore();
