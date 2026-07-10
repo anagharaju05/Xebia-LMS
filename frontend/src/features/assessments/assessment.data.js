@@ -184,8 +184,8 @@ export function createBlankAssessment() {
     language: "javascript",
     starterCode: "function solve(input) {\n  // Write your solution here\n}\n",
     testCases: [{ id: "test-new-1", input: "", expected: "", hidden: false }],
-    assignedStudentIds: DEMO_STUDENTS.map((student) => student.id),
-    assignmentScope: "entire_course",
+    assignedStudentIds: [],
+    assignmentScope: "",
     assignedBatchIds: []
   };
 }

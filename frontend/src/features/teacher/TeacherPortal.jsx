@@ -4,7 +4,7 @@ import {
   ClipboardList, Clock3, Code2, ExternalLink, FilePenLine, FileSpreadsheet, FileText, GraduationCap,
   HelpCircle, Inbox, LogOut, Menu, MessageCircleQuestion, Moon, MoreVertical,
   Layers3, Paperclip, Pencil, Plus, RotateCcw, Search, Send, Sun, Trash2, Upload, Users,
-  X, XCircle
+  X, XCircle, Archive
 } from "lucide-react";
 import { ASSESSMENT_TYPES, createBlankAssessment } from "../assessments/assessment.data.js";
 import { parseQuizSpreadsheet, QUIZ_EXCEL_COLUMNS } from "../../services/excelQuiz.service.js";
@@ -168,7 +168,7 @@ function AssessmentEditor({ initial, onClose, onSave, showToast, batchStore, stu
           <label className="assessment-field"><span>Maximum marks</span><input type="number" min="1" max="1000" value={form.points} onChange={(e) => update("points", e.target.value)} /></label>
         </div>
 
-        <fieldset className="allocation-picker"><legend>Who should receive this assessment?</legend><div>{[["entire_course", BookOpenCheck, "Entire course", "All enrolled students"], ["selected_batch", Users, "Selected batch", "One or more cohorts"], ["selected_students", GraduationCap, "Selected students", "Individual allocation"]].map(([value, Icon, label, hint]) => <button type="button" className={form.assignmentScope === value ? "active" : ""} key={value} onClick={() => update("assignmentScope", value)}><Icon /><span><strong>{label}</strong><small>{hint}</small></span>{form.assignmentScope === value && <Check />}</button>)}</div></fieldset>
+        <fieldset className="allocation-picker"><legend>Who should receive this assessment?</legend><div>{[["entire_course", BookOpenCheck, "Entire course", "All enrolled students"], ["selected_batch", Users, "Selected batch", "One or more cohorts"], ["selected_students", GraduationCap, "Selected students", "Individual allocation"]].map(([value, Icon, label, hint]) => <button type="button" className={form.assignmentScope === value ? "active" : ""} key={value} onClick={() => update("assignmentScope", form.assignmentScope === value ? "" : value)}><Icon /><span><strong>{label}</strong><small>{hint}</small></span>{form.assignmentScope === value && <Check />}</button>)}</div></fieldset>
         {form.assignmentScope === "selected_batch" && <fieldset className="student-picker"><legend>Select batches</legend><p>{form.assignedBatchIds.length} selected</p><div>{batchStore.state.batches.filter((batch) => batch.status === "Active").map((batch) => <label key={batch.id}><input type="checkbox" checked={form.assignedBatchIds.includes(batch.id)} onChange={(e) => update("assignedBatchIds", e.target.checked ? [...form.assignedBatchIds, batch.id] : form.assignedBatchIds.filter((id) => id !== batch.id))} /><span>{batch.name}<small>{batch.studentIds.length} students</small></span></label>)}</div></fieldset>}
         {form.assignmentScope === "selected_students" && <fieldset className="student-picker"><legend>Assign to students</legend><p>{form.assignedStudentIds.length} of {students.length} selected</p><div>{students.map((student) => <label key={student.id}><input type="checkbox" checked={form.assignedStudentIds.includes(student.id)} onChange={(e) => update("assignedStudentIds", e.target.checked ? [...form.assignedStudentIds, student.id] : form.assignedStudentIds.filter((id) => id !== student.id))} /><span>{student.name}<small>{student.email}</small></span></label>)}</div></fieldset>}
 
