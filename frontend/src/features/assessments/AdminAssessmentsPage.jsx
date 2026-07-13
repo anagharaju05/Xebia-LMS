@@ -4,6 +4,7 @@ import { useAssessmentStore } from "./useAssessmentStore.js";
 import { useBatchStore } from "../batches/useBatchStore.js";
 import { useStudentManagement } from "../students/useStudentManagement.js";
 import { AUTH_USERS } from "../auth/auth.data.js";
+import { ErrorBoundary } from "../../components/ErrorBoundary.jsx";
 
 // Reusable UI components for AdminAssessmentsPage
 const TYPE_META = {
@@ -154,11 +155,13 @@ export default function AdminAssessmentsPage({ showToast }) {
   };
 
   return (
+    <ErrorBoundary>
     <div className="page-container" style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
       <header style={{ marginBottom: '24px' }}>
         <h1 style={{ fontSize: '24px', fontWeight: 800, margin: '0 0 8px' }}>Assessments Overview</h1>
         <p style={{ color: 'var(--muted)', margin: 0 }}>View and manage student submissions across all teachers and batches.</p>
       </header>
+
 
       <div className="submission-assessment-picker" style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '20px', border: '1px solid var(--line)', borderRadius: '10px', background: 'var(--panel)', marginBottom: '24px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.5fr', gap: '20px' }}>
@@ -298,5 +301,6 @@ export default function AdminAssessmentsPage({ showToast }) {
         )}
       </section>
     </div>
+    </ErrorBoundary>
   );
 }
