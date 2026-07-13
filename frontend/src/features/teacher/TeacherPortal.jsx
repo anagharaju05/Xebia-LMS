@@ -29,12 +29,23 @@ const TYPE_META = {
 };
 
 function formatDate(value, includeTime = true) {
-  if (!value) return "No deadline";
-  const date = new Date(value);
-  return new Intl.DateTimeFormat("en-IN", {
-    day: "numeric", month: "short", year: "numeric",
-    ...(includeTime ? { hour: "numeric", minute: "2-digit" } : {})
-  }).format(date);
+  if (!value) return "";
+  try {
+    let date;
+    if (Array.isArray(value)) {
+      const [year, month, day, hour = 0, minute = 0, second = 0] = value;
+      date = new Date(year, month - 1, day, hour, minute, second);
+    } else {
+      date = new Date(value);
+    }
+    if (isNaN(date.getTime())) return "Unknown date";
+    
+    return new Intl.DateTimeFormat("en-IN", {
+      day: "numeric", month: "short", year: "numeric", ...(includeTime ? { hour: "numeric", minute: "2-digit" } : {})
+    }).format(date);
+  } catch (e) {
+    return "Unknown date";
+  }
 }
 
 function TypeBadge({ type }) {
