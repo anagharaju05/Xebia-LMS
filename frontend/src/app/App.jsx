@@ -12,6 +12,7 @@ import CurriculumPage from "../features/curriculum/CurriculumPage.jsx";
 import ContentLibraryPage from "../features/content/ContentLibraryPage.jsx";
 import StudentsPage from "../features/students/StudentsPage.jsx";
 import AdminAssessmentsPage from "../features/assessments/AdminAssessmentsPage.jsx";
+import { ErrorBoundary } from "../components/ErrorBoundary.jsx";
 import LoginPage from "../features/auth/LoginPage.jsx";
 import { useAssessmentStore } from "../features/assessments/useAssessmentStore.js";
 import { useBatchStore } from "../features/batches/useBatchStore.js";
@@ -166,33 +167,35 @@ export default function App() {
         <Topbar view={location.pathname} stats={stats} theme={theme} onThemeToggle={toggleTheme} onReset={handleResetStore} user={auth.session} />
         <Toast message={toastMessage} />
         
-        <Routes>
-          <Route path={APP_ROUTES.DASHBOARD} element={<DashboardPage store={store} stats={stats} go={handleNavigate} />} />
-          <Route path={APP_ROUTES.CATEGORIES} element={<CategoriesPage store={store} onCreate={() => { setEditing({ type: "category", id: "" }); handleNavigate("/categories/new"); }} onEdit={(id) => { setEditing({ type: "category", id }); handleNavigate(`/categories/${id}`); }} onDelete={handleDeleteCategory} />} />
-          <Route path="/categories/:id" element={<CategoryEditor key={editing.id || "new-category"} initial={store.categories.find((item) => item.id === editing.id)} categories={store.categories} onCancel={() => handleNavigate(APP_ROUTES.CATEGORIES)} onSave={handleSaveCategory} />} />
-          <Route path={APP_ROUTES.COURSES} element={<CoursesPage store={store} onCreate={() => { setEditing({ type: "course", id: "" }); handleNavigate("/courses/new"); }} onEdit={(id) => { setEditing({ type: "course", id }); handleNavigate(`/courses/${id}`); }} onDelete={handleDeleteCourse} onToggle={(id, field) => handleToggleEntity("courses", id, field)} onOpenCurriculum={handleOpenCurriculum} />} />
-          <Route path="/courses/:id" element={<CourseEditor key={editing.id || "new-course"} initial={store.courses.find((item) => item.id === editing.id)} categories={store.categories} onCancel={() => handleNavigate(APP_ROUTES.COURSES)} onSave={handleSaveCourse} />} />
-          <Route path={APP_ROUTES.CURRICULUM} element={<CurriculumPage store={store} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId} selectedModuleId={selectedModuleId} setSelectedModuleId={setSelectedModuleId} selectedSubmoduleId={selectedSubmoduleId} setSelectedSubmoduleId={setSelectedSubmoduleId} upsert={upsertEntity} removeModule={handleDeleteModule} removeSubmodule={handleDeleteSubmodule} removeContentBlock={handleDeleteContentBlock} toggleEntity={handleToggleEntity} onBack={() => handleNavigate(APP_ROUTES.COURSES)} />} />
-          <Route path={APP_ROUTES.CONTENT} element={<ContentLibraryPage store={store} upsert={upsertEntity} removeContentBlock={handleDeleteContentBlock} toggleEntity={handleToggleEntity} />} />
-          <Route path={APP_ROUTES.STUDENTS} element={<StudentsPage store={store} showToast={showToast} />} />
-          <Route path="/assessments" element={<AdminAssessmentsPage showToast={showToast} />} />
-              
-          {/* Analytics Routes */}
-          <Route path={APP_ROUTES.ANALYTICS_EXEC_SUMMARY} element={<ExecutiveSummary />} />
-          <Route path={APP_ROUTES.ANALYTICS_COVERAGE} element={<LearningCoverage />} />
-          <Route path={APP_ROUTES.ANALYTICS_HOURS} element={<LearningHours />} />
-          <Route path={APP_ROUTES.ANALYTICS_PILLARS} element={<LearningPillars />} />
-          <Route path={APP_ROUTES.ANALYTICS_AI} element={<AiTransformation />} />
-          <Route path={APP_ROUTES.ANALYTICS_CERTS} element={<Certifications />} />
-          <Route path={APP_ROUTES.ANALYTICS_FLAGSHIP} element={<FlagshipPrograms />} />
-          <Route path={APP_ROUTES.ANALYTICS_TRENDS} element={<LearningTrends />} />
-          <Route path={APP_ROUTES.ANALYTICS_EFFECTIVENESS} element={<TrainingEffectiveness />} />
-          <Route path={APP_ROUTES.ANALYTICS_CHAMPIONS} element={<LearningChampions />} />
-          <Route path={APP_ROUTES.ANALYTICS_INVESTMENT} element={<ProjectInvestment />} />
-          <Route path={APP_ROUTES.ANALYTICS_FRESHER} element={<FresherJourney />} />
+        <ErrorBoundary>
+          <Routes>
+            <Route path={APP_ROUTES.DASHBOARD} element={<DashboardPage store={store} stats={stats} go={handleNavigate} />} />
+            <Route path={APP_ROUTES.CATEGORIES} element={<CategoriesPage store={store} onCreate={() => { setEditing({ type: "category", id: "" }); handleNavigate("/categories/new"); }} onEdit={(id) => { setEditing({ type: "category", id }); handleNavigate(`/categories/${id}`); }} onDelete={handleDeleteCategory} />} />
+            <Route path="/categories/:id" element={<CategoryEditor key={editing.id || "new-category"} initial={store.categories.find((item) => item.id === editing.id)} categories={store.categories} onCancel={() => handleNavigate(APP_ROUTES.CATEGORIES)} onSave={handleSaveCategory} />} />
+            <Route path={APP_ROUTES.COURSES} element={<CoursesPage store={store} onCreate={() => { setEditing({ type: "course", id: "" }); handleNavigate("/courses/new"); }} onEdit={(id) => { setEditing({ type: "course", id }); handleNavigate(`/courses/${id}`); }} onDelete={handleDeleteCourse} onToggle={(id, field) => handleToggleEntity("courses", id, field)} onOpenCurriculum={handleOpenCurriculum} />} />
+            <Route path="/courses/:id" element={<CourseEditor key={editing.id || "new-course"} initial={store.courses.find((item) => item.id === editing.id)} categories={store.categories} onCancel={() => handleNavigate(APP_ROUTES.COURSES)} onSave={handleSaveCourse} />} />
+            <Route path={APP_ROUTES.CURRICULUM} element={<CurriculumPage store={store} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId} selectedModuleId={selectedModuleId} setSelectedModuleId={setSelectedModuleId} selectedSubmoduleId={selectedSubmoduleId} setSelectedSubmoduleId={setSelectedSubmoduleId} upsert={upsertEntity} removeModule={handleDeleteModule} removeSubmodule={handleDeleteSubmodule} removeContentBlock={handleDeleteContentBlock} toggleEntity={handleToggleEntity} onBack={() => handleNavigate(APP_ROUTES.COURSES)} />} />
+            <Route path={APP_ROUTES.CONTENT} element={<ContentLibraryPage store={store} upsert={upsertEntity} removeContentBlock={handleDeleteContentBlock} toggleEntity={handleToggleEntity} />} />
+            <Route path={APP_ROUTES.STUDENTS} element={<StudentsPage store={store} showToast={showToast} />} />
+            <Route path="/assessments" element={<AdminAssessmentsPage showToast={showToast} />} />
+                
+            {/* Analytics Routes */}
+            <Route path={APP_ROUTES.ANALYTICS_EXEC_SUMMARY} element={<ExecutiveSummary />} />
+            <Route path={APP_ROUTES.ANALYTICS_COVERAGE} element={<LearningCoverage />} />
+            <Route path={APP_ROUTES.ANALYTICS_HOURS} element={<LearningHours />} />
+            <Route path={APP_ROUTES.ANALYTICS_PILLARS} element={<LearningPillars />} />
+            <Route path={APP_ROUTES.ANALYTICS_AI} element={<AiTransformation />} />
+            <Route path={APP_ROUTES.ANALYTICS_CERTS} element={<Certifications />} />
+            <Route path={APP_ROUTES.ANALYTICS_FLAGSHIP} element={<FlagshipPrograms />} />
+            <Route path={APP_ROUTES.ANALYTICS_TRENDS} element={<LearningTrends />} />
+            <Route path={APP_ROUTES.ANALYTICS_EFFECTIVENESS} element={<TrainingEffectiveness />} />
+            <Route path={APP_ROUTES.ANALYTICS_CHAMPIONS} element={<LearningChampions />} />
+            <Route path={APP_ROUTES.ANALYTICS_INVESTMENT} element={<ProjectInvestment />} />
+            <Route path={APP_ROUTES.ANALYTICS_FRESHER} element={<FresherJourney />} />
 
-          <Route path="*" element={<Navigate to={APP_ROUTES.DASHBOARD} replace />} />
-        </Routes>
+            <Route path="*" element={<Navigate to={APP_ROUTES.DASHBOARD} replace />} />
+          </Routes>
+        </ErrorBoundary>
       </main>
     </div>
   );

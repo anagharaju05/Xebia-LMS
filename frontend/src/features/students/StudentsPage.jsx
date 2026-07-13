@@ -25,17 +25,20 @@ function getCourseTitle(courses, slug) {
 
 export default function StudentsPage({ store, showToast }) {
   const studentStore = useStudentManagement();
-  const { students, assignments } = studentStore.management;
+  const { management } = studentStore || {};
+  const students = Array.isArray(management?.students) ? management.students : [];
+  const assignments = Array.isArray(management?.assignments) ? management.assignments : [];
+  
   const [tab, setTab] = useState("students");
   const [selectedStudentId, setSelectedStudentId] = useState(students[0]?.id || "");
   const [showAddStudent, setShowAddStudent] = useState(false);
   const [studentForm, setStudentForm] = useState(EMPTY_STUDENT);
-  const [courseSlug, setCourseSlug] = useState(store.courses[0]?.slug || "");
+  const [courseSlug, setCourseSlug] = useState((Array.isArray(store?.courses) ? store.courses : [])[0]?.slug || "");
   const [taskForm, setTaskForm] = useState({
     title: "",
     instructions: "",
     dueDate: "",
-    courseSlug: store.courses[0]?.slug || ""
+    courseSlug: (Array.isArray(store?.courses) ? store.courses : [])[0]?.slug || ""
   });
   const [reviewDrafts, setReviewDrafts] = useState({});
 
@@ -45,7 +48,7 @@ export default function StudentsPage({ store, showToast }) {
   const reviewed = assignments.filter((assignment) => assignment.status === "Reviewed");
 
   const courseOptions = useMemo(
-    () => [["", "Select a course..."], ...store.courses.map((course) => [course.slug, course.title])],
+    () => [["", "Select a course..."], ...(Array.isArray(store?.courses) ? store.courses : []).map((course) => [course.slug, course.title])],
     [store.courses]
   );
 

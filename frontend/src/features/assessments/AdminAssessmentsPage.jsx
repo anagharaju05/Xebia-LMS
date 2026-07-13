@@ -55,7 +55,7 @@ export default function AdminAssessmentsPage({ showToast }) {
 
   // Filter available assessments based on selected teacher and batch
   const filteredAssessments = useMemo(() => {
-    return assessmentState.assessments.filter((a) => {
+    return (Array.isArray(assessmentState.assessments) ? assessmentState.assessments : []).filter((a) => {
       const matchTeacher = teacherId === "all" || a.teacherId === teacherId;
       const matchBatch = batchId === "all" || (a.assignmentScope === "entire_course" || (a.assignedBatchIds || []).includes(batchId));
       return matchTeacher && matchBatch && a.status === "Published";
@@ -70,7 +70,7 @@ export default function AdminAssessmentsPage({ showToast }) {
   const relevantStudentIds = useMemo(() => {
     const ids = new Set(activeAssessment?.assignedStudentIds || []);
     if (batchId !== "all") {
-      const selectedBatch = batchState.batches.find((b) => b.id === batchId);
+      const selectedBatch = (Array.isArray(batchState.batches) ? batchState.batches : []).find((b) => b.id === batchId);
       if (selectedBatch) {
         const batchStudentIds = new Set(selectedBatch.studentIds);
         for (let id of ids) {
@@ -83,9 +83,9 @@ export default function AdminAssessmentsPage({ showToast }) {
     return ids;
   }, [activeAssessment, batchId, batchState.batches]);
 
-  const submissions = assessmentState.submissions.filter((item) => item.assessmentId === activeAssessmentId && relevantStudentIds.has(item.studentId));
+  const submissions = (Array.isArray(assessmentState.submissions) ? assessmentState.submissions : []).filter((item) => item.assessmentId === activeAssessmentId && relevantStudentIds.has(item.studentId));
   const submittedIds = new Set(submissions.map((item) => item.studentId));
-  const missing = students.filter((student) => relevantStudentIds.has(student.id) && !submittedIds.has(student.id));
+  const missing = (Array.isArray(students) ? students : []).filter((student) => relevantStudentIds.has(student.id) && !submittedIds.has(student.id));
 
   const [tab, setTab] = useState("submitted");
 
