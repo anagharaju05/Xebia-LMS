@@ -60,6 +60,7 @@ function FileSubmission({ assessment, onSubmit, showToast }) {
   const [file, setFile] = useState(null);
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   function choose(event) {
     const next = event.target.files?.[0];
     if (!next) return;
@@ -68,16 +69,22 @@ function FileSubmission({ assessment, onSubmit, showToast }) {
     if (!allowed.includes(extension)) { setError(`Please select a ${allowed.join(" or ").toUpperCase()} file.`); return; }
     setFile(next); setError("");
   }
-  function submit() {
+  async function submit() {
     if (!file) return;
-    onSubmit({ type: "file", file: file, fileName: file.name, fileSize: file.size > 1024 * 1024 ? `${(file.size / 1024 / 1024).toFixed(1)} MB` : `${Math.ceil(file.size / 1024)} KB`, note });
+    setSubmitting(true);
+    await onSubmit({ type: "file", file: file, fileName: file.name, fileSize: file.size > 1024 * 1024 ? `${(file.size / 1024 / 1024).toFixed(1)} MB` : `${Math.ceil(file.size / 1024)} KB`, note });
+    setSubmitting(false);
     showToast?.("Assessment submitted successfully");
   }
-  return <section className="student-submit-panel"><header><Upload /><div><h3>Upload your work</h3><p>One ${(assessment.allowedFileTypes || ["pdf", "docx"]).map((type) => type.toUpperCase()).join(" or ")} file, up to 25 MB.</p></div></header>
-    <label className={`student-file-drop ${file ? "selected" : ""}`}><input type="file" accept={(assessment.allowedFileTypes || ["pdf", "docx"]).map((type) => `.${type}`).join(",")} onChange={choose} />{file ? <><CheckCircle2 /><strong>{file.name}</strong><span>{(file.size / 1024).toFixed(0)} KB • Click to replace</span></> : <><Upload /><strong>Choose a file</strong><span>or drag and drop it here</span></>}</label>
+  return <section className="student-submit-panel">
+    <header><UploadCloud /><div><h3>Upload your work</h3><p>One {assessment.allowedFileTypes ? assessment.allowedFileTypes.map((ext) => `.${ext.toUpperCase()}`).join(" or ") : ".PDF or DOCX"} file, up to 25 MB.</p></div></header>
+    <label className={`file-drop-zone ${file ? "has-file" : ""}`}>
+      {file ? <><CheckCircle2 /><strong>{file.name}</strong><small>{file.size > 1024 * 1024 ? `${(file.size / 1024 / 1024).toFixed(1)} MB` : `${Math.ceil(file.size / 1024)} KB`} • Click to replace</small></> : <><UploadCloud /><strong>Click to browse or drag file here</strong></>}
+      <input type="file" onChange={choose} accept={assessment.allowedFileTypes ? assessment.allowedFileTypes.map((ext) => `.${ext}`).join(",") : ".pdf,.docx"} />
+    </label>
     {error && <p className="student-submit-error"><XCircle />{error}</p>}
-    <label><span>Private note to teacher <small>(optional)</small></span><textarea rows="3" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Add context about your submission..." /></label>
-    <button className="primary student-submit-button" disabled={!file} onClick={submit}><Send /> Turn in assessment</button>
+    <label className="student-submit-note"><span>Private note to teacher <small>(optional)</small></span><textarea rows="3" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Add context about your submission..." /></label>
+    <button className="primary student-submit-button" onClick={submit} disabled={!file || submitting}>{submitting ? <LoaderCircle className="spin" /> : <Send />} {submitting ? "Uploading..." : "Turn in assessment"}</button>
   </section>;
 }
 
@@ -128,7 +135,7 @@ function SubmissionResult({ submission, assessment, user, onReattempt }) {
 function AssessmentDetail({ assessment, submission, questions, user, store, onBack, showToast }) {
   const [isReattempting, setIsReattempting] = useState(false);
   const isLate = new Date(assessment.dueAt) < new Date();
-  function submit(payload) { store.submitWork({ ...payload, assessmentId: assessment.id, studentId: user.studentId || user.id, studentName: user.name }); setIsReattempting(false); }
+  async function submit(payload) { await store.submitWork({ ...payload, assessmentId: assessment.id, studentId: user.studentId || user.id, studentName: user.name }); setIsReattempting(false); }
   return <section className="student-assessment-detail"><button className="student-back" onClick={onBack}><ArrowLeft /> Back to assessments</button><header className="student-assessment-hero"><div><TypeLabel type={assessment.type} /><h1>{assessment.title}</h1><p>{assessment.subject} • {assessment.className}</p></div><div><span><CalendarClock />Due</span><strong>{formatDate(assessment.dueAt)}</strong><small>{isLate ? "Deadline passed" : "Submit before the deadline"}</small></div></header>
     <div className="student-assessment-layout"><main><section className="student-instructions"><header><BookOpenIcon /><div><span>Instructions</span><h2>What you need to do</h2></div></header><p>{assessment.instructions}</p>{assessment.attachmentName && <button><FileText /><span><strong>{assessment.attachmentName}</strong><small>Reference material</small></span><Download /></button>}</section>
       {submission && !isReattempting ? <SubmissionResult submission={submission} assessment={assessment} user={user} onReattempt={() => setIsReattempting(true)} /> : <>{assessment.type === "file" && <FileSubmission assessment={assessment} onSubmit={submit} showToast={showToast} />}{assessment.type === "quiz" && <QuizSubmission assessment={assessment} onSubmit={submit} showToast={showToast} />}{assessment.type === "coding" && <CodingSubmission assessment={assessment} onSubmit={submit} showToast={showToast} />}</>}
