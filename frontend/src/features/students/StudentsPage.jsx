@@ -139,8 +139,8 @@ export default function StudentsPage({ store, showToast }) {
               return (
                 <article className={student.id === selectedStudent?.id ? "admin-student-card active" : "admin-student-card"} key={student.id}>
                   <button className="admin-student-select" onClick={() => setSelectedStudentId(student.id)}>
-                    <span>{student.name.charAt(0)}</span>
-                    <div><strong>{student.name}</strong><small>{student.email}</small><small>{student.cohort}</small></div>
+                    <span>{(student.name || "Student").charAt(0)}</span>
+                    <div><strong>{student.name || "Student"}</strong><small>{student.email}</small><small>{student.cohort}</small></div>
                   </button>
                   <div className="admin-student-meta">
                     <span>{student.courseSlugs.length} courses</span>
@@ -159,7 +159,7 @@ export default function StudentsPage({ store, showToast }) {
 
           {selectedStudent && (
             <aside className="student-management-panel">
-              <header><span>{selectedStudent.name.charAt(0)}</span><div><h2>{selectedStudent.name}</h2><p>{selectedStudent.cohort}</p></div></header>
+              <header><span>{(selectedStudent.name || "Student").charAt(0)}</span><div><h2>{selectedStudent.name || "Student"}</h2><p>{selectedStudent.cohort}</p></div></header>
               <section>
                 <h3>Assign Course</h3>
                 <SelectField label="Course" value={courseSlug} onChange={setCourseSlug} options={courseOptions} />
