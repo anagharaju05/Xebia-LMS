@@ -224,15 +224,18 @@ export default function AdminAssessmentsPage({ showToast }) {
               <span>Submitted on</span>
               <span style={{ textAlign: 'right' }}>Status / marks</span>
             </header>
-            {submissions.map((submission) => (
+            {submissions.map((submission) => {
+              const studentInfo = students.find((s) => s.id === submission.studentId);
+              const displayName = submission.studentName || studentInfo?.name || "Student";
+              return (
               <article key={submission.id} style={{ display: 'grid', gridTemplateColumns: 'minmax(200px, 2fr) minmax(150px, 1.5fr) 150px 180px', gap: '20px', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid var(--line)' }}>
                 <span className="submission-student" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <b style={{ display: 'grid', placeItems: 'center', width: '36px', height: '36px', borderRadius: '50%', background: '#84117c', color: '#fff', fontSize: '12px' }}>
-                    {submission.studentName.split(" ").map((w) => w[0]).join("")}
+                    {displayName.split(" ").map((w) => w[0]).join("")}
                   </b>
                   <span style={{ display: 'grid' }}>
-                    <strong style={{ color: 'var(--ink)', fontSize: '14px' }}>{submission.studentName}</strong>
-                    <small style={{ color: 'var(--muted)', fontSize: '12px' }}>{students.find((s) => s.id === submission.studentId)?.email}</small>
+                    <strong style={{ color: 'var(--ink)', fontSize: '14px' }}>{displayName}</strong>
+                    <small style={{ color: 'var(--muted)', fontSize: '12px' }}>{studentInfo?.email}</small>
                   </span>
                 </span>
                 <span style={{ display: 'grid', gap: '4px' }}>
@@ -251,7 +254,7 @@ export default function AdminAssessmentsPage({ showToast }) {
                   )}
                 </span>
               </article>
-            ))}
+            );})}
           </>
         ) : (
           <>
