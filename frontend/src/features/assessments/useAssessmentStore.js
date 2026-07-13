@@ -34,7 +34,10 @@ export function useAssessmentStore() {
 
       setState((current) => ({
         ...current,
-        assessments: assessments || [],
+        assessments: (assessments || []).map(a => ({
+          ...a,
+          teacherId: a.teacherId || "teacher-user-1"
+        })),
         questions: (questions || []).map(q => ({
           id: q.id,
           studentId: q.studentId,
