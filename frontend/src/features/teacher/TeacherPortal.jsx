@@ -299,18 +299,131 @@ function ReviewModal({ submission, assessment, onClose, onGrade, showToast }) {
   </Modal>;
 }
 
-function SubmissionsPage({ state, onGrade, showToast, students }) {
+function SubmissionsPage({ state, onGrade, showToast, students, batches = [] }) {
   const [assessmentId, setAssessmentId] = useState(state.assessments.find((item) => item.status === "Published")?.id || "");
+  const [batchId, setBatchId] = useState("all");
   const [tab, setTab] = useState("submitted");
   const [reviewing, setReviewing] = useState(null);
   const assessment = state.assessments.find((item) => item.id === assessmentId);
-  const submissions = state.submissions.filter((item) => item.assessmentId === assessmentId);
+  
+  const relevantStudentIds = new Set(assessment?.assignedStudentIds || []);
+  if (batchId !== "all") {
+    const selectedBatch = batches.find((b) => b.id === batchId);
+    if (selectedBatch) {
+      const batchStudentIds = new Set(selectedBatch.studentIds);
+      for (let id of relevantStudentIds) {
+        if (!batchStudentIds.has(id)) {
+          relevantStudentIds.delete(id);
+        }
+      }
+    }
+  }
+
+  const submissions = state.submissions.filter((item) => item.assessmentId === assessmentId && relevantStudentIds.has(item.studentId));
   const submittedIds = new Set(submissions.map((item) => item.studentId));
-  const missing = students.filter((student) => assessment?.assignedStudentIds.includes(student.id) && !submittedIds.has(student.id));
+  const missing = students.filter((student) => relevantStudentIds.has(student.id) && !submittedIds.has(student.id));
+
+  const exportToCSV = () => {
+    if (!assessment) return;
+    const rows = [
+      ["Student Name", "Email ID", "Marks", "Submitted/Not Submitted"]
+    ];
+
+    const assessmentStudents = students.filter((s) => relevantStudentIds.has(s.id));
+    
+    assessmentStudents.forEach((student) => {
+      const submission = submissions.find((s) => s.studentId === student.id);
+      const isSubmitted = !!submission;
+      const marks = isSubmitted ? (submission.score || 0) : 0;
+      const status = isSubmitted ? "Submitted" : "Not submitted";
+      
+      const escape = (val) => {
+        const str = String(val);
+        if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+          return '"' + str.replace(/"/g, '""') + '"';
+        }
+        return str;
+      };
+
+      rows.push([escape(student.name), escape(student.email), marks, status]);
+    });
+
+    const csvContent = rows.map(e => e.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `${assessment.title}_submissions.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const exportToExcel = async () => {
+    if (!assessment) return;
+    try {
+      const XLSX = await import('xlsx');
+      const data = [
+        ["Student Name", "Email ID", "Marks", "Submitted/Not Submitted"]
+      ];
+  
+      const assessmentStudents = students.filter((s) => relevantStudentIds.has(s.id));
+      
+      assessmentStudents.forEach((student) => {
+        const submission = submissions.find((s) => s.studentId === student.id);
+        const isSubmitted = !!submission;
+        const marks = isSubmitted ? (submission.score || 0) : 0;
+        const status = isSubmitted ? "Submitted" : "Not submitted";
+        
+        data.push([student.name, student.email, marks, status]);
+      });
+  
+      const worksheet = XLSX.utils.aoa_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Submissions");
+      
+      XLSX.writeFile(workbook, `${assessment.title}_submissions.xlsx`);
+    } catch (err) {
+      showToast?.("Failed to export to Excel. " + err.message);
+    }
+  };
+
   return <section className="teacher-page">
     <div className="teacher-page-heading"><div><span>Review centre</span><h1>Student submissions</h1><p>Track completion, evaluate work, and return feedback.</p></div></div>
-    <div className="submission-assessment-picker"><label><span>Assessment</span><select value={assessmentId} onChange={(e) => setAssessmentId(e.target.value)}>{state.assessments.filter((item) => item.status === "Published").map((item) => <option value={item.id} key={item.id}>{item.title}</option>)}</select></label>{assessment && <div><span><strong>{submissions.length}</strong> Submitted</span><span><strong>{missing.length}</strong> Not submitted</span><span><strong>{submissions.filter((item) => item.status === "Graded").length}</strong> Graded</span></div>}</div>
-    <div className="submission-tabs"><button className={tab === "submitted" ? "active" : ""} onClick={() => setTab("submitted")}>Submitted <span>{submissions.length}</span></button><button className={tab === "missing" ? "active" : ""} onClick={() => setTab("missing")}>Not submitted <span>{missing.length}</span></button></div>
+    <div className="submission-assessment-picker">
+      <div style={{ display: 'flex', gap: '20px', width: 'min(500px, 100%)' }}>
+        <label style={{ display: 'grid', gap: '6px', flex: 1 }}>
+          <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>Assessment</span>
+          <select value={assessmentId} onChange={(e) => setAssessmentId(e.target.value)} style={{ padding: '10px 12px', border: '1px solid var(--line)', borderRadius: '7px', color: 'var(--ink)', background: 'var(--input-bg)', fontWeight: 700 }}>
+            {state.assessments.filter((item) => item.status === "Published").map((item) => <option value={item.id} key={item.id}>{item.title}</option>)}
+          </select>
+        </label>
+        <label style={{ display: 'grid', gap: '6px', flex: 1 }}>
+          <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>Batch</span>
+          <select value={batchId} onChange={(e) => setBatchId(e.target.value)} style={{ padding: '10px 12px', border: '1px solid var(--line)', borderRadius: '7px', color: 'var(--ink)', background: 'var(--input-bg)', fontWeight: 700 }}>
+            <option value="all">All batches</option>
+            {batches?.filter((b) => b.status === "Active").map((batch) => <option value={batch.id} key={batch.id}>{batch.name}</option>)}
+          </select>
+        </label>
+      </div>
+      {assessment && <div><span><strong>{submissions.length}</strong> Submitted</span><span><strong>{missing.length}</strong> Not submitted</span><span><strong>{submissions.filter((item) => item.status === "Graded").length}</strong> Graded</span></div>}
+    </div>
+    <div className="submission-tabs" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '22px' }}>
+        <button className={tab === "submitted" ? "active" : ""} onClick={() => setTab("submitted")}>Submitted <span>{submissions.length}</span></button>
+        <button className={tab === "missing" ? "active" : ""} onClick={() => setTab("missing")}>Not submitted <span>{missing.length}</span></button>
+      </div>
+      {assessment && (
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '8px' }}>
+          <button type="button" onClick={exportToCSV} style={{ borderBottom: 'none', padding: '6px 12px', borderRadius: '6px', border: '1px solid var(--line)', color: 'var(--ink)' }}>
+            <FileText size={16} /> Export to CSV
+          </button>
+          <button type="button" onClick={exportToExcel} style={{ borderBottom: 'none', padding: '6px 12px', borderRadius: '6px', border: '1px solid var(--line)', color: 'var(--ink)' }}>
+            <FileSpreadsheet size={16} /> Export to Excel
+          </button>
+        </div>
+      )}
+    </div>
     <section className="submission-table">
       {tab === "submitted" ? <><header><span>Student</span><span>Submission</span><span>Submitted on</span><span>Status / marks</span><span /></header>{submissions.map((submission) => <article key={submission.id}><span className="submission-student"><b>{submission.studentName.split(" ").map((w) => w[0]).join("")}</b><span><strong>{submission.studentName}</strong><small>{students.find((s) => s.id === submission.studentId)?.email}</small></span></span><span><TypeBadge type={submission.type} /><small>{submission.fileName || submission.formReceipt || `${submission.testResults?.passed || 0}/${submission.testResults?.total || 0} tests`}</small></span><time>{formatDate(submission.submittedAt)}</time><span>{submission.status === "Graded" ? <><strong className="score-text">{submission.score}/{assessment?.points}</strong><StatusPill status="Graded" /></> : <StatusPill status="Submitted" />}</span><button className="review-button" onClick={() => setReviewing(submission)}>{submission.status === "Graded" ? "Edit grade" : "Review"}<ChevronRight /></button></article>)}</> : <><header className="missing"><span>Student</span><span>Email</span><span>Deadline</span><span>Action</span></header>{missing.map((student) => <article className="missing" key={student.id}><span className="submission-student"><b>{student.name.split(" ").map((w) => w[0]).join("")}</b><strong>{student.name}</strong></span><span>{student.email}</span><time>{formatDate(assessment?.dueAt)}</time><button className="remind-button" onClick={() => showToast?.(`Reminder queued for ${student.name}`)}><Bell /> Send reminder</button></article>)}</>}
       {((tab === "submitted" && !submissions.length) || (tab === "missing" && !missing.length)) && <div className="teacher-empty"><CheckCircle2 /><h2>{tab === "missing" ? "Everyone has submitted" : "No submissions yet"}</h2></div>}
@@ -361,7 +474,7 @@ export default function TeacherPortal({ assessmentStore, batchStore, theme, onTh
       <main>
         {view === VIEWS.DASHBOARD && <TeacherDashboard state={assessmentStore.state} onNavigate={setView} onCreate={() => setEditor(createBlankAssessment())} />}
         {view === VIEWS.ASSESSMENTS && <AssessmentsPage state={assessmentStore.state} onCreate={() => setEditor(createBlankAssessment())} onEdit={setEditor} onDelete={requestDelete} onStatus={(id, status) => { assessmentStore.setAssessmentStatus(id, status); showToast?.(status === "Published" ? "Assessment published" : "Moved to drafts"); }} />}
-        {view === VIEWS.SUBMISSIONS && <SubmissionsPage state={assessmentStore.state} onGrade={assessmentStore.gradeSubmission} showToast={showToast} students={students} />}
+        {view === VIEWS.SUBMISSIONS && <SubmissionsPage state={assessmentStore.state} onGrade={assessmentStore.gradeSubmission} showToast={showToast} students={students} batches={batchStore.state.batches} />}
         {view === VIEWS.QUESTIONS && <QuestionsPage state={assessmentStore.state} onAnswer={assessmentStore.answerQuestion} showToast={showToast} />}
         {view === VIEWS.BATCHES && <TeacherBatchWorkspace mode="batches" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
         {view === VIEWS.SUBJECTS && <TeacherBatchWorkspace mode="subjects" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}

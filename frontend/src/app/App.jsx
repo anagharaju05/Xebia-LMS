@@ -11,6 +11,7 @@ import CourseEditor from "../features/courses/CourseEditor.jsx";
 import CurriculumPage from "../features/curriculum/CurriculumPage.jsx";
 import ContentLibraryPage from "../features/content/ContentLibraryPage.jsx";
 import StudentsPage from "../features/students/StudentsPage.jsx";
+import AdminAssessmentsPage from "../features/assessments/AdminAssessmentsPage.jsx";
 import LoginPage from "../features/auth/LoginPage.jsx";
 import { useAssessmentStore } from "../features/assessments/useAssessmentStore.js";
 import { useBatchStore } from "../features/batches/useBatchStore.js";
@@ -174,6 +175,7 @@ export default function App() {
           <Route path={APP_ROUTES.CURRICULUM} element={<CurriculumPage store={store} selectedCourseId={selectedCourseId} setSelectedCourseId={setSelectedCourseId} selectedModuleId={selectedModuleId} setSelectedModuleId={setSelectedModuleId} selectedSubmoduleId={selectedSubmoduleId} setSelectedSubmoduleId={setSelectedSubmoduleId} upsert={upsertEntity} removeModule={handleDeleteModule} removeSubmodule={handleDeleteSubmodule} removeContentBlock={handleDeleteContentBlock} toggleEntity={handleToggleEntity} onBack={() => handleNavigate(APP_ROUTES.COURSES)} />} />
           <Route path={APP_ROUTES.CONTENT} element={<ContentLibraryPage store={store} upsert={upsertEntity} removeContentBlock={handleDeleteContentBlock} toggleEntity={handleToggleEntity} />} />
           <Route path={APP_ROUTES.STUDENTS} element={<StudentsPage store={store} showToast={showToast} />} />
+          <Route path="/assessments" element={<AdminAssessmentsPage showToast={showToast} />} />
               
           {/* Analytics Routes */}
           <Route path={APP_ROUTES.ANALYTICS_EXEC_SUMMARY} element={<ExecutiveSummary />} />

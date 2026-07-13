@@ -16,6 +16,7 @@ export const APP_ROUTES = {
   CURRICULUM: "/courses/:courseId/curriculum",
   CONTENT: "/content",
   STUDENTS: "/students",
+  ASSESSMENTS: "/assessments",
   ANALYTICS_EXEC_SUMMARY: "/admin/learning-analytics/executive-summary",
   ANALYTICS_COVERAGE: "/admin/learning-analytics/coverage",
   ANALYTICS_HOURS: "/admin/learning-analytics/learning-hours",
