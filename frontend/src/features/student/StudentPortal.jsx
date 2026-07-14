@@ -22,7 +22,14 @@ import {
   Star,
   Sparkles,
   Sun,
-  Trophy
+  Trophy,
+  MapPin,
+  Clock,
+  UserCheck,
+  Search,
+  Calendar,
+  Link,
+  ExternalLink
 } from "lucide-react";
 import StudentContentRenderer from "./StudentContentRenderer.jsx";
 import { useStudentPortal } from "./useStudentPortal.js";
@@ -31,6 +38,7 @@ import StudentAssessments from "./StudentAssessments.jsx";
 import { getLearningIcon } from "../../utils/learningIcon.utils.js";
 import { useStudentManagement } from "../students/useStudentManagement.js";
 import StudentBatchWorkspace from "./StudentBatchWorkspace.jsx";
+import { ErrorBoundary } from "../../components/ErrorBoundary.jsx";
 
 const STUDENT_VIEWS = {
   HOME: "home",
@@ -42,7 +50,8 @@ const STUDENT_VIEWS = {
   CALENDAR: "calendar",
   ANALYTICS: "analytics",
   NOTIFICATIONS: "notifications",
-  FEEDBACK: "feedback"
+  FEEDBACK: "feedback",
+  EVENTS: "events"
 };
 
 function getAssignedCourses(store, assignedCourseSlugs) {
@@ -471,12 +480,233 @@ function FeedbackView({ courses, submitted, onSubmit }) {
   );
 }
 
-export default function StudentPortal({ store, theme, onThemeToggle, user, onLogout, showToast, assessmentStore, batchStore }) {
+function StudentEventsView({ store, studentId, studentName, studentEmail, cohort, upsertEntity, deleteEntity }) {
+  const events = (store.events || []).filter(e => e.status !== "Draft");
+  const registrations = store.registrations || [];
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredEvents = useMemo(() => {
+    if (!searchQuery.trim()) return events;
+    return events.filter(e => 
+      e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      e.location.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [events, searchQuery]);
+
+  const registeredEventIds = useMemo(() => {
+    return registrations
+      .filter(r => r.studentId === studentId)
+      .map(r => r.eventId);
+  }, [registrations, studentId]);
+
+  const stats = useMemo(() => {
+    const total = events.length;
+    const registered = registeredEventIds.length;
+    const now = new Date();
+    const open = events.filter(e => new Date(e.deadline) > now && !registeredEventIds.includes(e.id)).length;
+    return { total, registered, open };
+  }, [events, registeredEventIds]);
+
+  function handleRegister(eventId, eventTitle) {
+    const reg = {
+      id: "reg-" + Math.random().toString(36).substr(2, 9),
+      eventId: eventId,
+      studentId: studentId,
+      studentName: studentName,
+      studentEmail: studentEmail,
+      cohort: cohort,
+      registeredAt: new Date().toISOString()
+    };
+    upsertEntity("registrations", reg, `Registered for ${eventTitle}`);
+  }
+
+  function handleUnregister(eventId, eventTitle) {
+    if (!window.confirm(`Are you sure you want to unregister from ${eventTitle}?`)) return;
+    const reg = registrations.find(r => r.eventId === eventId && r.studentId === studentId);
+    if (reg) {
+      deleteEntity("registrations", reg.id, `Unregistered from ${eventTitle}`);
+    }
+  }
+
+  function formatDateTime(str) {
+    if (!str) return "";
+    const date = new Date(str);
+    if (isNaN(date.getTime())) return str;
+    return new Intl.DateTimeFormat("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit"
+    }).format(date);
+  }
+
+  const isRegistrationClosed = (event) => {
+    return new Date(event.deadline) < new Date();
+  };
+
+  return (
+    <section className="student-events-section">
+      <div className="student-page-title">
+        <div>
+          <span>Co-curricular & learning programs</span>
+          <h1>Campus Events</h1>
+          <p>Register for tech summits, expert workshops, hackathons, and guest lectures.</p>
+        </div>
+      </div>
+
+      <div className="student-stats-row">
+        <div className="student-stat-card">
+          <CalendarDays size={20} />
+          <div>
+            <strong>{stats.total}</strong>
+            <span>Total Events</span>
+          </div>
+        </div>
+        <div className="student-stat-card">
+          <UserCheck size={20} />
+          <div>
+            <strong>{stats.registered}</strong>
+            <span>My Registrations</span>
+          </div>
+        </div>
+        <div className="student-stat-card">
+          <Sparkles size={20} />
+          <div>
+            <strong>{stats.open}</strong>
+            <span>Available Events</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="student-events-toolbar">
+        <div className="student-search-box">
+          <Search size={18} />
+          <input 
+            type="text" 
+            placeholder="Search events..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {filteredEvents.length === 0 ? (
+        <div className="student-empty-state">
+          <CalendarDays size={48} />
+          <p>No events scheduled at this time.</p>
+        </div>
+      ) : (
+        <div className="student-events-grid">
+          {filteredEvents.map(event => {
+            const isRegistered = registeredEventIds.includes(event.id);
+            const closed = isRegistrationClosed(event);
+
+            return (
+              <article 
+                key={event.id} 
+                className={`student-event-card ${isRegistered ? "registered" : ""}`}
+              >
+                <div className="student-event-img">
+                  <img src={event.image} alt={event.title} />
+                  {isRegistered && <span className="reg-badge"><UserCheck size={14} /> Registered</span>}
+                </div>
+                <div className="student-event-body">
+                  <h3>{event.title}</h3>
+                  <p>{event.description}</p>
+                  
+                  <div className="event-meta-list">
+                    <div className="meta-item">
+                      <Clock size={14} />
+                      <span><strong>Starts:</strong> {formatDateTime(event.timeline)}</span>
+                    </div>
+                    <div className="meta-item">
+                      <Calendar size={14} />
+                      <span><strong>Deadline:</strong> {formatDateTime(event.deadline)}</span>
+                    </div>
+                    <div className="meta-item">
+                      <MapPin size={14} />
+                      <span><strong>Location:</strong> {event.location}</span>
+                    </div>
+                    {event.meetingUrl && isRegistered && (
+                      <div className="meta-item">
+                        <Link size={14} />
+                        <span>
+                          <strong>Link: </strong>
+                          <a 
+                            href={event.meetingUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            style={{ color: "var(--color-primary)", textDecoration: "underline", fontWeight: 600 }}
+                          >
+                            Join Meeting <ExternalLink size={11} style={{ display: "inline", verticalAlign: "middle", marginLeft: "2px" }} />
+                          </a>
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="student-event-footer">
+                    {isRegistered ? (
+                      <div style={{ display: "flex", gap: "8px", width: "100%" }}>
+                        <button className="success-btn" disabled style={{ flex: 1 }}>
+                          <UserCheck size={16} /> Registered
+                        </button>
+                        <button 
+                          className="closed-btn" 
+                          onClick={() => handleUnregister(event.id, event.title)}
+                          style={{ 
+                            width: "auto", 
+                            padding: "8px 12px", 
+                            color: "#e11d48", 
+                            borderColor: "rgba(225, 29, 72, 0.3)", 
+                            background: "rgba(225, 29, 72, 0.05)",
+                            cursor: "pointer",
+                            fontSize: "13px"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "rgba(225, 29, 72, 0.12)";
+                            e.currentTarget.style.borderColor = "#e11d48";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "rgba(225, 29, 72, 0.05)";
+                            e.currentTarget.style.borderColor = "rgba(225, 29, 72, 0.3)";
+                          }}
+                        >
+                          Unregister
+                        </button>
+                      </div>
+                    ) : closed ? (
+                      <button className="closed-btn" disabled>
+                        Registration Closed
+                      </button>
+                    ) : (
+                      <button className="primary" onClick={() => handleRegister(event.id, event.title)}>
+                        Register Now
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+}
+
+export default function StudentPortal({ store, theme, onThemeToggle, user, onLogout, showToast, assessmentStore, batchStore, upsertEntity, deleteEntity }) {
   const [view, setView] = useState(STUDENT_VIEWS.HOME);
   const studentManagement = useStudentManagement();
   const studentRecord = studentManagement.management.students.find(
     (student) => student.id === user?.studentId || student.email === user?.email
   );
+  const studentId = studentRecord?.id || user?.studentId || user?.id || "student-aarav";
+  const studentName = studentRecord?.name || user?.name || "Student User";
+  const studentEmail = studentRecord?.email || user?.email || "student@xebia.com";
+  const cohort = studentRecord?.cohort || "N/A";
+
   const assignedCourseSlugs = studentRecord?.courseSlugs || [];
   const courses = useMemo(
     () => getAssignedCourses(store, assignedCourseSlugs),
@@ -526,7 +756,8 @@ export default function StudentPortal({ store, theme, onThemeToggle, user, onLog
     [STUDENT_VIEWS.CALENDAR, CalendarDays, "Calendar"],
     [STUDENT_VIEWS.ANALYTICS, BarChart3, "Analytics"],
     [STUDENT_VIEWS.NOTIFICATIONS, Bell, "Notifications"],
-    [STUDENT_VIEWS.FEEDBACK, MessageCircle, "Feedback"]
+    [STUDENT_VIEWS.FEEDBACK, MessageCircle, "Feedback"],
+    [STUDENT_VIEWS.EVENTS, CalendarDays, "Events"]
   ];
 
   return (
@@ -562,11 +793,16 @@ export default function StudentPortal({ store, theme, onThemeToggle, user, onLog
           }} />}
           {view === STUDENT_VIEWS.COURSE && course && <CourseView store={store} course={course} studentState={portal.studentState} onBack={() => navigate(STUDENT_VIEWS.LEARNING)} onComplete={completeLesson} onComment={portal.addComment} onReply={portal.addReply} />}
           {view === STUDENT_VIEWS.ASSESSMENTS && <StudentAssessments assessmentStore={assessmentStore} batchStore={batchStore} user={user} showToast={showToast} />}
-          {view === STUDENT_VIEWS.BATCHES && <StudentBatchWorkspace mode="batches" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
-          {view === STUDENT_VIEWS.CALENDAR && <StudentBatchWorkspace mode="calendar" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
-          {view === STUDENT_VIEWS.ANALYTICS && <StudentBatchWorkspace mode="analytics" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
+          {view === STUDENT_VIEWS.BATCHES && <StudentBatchWorkspace mode="batches" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
+          {view === STUDENT_VIEWS.CALENDAR && <StudentBatchWorkspace mode="calendar" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
+          {view === STUDENT_VIEWS.ANALYTICS && <StudentBatchWorkspace mode="analytics" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
           {view === STUDENT_VIEWS.NOTIFICATIONS && <NotificationsView notifications={portal.studentState.notifications} onRead={portal.markNotificationRead} />}
           {view === STUDENT_VIEWS.FEEDBACK && <FeedbackView courses={courses} submitted={portal.studentState.feedback} onSubmit={submitFeedback} />}
+          {view === STUDENT_VIEWS.EVENTS && (
+            <ErrorBoundary>
+              <StudentEventsView store={store} studentId={studentId} studentName={studentName} studentEmail={studentEmail} cohort={cohort} upsertEntity={upsertEntity} deleteEntity={deleteEntity} showToast={showToast} />
+            </ErrorBoundary>
+          )}
         </main>
       </div>
     </div>

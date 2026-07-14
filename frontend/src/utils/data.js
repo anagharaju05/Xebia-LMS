@@ -455,5 +455,35 @@ export const seedState = {
     { id: "aud-1", label: "Category created", target: "Web Development", time: "Just now" },
     { id: "aud-2", label: "Course published", target: "Spring Boot Masterclass", time: "Today" },
     { id: "aud-3", label: "Submodule updated", target: "Project Setup & Structure", time: "Yesterday" }
+  ],
+  events: [
+    {
+      id: "evt-1",
+      title: "Xebia Tech Summit 2026",
+      description: "Join us for the annual technology summit covering AI, Cloud Computing, and Modern Web Architecture. Network with industry experts and learn about the latest industry trends.",
+      image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80",
+      timeline: "2026-08-15T09:00",
+      deadline: "2026-08-10T18:00",
+      location: "Xebia Headquarters, Sector 45, Gurgaon"
+    },
+    {
+      id: "evt-2",
+      title: "React 19 & Next.js Workshop",
+      description: "A hands-on coding workshop on the newly released React 19 features, Server Components, Server Actions, and optimizing Next.js applications.",
+      image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=80",
+      timeline: "2026-07-28T14:00",
+      deadline: "2026-07-26T23:59",
+      location: "Virtual (Teams Link will be sent upon registration)"
+    }
+  ],
+  registrations: [
+    {
+      id: "reg-1",
+      eventId: "evt-1",
+      studentId: "student-aarav",
+      studentName: "Aarav Kumar",
+      studentEmail: "student@xebia.com",
+      registeredAt: "2026-07-14T12:00:00Z"
+    }
   ]
 };

@@ -4,7 +4,7 @@ import {
   ClipboardList, Clock3, Code2, ExternalLink, FilePenLine, FileSpreadsheet, FileText, GraduationCap,
   HelpCircle, Inbox, LogOut, Menu, MessageCircleQuestion, Moon, MoreVertical,
   Layers3, Paperclip, Pencil, Plus, RotateCcw, Search, Send, Sun, Trash2, Upload, Users,
-  X, XCircle, Archive
+  X, XCircle, Archive, MapPin, Clock
 } from "lucide-react";
 import { ASSESSMENT_TYPES, createBlankAssessment } from "../assessments/assessment.data.js";
 import { parseQuizSpreadsheet, QUIZ_EXCEL_COLUMNS } from "../../services/excelQuiz.service.js";
@@ -19,7 +19,8 @@ const VIEWS = {
   BATCHES: "batches",
   SUBJECTS: "subjects",
   CALENDAR: "calendar",
-  ANALYTICS: "analytics"
+  ANALYTICS: "analytics",
+  EVENTS: "events"
 };
 
 const TYPE_META = {
@@ -455,7 +456,137 @@ function QuestionsPage({ state, onAnswer, showToast }) {
   </section>;
 }
 
-export default function TeacherPortal({ assessmentStore, batchStore, theme, onThemeToggle, user, onLogout, showToast }) {
+function TeacherEventsView({ store }) {
+  const events = (store?.events || []).filter(e => e.status !== "Draft");
+  const registrations = store?.registrations || [];
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredEvents = useMemo(() => {
+    if (!searchQuery.trim()) return events;
+    return events.filter(e => 
+      e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      e.location.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [events, searchQuery]);
+
+  function formatDateTime(str) {
+    if (!str) return "";
+    const date = new Date(str);
+    if (isNaN(date.getTime())) return str;
+    return new Intl.DateTimeFormat("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit"
+    }).format(date);
+  }
+
+  const isRegistrationClosed = (event) => {
+    return new Date(event.deadline) < new Date();
+  };
+
+  return (
+    <section className="teacher-page">
+      <div className="teacher-page-heading">
+        <div>
+          <span>Campus programs & workshops</span>
+          <h1>Events Directory</h1>
+          <p>View upcoming summits, hackathons, and learning sessions scheduled for the academy.</p>
+        </div>
+      </div>
+
+      <div className="events-toolbar-row" style={{ marginBottom: "20px" }}>
+        <div className="search-bar-wrapper" style={{ flex: 1, maxWidth: "500px", position: "relative" }}>
+          <Search size={18} style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "var(--muted)" }} />
+          <input 
+            type="text" 
+            placeholder="Search events by title or location..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{ width: "100%", padding: "10px 12px 10px 38px", border: "1px solid var(--line)", borderRadius: "7px", background: "var(--input-bg)", color: "var(--ink)" }}
+          />
+        </div>
+      </div>
+
+      {filteredEvents.length === 0 ? (
+        <div className="teacher-empty">
+          <CalendarDays size={48} />
+          <h2>No events scheduled</h2>
+        </div>
+      ) : (
+        <div className="teacher-events-grid-layout" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "20px" }}>
+          {filteredEvents.map(event => {
+            const regCount = registrations.filter(r => r.eventId === event.id).length;
+            const closed = isRegistrationClosed(event);
+
+            return (
+              <article 
+                key={event.id} 
+                className="event-teacher-card"
+                style={{ background: "var(--panel)", border: "1px solid var(--line)", borderRadius: "10px", overflow: "hidden", display: "flex", flexDirection: "column" }}
+              >
+                <div className="event-card-img" style={{ position: "relative", height: "160px" }}>
+                  <img src={event.image} alt={event.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  <span 
+                    className={`event-status-badge ${closed ? "closed" : "active"}`}
+                    style={{ position: "absolute", top: "12px", right: "12px", padding: "4px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: "bold", background: closed ? "rgba(0,0,0,0.6)" : "var(--color-success)", color: "#fff" }}
+                  >
+                    {closed ? "Registration Closed" : "Open for Students"}
+                  </span>
+                </div>
+                <div className="event-card-content" style={{ padding: "16px", display: "flex", flexDirection: "column", flex: 1, gap: "12px" }}>
+                  <h3 style={{ margin: 0, fontSize: "18px", fontWeight: 700 }}>{event.title}</h3>
+                  <p style={{ margin: 0, fontSize: "14px", color: "var(--muted)", flex: 1 }}>{event.description}</p>
+                  
+                  <div className="event-meta-info" style={{ display: "grid", gap: "8px", fontSize: "13px" }}>
+                    <div className="meta-item" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <Clock size={14} style={{ color: "var(--color-primary)" }} />
+                      <span><strong>Starts:</strong> {formatDateTime(event.timeline)}</span>
+                    </div>
+                    <div className="meta-item" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <CalendarDays size={14} style={{ color: "var(--color-primary)" }} />
+                      <span><strong>Deadline:</strong> {formatDateTime(event.deadline)}</span>
+                    </div>
+                    <div className="meta-item" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <MapPin size={14} style={{ color: "var(--color-primary)" }} />
+                      <span><strong>Location:</strong> {event.location}</span>
+                    </div>
+                    {event.meetingUrl && (
+                      <div className="meta-item" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <span style={{ display: "inline-flex", width: "14px", height: "14px", alignItems: "center", justifyContent: "center", color: "var(--color-primary)", fontSize: "12px" }}>🔗</span>
+                        <span>
+                          <strong>Link: </strong>
+                          <a 
+                            href={event.meetingUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            style={{ color: "var(--color-primary)", textDecoration: "underline", fontWeight: 600 }}
+                          >
+                            Join Meeting <ExternalLink size={11} style={{ display: "inline", verticalAlign: "middle", marginLeft: "2px" }} />
+                          </a>
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="event-card-footer" style={{ borderTop: "1px solid var(--line)", paddingTop: "12px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div className="reg-pill" style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "var(--color-primary)", fontWeight: 600 }}>
+                      <Users size={14} />
+                      <span>{regCount} registered</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+}
+
+export default function TeacherPortal({ store, assessmentStore, batchStore, theme, onThemeToggle, user, onLogout, showToast }) {
   const { management: { students } } = useStudentManagement();
   const [view, setView] = useState(VIEWS.DASHBOARD);
   const [editor, setEditor] = useState(null);
@@ -471,7 +602,8 @@ export default function TeacherPortal({ assessmentStore, batchStore, theme, onTh
     [VIEWS.SUBMISSIONS, ClipboardCheck, "Submissions", awaiting],
     [VIEWS.QUESTIONS, MessageCircleQuestion, "Questions", unanswered],
     [VIEWS.CALENDAR, CalendarDays, "Calendar"],
-    [VIEWS.ANALYTICS, BarChart3, "Analytics"]
+    [VIEWS.ANALYTICS, BarChart3, "Analytics"],
+    [VIEWS.EVENTS, CalendarDays, "Events"]
   ];
   function requestDelete(assessment) {
     if (window.confirm(`Delete “${assessment.title}” and all related submissions?`)) {
@@ -487,10 +619,11 @@ export default function TeacherPortal({ assessmentStore, batchStore, theme, onTh
         {view === VIEWS.ASSESSMENTS && <AssessmentsPage state={assessmentStore.state} onCreate={() => setEditor(createBlankAssessment())} onEdit={setEditor} onDelete={requestDelete} onStatus={(id, status) => { assessmentStore.setAssessmentStatus(id, status); showToast?.(status === "Published" ? "Assessment published" : "Moved to drafts"); }} />}
         {view === VIEWS.SUBMISSIONS && <SubmissionsPage state={assessmentStore.state} onGrade={assessmentStore.gradeSubmission} showToast={showToast} students={students} batches={batchStore.state.batches} />}
         {view === VIEWS.QUESTIONS && <QuestionsPage state={assessmentStore.state} onAnswer={assessmentStore.answerQuestion} showToast={showToast} />}
-        {view === VIEWS.BATCHES && <TeacherBatchWorkspace mode="batches" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
-        {view === VIEWS.SUBJECTS && <TeacherBatchWorkspace mode="subjects" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
-        {view === VIEWS.CALENDAR && <TeacherBatchWorkspace mode="calendar" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
-        {view === VIEWS.ANALYTICS && <TeacherBatchWorkspace mode="analytics" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
+        {view === VIEWS.BATCHES && <TeacherBatchWorkspace mode="batches" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
+        {view === VIEWS.SUBJECTS && <TeacherBatchWorkspace mode="subjects" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
+        {view === VIEWS.CALENDAR && <TeacherBatchWorkspace mode="calendar" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
+        {view === VIEWS.ANALYTICS && <TeacherBatchWorkspace mode="analytics" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
+        {view === VIEWS.EVENTS && <TeacherEventsView store={store} />}
       </main>
     </div>
     {editor && <AssessmentEditor initial={editor} onClose={() => setEditor(null)} onSave={assessmentStore.saveAssessment} showToast={showToast} batchStore={batchStore} students={students} />}

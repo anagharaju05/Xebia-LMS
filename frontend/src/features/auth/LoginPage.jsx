@@ -27,8 +27,8 @@ export default function LoginPage({ onLogin }) {
       setEmail("teacher@xebia.com");
       setPassword("Teacher@123");
     } else {
-      setEmail("learner1@example.com");
-      setPassword("password123");
+      setEmail("student@xebia.com");
+      setPassword("Student@123");
     }
   }
 

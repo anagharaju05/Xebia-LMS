@@ -32,7 +32,12 @@ function getRecordLabel(record) {
 }
 
 export function useLmsStore(showToast) {
-  const [store, setStore] = useState(() => readStorageValue(STORAGE_KEY, seedState));
+  const [store, setStore] = useState(() => {
+    const data = readStorageValue(STORAGE_KEY, seedState);
+    if (!data.events) data.events = seedState.events || [];
+    if (!data.registrations) data.registrations = seedState.registrations || [];
+    return data;
+  });
   const [isOffline, setIsOffline] = useState(!API_ENABLED);
 
   // Sync to local storage as offline backup
@@ -313,7 +318,7 @@ export function useLmsStore(showToast) {
     addAudit(label, getRecordLabel(record));
     showToast(label);
 
-    if (isOffline) {
+    if (isOffline || entity === "events" || entity === "registrations") {
       return id;
     }
 
@@ -409,6 +414,30 @@ export function useLmsStore(showToast) {
       showToast("DB write failed. Running in offline/cached mode.", "warning");
     }
     return id;
+  }
+
+  async function deleteEntity(entity, id, label) {
+    setStore((currentStore) => {
+      const nextItems = (currentStore[entity] || []).filter((item) => item.id !== id);
+      return { ...currentStore, [entity]: nextItems };
+    });
+    addAudit(label, `Deleted ID: ${id}`);
+    showToast(label);
+    return true;
+  }
+
+  async function handleDeleteEvent(id) {
+    const event = store.events.find((item) => item.id === id);
+    if (!window.confirm(`Delete event "${event?.title || "this event"}"?`)) return false;
+
+    setStore((currentStore) => ({
+      ...currentStore,
+      events: currentStore.events.filter((item) => item.id !== id),
+      registrations: currentStore.registrations.filter((reg) => reg.eventId !== id)
+    }));
+    addAudit("Event deleted", event?.title || "Event");
+    showToast("Event deleted");
+    return true;
   }
 
   async function handleDeleteCategory(id) {
@@ -608,8 +637,10 @@ export function useLmsStore(showToast) {
   return {
     store,
     upsertEntity,
+    deleteEntity,
     handleDeleteCategory,
     handleDeleteCourse,
+    handleDeleteEvent,
     handleDeleteModule,
     handleDeleteSubmodule,
     handleDeleteContentBlock,
