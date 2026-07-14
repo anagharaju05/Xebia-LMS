@@ -416,6 +416,16 @@ export function useLmsStore(showToast) {
     return id;
   }
 
+  async function deleteEntity(entity, id, label) {
+    setStore((currentStore) => {
+      const nextItems = (currentStore[entity] || []).filter((item) => item.id !== id);
+      return { ...currentStore, [entity]: nextItems };
+    });
+    addAudit(label, `Deleted ID: ${id}`);
+    showToast(label);
+    return true;
+  }
+
   async function handleDeleteEvent(id) {
     const event = store.events.find((item) => item.id === id);
     if (!window.confirm(`Delete event "${event?.title || "this event"}"?`)) return false;
@@ -627,6 +637,7 @@ export function useLmsStore(showToast) {
   return {
     store,
     upsertEntity,
+    deleteEntity,
     handleDeleteCategory,
     handleDeleteCourse,
     handleDeleteEvent,

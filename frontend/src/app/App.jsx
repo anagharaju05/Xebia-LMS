@@ -80,6 +80,7 @@ export default function App() {
   const {
     store,
     upsertEntity,
+    deleteEntity,
     handleDeleteCategory,
     handleDeleteCourse,
     handleDeleteEvent,
@@ -148,7 +149,7 @@ export default function App() {
   if (auth.session.role === "student") {
     return (
       <>
-        <Suspense fallback={<PortalLoading />}><StudentPortal store={store} theme={theme} onThemeToggle={toggleTheme} user={auth.session} onLogout={auth.logout} showToast={showToast} assessmentStore={assessmentStore} batchStore={batchStore} upsertEntity={upsertEntity} /></Suspense>
+        <Suspense fallback={<PortalLoading />}><StudentPortal store={store} theme={theme} onThemeToggle={toggleTheme} user={auth.session} onLogout={auth.logout} showToast={showToast} assessmentStore={assessmentStore} batchStore={batchStore} upsertEntity={upsertEntity} deleteEntity={deleteEntity} /></Suspense>
         <Toast message={toastMessage} />
       </>
     );

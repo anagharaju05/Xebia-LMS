@@ -13,7 +13,9 @@ import {
   Sparkles,
   CalendarDays,
   ExternalLink,
-  Link
+  Link,
+  Download,
+  FileSpreadsheet
 } from "lucide-react";
 import PageTitle from "../../components/common/PageTitle.jsx";
 import Metric from "../../components/common/Metric.jsx";
@@ -34,7 +36,8 @@ const EMPTY_EVENT = {
   timeline: "",
   deadline: "",
   location: "Xebia Gurgaon HQ (Sector 45)",
-  meetingUrl: ""
+  meetingUrl: "",
+  status: "Published"
 };
 
 export default function EventsPage({ store, upsertEvent, deleteEvent, showToast }) {
@@ -49,14 +52,19 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
 
   const [locationType, setLocationType] = useState("Xebia Gurgaon HQ (Sector 45)");
   const [customLocation, setCustomLocation] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const filteredEvents = useMemo(() => {
-    if (!searchQuery.trim()) return events;
-    return events.filter(e => 
+    let result = events;
+    if (statusFilter !== "All") {
+      result = result.filter(e => (e.status || "Published") === statusFilter);
+    }
+    if (!searchQuery.trim()) return result;
+    return result.filter(e => 
       e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       e.location.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [events, searchQuery]);
+  }, [events, searchQuery, statusFilter]);
 
   const stats = useMemo(() => {
     const total = events.length;
@@ -96,19 +104,69 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
     setShowForm(true);
   }
 
-  function handleSave(e) {
-    e.preventDefault();
+  const exportToExcel = async () => {
+    if (!selectedEvent) return;
+    try {
+      const XLSX = await import('xlsx');
+      const data = [
+        ["Student Name", "Email ID", "Enrolled Event"]
+      ];
+      selectedRegistrations.forEach((reg) => {
+        data.push([reg.studentName, reg.studentEmail, selectedEvent.title]);
+      });
+      const worksheet = XLSX.utils.aoa_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Attendees");
+      XLSX.writeFile(workbook, `${selectedEvent.title.replace(/\s+/g, "_")}_attendees.xlsx`);
+      showToast("Excel exported successfully", "success");
+    } catch (err) {
+      showToast("Failed to export to Excel: " + err.message, "danger");
+    }
+  };
+
+  const exportToCSV = () => {
+    if (!selectedEvent) return;
+    const rows = [
+      ["Student Name", "Email ID", "Enrolled Event"]
+    ];
+    const escape = (val) => {
+      const str = String(val);
+      if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+        return '"' + str.replace(/"/g, '""') + '"';
+      }
+      return str;
+    };
+    selectedRegistrations.forEach((reg) => {
+      rows.push([escape(reg.studentName), escape(reg.studentEmail), escape(selectedEvent.title)]);
+    });
+    const csvContent = rows.map(e => e.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `${selectedEvent.title.replace(/\s+/g, "_")}_attendees.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast("CSV exported successfully", "success");
+  };
+
+  function handleSave(e, customStatus = null) {
+    if (e) e.preventDefault();
     if (!formState.title.trim() || !formState.timeline || !formState.deadline) {
       showToast("Please fill in all required fields", "warning");
       return;
     }
 
+    const nextStatus = customStatus || formState.status || "Published";
+
     const payload = {
       ...formState,
+      status: nextStatus,
       id: editingEvent ? editingEvent.id : undefined
     };
 
-    upsertEvent("events", payload, editingEvent ? "Event updated" : "Event created");
+    upsertEvent("events", payload, editingEvent ? "Event updated" : `Event created as ${nextStatus}`);
     setShowForm(false);
     setFormState(EMPTY_EVENT);
     setEditingEvent(null);
@@ -168,6 +226,28 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
+        <div className="status-filter-group" style={{ display: "flex", gap: "6px" }}>
+          {["All", "Published", "Draft"].map((item) => (
+            <button 
+              key={item}
+              className={`filter-btn ${statusFilter === item ? "active" : ""}`}
+              onClick={() => setStatusFilter(item)}
+              style={{
+                padding: "8px 16px",
+                borderRadius: "8px",
+                fontSize: "13px",
+                fontWeight: 600,
+                border: "1px solid var(--color-border)",
+                background: statusFilter === item ? "var(--color-primary)" : "var(--color-surface)",
+                color: statusFilter === item ? "#fff" : "var(--color-text-secondary)",
+                cursor: "pointer",
+                transition: "all 0.2s ease"
+              }}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
       </section>
 
       <div className="events-admin-grid-layout">
@@ -199,6 +279,22 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                       </span>
                     </div>
                     <div className="event-card-content">
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
+                        <span 
+                          className={`event-status-badge ${event.status?.toLowerCase() === "draft" ? "draft" : "published"}`}
+                          style={{
+                            padding: "2px 6px",
+                            borderRadius: "4px",
+                            fontSize: "10px",
+                            fontWeight: 700,
+                            textTransform: "uppercase",
+                            background: event.status?.toLowerCase() === "draft" ? "var(--color-surface-secondary)" : "rgba(1, 172, 159, 0.12)",
+                            color: event.status?.toLowerCase() === "draft" ? "var(--color-text-secondary)" : "var(--color-success)"
+                          }}
+                        >
+                          {event.status || "Published"}
+                        </span>
+                      </div>
                       <h3>{event.title}</h3>
                       <p className="event-desc">{event.description}</p>
                       
@@ -273,9 +369,55 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                 <h3>Registrations ({selectedRegistrations.length})</h3>
                 <small className="event-panel-title">{selectedEvent?.title}</small>
               </div>
-              <button className="close-btn" onClick={() => setSelectedEventId(null)}>
-                <X size={18} />
-              </button>
+              <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                {selectedRegistrations.length > 0 && (
+                  <>
+                    <button 
+                      onClick={exportToExcel} 
+                      title="Export to Excel" 
+                      style={{ 
+                        padding: "6px 10px", 
+                        fontSize: "12px", 
+                        display: "flex", 
+                        alignItems: "center", 
+                        gap: "4px",
+                        border: "1px solid var(--color-border)",
+                        borderRadius: "6px",
+                        background: "var(--color-surface)",
+                        color: "var(--color-text-primary)",
+                        cursor: "pointer",
+                        fontWeight: 600
+                      }}
+                    >
+                      <FileSpreadsheet size={14} style={{ color: "var(--color-success)" }} />
+                      <span>Excel</span>
+                    </button>
+                    <button 
+                      onClick={exportToCSV} 
+                      title="Export to CSV" 
+                      style={{ 
+                        padding: "6px 10px", 
+                        fontSize: "12px", 
+                        display: "flex", 
+                        alignItems: "center", 
+                        gap: "4px",
+                        border: "1px solid var(--color-border)",
+                        borderRadius: "6px",
+                        background: "var(--color-surface)",
+                        color: "var(--color-text-primary)",
+                        cursor: "pointer",
+                        fontWeight: 600
+                      }}
+                    >
+                      <Download size={14} style={{ color: "var(--color-primary)" }} />
+                      <span>CSV</span>
+                    </button>
+                  </>
+                )}
+                <button className="close-btn" onClick={() => setSelectedEventId(null)}>
+                  <X size={18} />
+                </button>
+              </div>
             </header>
 
             <div className="panel-body">
@@ -435,9 +577,27 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                 <button type="button" className="outline" onClick={() => setShowForm(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="primary">
-                  {editingEvent ? "Save Changes" : "Create Event"}
-                </button>
+                {editingEvent ? (
+                  <>
+                    {formState.status === "Draft" && (
+                      <button type="button" className="outline" onClick={() => handleSave(null, "Published")} style={{ color: "var(--color-success)", borderColor: "var(--color-success)" }}>
+                        Publish Now
+                      </button>
+                    )}
+                    <button type="submit" className="primary">
+                      Save Changes
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button type="button" className="outline" onClick={() => handleSave(null, "Draft")} style={{ color: "var(--color-primary)", borderColor: "var(--color-primary)" }}>
+                      Save as Draft
+                    </button>
+                    <button type="button" className="primary" onClick={() => handleSave(null, "Published")}>
+                      Publish Event
+                    </button>
+                  </>
+                )}
               </div>
             </form>
           </div>

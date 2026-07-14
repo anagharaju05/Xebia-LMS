@@ -457,7 +457,7 @@ function QuestionsPage({ state, onAnswer, showToast }) {
 }
 
 function TeacherEventsView({ store }) {
-  const events = store?.events || [];
+  const events = (store?.events || []).filter(e => e.status !== "Draft");
   const registrations = store?.registrations || [];
   const [searchQuery, setSearchQuery] = useState("");
 

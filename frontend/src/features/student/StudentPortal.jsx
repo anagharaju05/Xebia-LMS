@@ -479,8 +479,8 @@ function FeedbackView({ courses, submitted, onSubmit }) {
   );
 }
 
-function StudentEventsView({ store, studentId, studentName, studentEmail, cohort, upsertEntity }) {
-  const events = store.events || [];
+function StudentEventsView({ store, studentId, studentName, studentEmail, cohort, upsertEntity, deleteEntity }) {
+  const events = (store.events || []).filter(e => e.status !== "Draft");
   const registrations = store.registrations || [];
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -517,6 +517,14 @@ function StudentEventsView({ store, studentId, studentName, studentEmail, cohort
       registeredAt: new Date().toISOString()
     };
     upsertEntity("registrations", reg, `Registered for ${eventTitle}`);
+  }
+
+  function handleUnregister(eventId, eventTitle) {
+    if (!window.confirm(`Are you sure you want to unregister from ${eventTitle}?`)) return;
+    const reg = registrations.find(r => r.eventId === eventId && r.studentId === studentId);
+    if (reg) {
+      deleteEntity("registrations", reg.id, `Unregistered from ${eventTitle}`);
+    }
   }
 
   function formatDateTime(str) {
@@ -619,7 +627,7 @@ function StudentEventsView({ store, studentId, studentName, studentEmail, cohort
                       <MapPin size={14} />
                       <span><strong>Location:</strong> {event.location}</span>
                     </div>
-                    {event.meetingUrl && (
+                    {event.meetingUrl && isRegistered && (
                       <div className="meta-item">
                         <Link size={14} />
                         <span>
@@ -639,9 +647,34 @@ function StudentEventsView({ store, studentId, studentName, studentEmail, cohort
 
                   <div className="student-event-footer">
                     {isRegistered ? (
-                      <button className="success-btn" disabled>
-                        <UserCheck size={16} /> Registered
-                      </button>
+                      <div style={{ display: "flex", gap: "8px", width: "100%" }}>
+                        <button className="success-btn" disabled style={{ flex: 1 }}>
+                          <UserCheck size={16} /> Registered
+                        </button>
+                        <button 
+                          className="closed-btn" 
+                          onClick={() => handleUnregister(event.id, event.title)}
+                          style={{ 
+                            width: "auto", 
+                            padding: "8px 12px", 
+                            color: "#e11d48", 
+                            borderColor: "rgba(225, 29, 72, 0.3)", 
+                            background: "rgba(225, 29, 72, 0.05)",
+                            cursor: "pointer",
+                            fontSize: "13px"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "rgba(225, 29, 72, 0.12)";
+                            e.currentTarget.style.borderColor = "#e11d48";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "rgba(225, 29, 72, 0.05)";
+                            e.currentTarget.style.borderColor = "rgba(225, 29, 72, 0.3)";
+                          }}
+                        >
+                          Unregister
+                        </button>
+                      </div>
                     ) : closed ? (
                       <button className="closed-btn" disabled>
                         Registration Closed
@@ -764,7 +797,7 @@ export default function StudentPortal({ store, theme, onThemeToggle, user, onLog
           {view === STUDENT_VIEWS.ANALYTICS && <StudentBatchWorkspace mode="analytics" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
           {view === STUDENT_VIEWS.NOTIFICATIONS && <NotificationsView notifications={portal.studentState.notifications} onRead={portal.markNotificationRead} />}
           {view === STUDENT_VIEWS.FEEDBACK && <FeedbackView courses={courses} submitted={portal.studentState.feedback} onSubmit={submitFeedback} />}
-          {view === STUDENT_VIEWS.EVENTS && <StudentEventsView store={store} studentId={studentId} studentName={studentName} studentEmail={studentEmail} cohort={cohort} upsertEntity={upsertEntity} showToast={showToast} />}
+          {view === STUDENT_VIEWS.EVENTS && <StudentEventsView store={store} studentId={studentId} studentName={studentName} studentEmail={studentEmail} cohort={cohort} upsertEntity={upsertEntity} deleteEntity={deleteEntity} showToast={showToast} />}
         </main>
       </div>
     </div>
