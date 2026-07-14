@@ -338,17 +338,12 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
             
             <form onSubmit={handleSave} className="events-form">
               <Field 
-                label="Event Title *" 
-                id="event-title"
-              >
-                <input 
-                  type="text" 
-                  value={formState.title}
-                  onChange={(e) => setFormState({ ...formState, title: e.target.value })}
-                  placeholder="e.g. Hackathon 2026, React 19 Session"
-                  required
-                />
-              </Field>
+                label="Event Title" 
+                required 
+                value={formState.title}
+                onChange={(val) => setFormState({ ...formState, title: val })}
+                placeholder="e.g. Hackathon 2026, React 19 Session"
+              />
 
               <TextArea 
                 label="Description" 
@@ -359,25 +354,24 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
               />
 
               <div className="form-row-2">
-                <Field label="Timeline (Start Date & Time) *" id="event-timeline">
-                  <input 
-                    type="datetime-local" 
-                    value={formState.timeline}
-                    onChange={(e) => setFormState({ ...formState, timeline: e.target.value })}
-                    required
-                  />
-                </Field>
-                <Field label="Registration Deadline *" id="event-deadline">
-                  <input 
-                    type="datetime-local" 
-                    value={formState.deadline}
-                    onChange={(e) => setFormState({ ...formState, deadline: e.target.value })}
-                    required
-                  />
-                </Field>
+                <Field 
+                  label="Timeline (Start Date & Time)" 
+                  required 
+                  type="datetime-local"
+                  value={formState.timeline}
+                  onChange={(val) => setFormState({ ...formState, timeline: val })}
+                />
+                <Field 
+                  label="Registration Deadline" 
+                  required 
+                  type="datetime-local"
+                  value={formState.deadline}
+                  onChange={(val) => setFormState({ ...formState, deadline: val })}
+                />
               </div>
 
-              <Field label="Location *" id="event-location">
+              <label className="field" id="event-location">
+                <span>Location <em>*</em></span>
                 <select
                   value={locationType}
                   onChange={(e) => {
@@ -397,31 +391,28 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                   <option value="Virtual (Zoom)">Virtual (Zoom)</option>
                   <option value="Other">Other (Custom Location)</option>
                 </select>
-              </Field>
+              </label>
 
               {locationType === "Other" && (
-                <Field label="Specify Custom Location *" id="event-custom-location">
-                  <input 
-                    type="text" 
-                    value={customLocation}
-                    onChange={(e) => {
-                      setCustomLocation(e.target.value);
-                      setFormState({ ...formState, location: e.target.value });
-                    }}
-                    placeholder="Enter custom venue address or details..."
-                    required
-                  />
-                </Field>
+                <Field 
+                  label="Specify Custom Location" 
+                  required 
+                  value={customLocation}
+                  onChange={(val) => {
+                    setCustomLocation(val);
+                    setFormState({ ...formState, location: val });
+                  }}
+                  placeholder="Enter custom venue address or details..."
+                />
               )}
 
-              <Field label="Meeting Link / URL (Optional)" id="event-meeting-url">
-                <input 
-                  type="url" 
-                  value={formState.meetingUrl || ""}
-                  onChange={(e) => setFormState({ ...formState, meetingUrl: e.target.value })}
-                  placeholder="e.g. https://teams.microsoft.com/l/meetup-join/..."
-                />
-              </Field>
+              <Field 
+                label="Meeting Link / URL (Optional)" 
+                type="url"
+                value={formState.meetingUrl || ""}
+                onChange={(val) => setFormState({ ...formState, meetingUrl: val })}
+                placeholder="e.g. https://teams.microsoft.com/l/meetup-join/..."
+              />
 
               <div className="image-preset-picker">
                 <span className="preset-label">Choose Event Image Banner:</span>
