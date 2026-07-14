@@ -11,7 +11,9 @@ import {
   Users,
   Search,
   Sparkles,
-  CalendarDays
+  CalendarDays,
+  ExternalLink,
+  Link
 } from "lucide-react";
 import PageTitle from "../../components/common/PageTitle.jsx";
 import Metric from "../../components/common/Metric.jsx";
@@ -31,7 +33,8 @@ const EMPTY_EVENT = {
   image: PRESET_IMAGES[0].url,
   timeline: "",
   deadline: "",
-  location: ""
+  location: "Xebia Gurgaon HQ (Sector 45)",
+  meetingUrl: ""
 };
 
 export default function EventsPage({ store, upsertEvent, deleteEvent, showToast }) {
@@ -43,6 +46,9 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
   const [formState, setFormState] = useState(EMPTY_EVENT);
   const [selectedEventId, setSelectedEventId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [locationType, setLocationType] = useState("Xebia Gurgaon HQ (Sector 45)");
+  const [customLocation, setCustomLocation] = useState("");
 
   const filteredEvents = useMemo(() => {
     if (!searchQuery.trim()) return events;
@@ -65,12 +71,27 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
 
   function openCreate() {
     setFormState(EMPTY_EVENT);
+    setLocationType("Xebia Gurgaon HQ (Sector 45)");
+    setCustomLocation("");
     setEditingEvent(null);
     setShowForm(true);
   }
 
   function openEdit(event) {
     setFormState(event);
+    const standardOptions = [
+      "Xebia Gurgaon HQ (Sector 45)",
+      "Xebia Noida Office (Sector 62)",
+      "Virtual (Microsoft Teams)",
+      "Virtual (Zoom)"
+    ];
+    if (standardOptions.includes(event.location)) {
+      setLocationType(event.location);
+      setCustomLocation("");
+    } else {
+      setLocationType("Other");
+      setCustomLocation(event.location);
+    }
     setEditingEvent(event);
     setShowForm(true);
   }
@@ -194,6 +215,23 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                           <MapPin size={15} />
                           <span><strong>Location:</strong> {event.location}</span>
                         </div>
+                        {event.meetingUrl && (
+                          <div className="meta-item">
+                            <Link size={14} />
+                            <span>
+                              <strong>Link: </strong>
+                              <a 
+                                href={event.meetingUrl} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="event-meeting-url-link"
+                                style={{ color: "var(--color-primary)", textDecoration: "underline", fontWeight: 600 }}
+                              >
+                                Join Meeting <ExternalLink size={11} style={{ display: "inline", verticalAlign: "middle", marginLeft: "2px" }} />
+                              </a>
+                            </span>
+                          </div>
+                        )}
                       </div>
 
                       <div className="event-card-footer" onClick={(e) => e.stopPropagation()}>
@@ -339,13 +377,49 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                 </Field>
               </div>
 
-              <Field label="Location / Meeting URL *" id="event-location">
+              <Field label="Location *" id="event-location">
+                <select
+                  value={locationType}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setLocationType(val);
+                    if (val !== "Other") {
+                      setFormState({ ...formState, location: val });
+                    } else {
+                      setFormState({ ...formState, location: customLocation });
+                    }
+                  }}
+                  style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--color-border)", borderRadius: "8px", background: "var(--color-surface)", color: "var(--color-text-primary)", fontWeight: 500 }}
+                >
+                  <option value="Xebia Gurgaon HQ (Sector 45)">Xebia Gurgaon HQ (Sector 45)</option>
+                  <option value="Xebia Noida Office (Sector 62)">Xebia Noida Office (Sector 62)</option>
+                  <option value="Virtual (Microsoft Teams)">Virtual (Microsoft Teams)</option>
+                  <option value="Virtual (Zoom)">Virtual (Zoom)</option>
+                  <option value="Other">Other (Custom Location)</option>
+                </select>
+              </Field>
+
+              {locationType === "Other" && (
+                <Field label="Specify Custom Location *" id="event-custom-location">
+                  <input 
+                    type="text" 
+                    value={customLocation}
+                    onChange={(e) => {
+                      setCustomLocation(e.target.value);
+                      setFormState({ ...formState, location: e.target.value });
+                    }}
+                    placeholder="Enter custom venue address or details..."
+                    required
+                  />
+                </Field>
+              )}
+
+              <Field label="Meeting Link / URL (Optional)" id="event-meeting-url">
                 <input 
-                  type="text" 
-                  value={formState.location}
-                  onChange={(e) => setFormState({ ...formState, location: e.target.value })}
-                  placeholder="e.g. Xebia HQ, Sector 45 Gurugram or Microsoft Teams Link"
-                  required
+                  type="url" 
+                  value={formState.meetingUrl || ""}
+                  onChange={(e) => setFormState({ ...formState, meetingUrl: e.target.value })}
+                  placeholder="e.g. https://teams.microsoft.com/l/meetup-join/..."
                 />
               </Field>
 

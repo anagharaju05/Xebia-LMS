@@ -552,6 +552,22 @@ function TeacherEventsView({ store }) {
                       <MapPin size={14} style={{ color: "var(--color-primary)" }} />
                       <span><strong>Location:</strong> {event.location}</span>
                     </div>
+                    {event.meetingUrl && (
+                      <div className="meta-item" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <span style={{ display: "inline-flex", width: "14px", height: "14px", alignItems: "center", justifyContent: "center", color: "var(--color-primary)", fontSize: "12px" }}>🔗</span>
+                        <span>
+                          <strong>Link: </strong>
+                          <a 
+                            href={event.meetingUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            style={{ color: "var(--color-primary)", textDecoration: "underline", fontWeight: 600 }}
+                          >
+                            Join Meeting <ExternalLink size={11} style={{ display: "inline", verticalAlign: "middle", marginLeft: "2px" }} />
+                          </a>
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="event-card-footer" style={{ borderTop: "1px solid var(--line)", paddingTop: "12px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -603,10 +619,10 @@ export default function TeacherPortal({ store, assessmentStore, batchStore, them
         {view === VIEWS.ASSESSMENTS && <AssessmentsPage state={assessmentStore.state} onCreate={() => setEditor(createBlankAssessment())} onEdit={setEditor} onDelete={requestDelete} onStatus={(id, status) => { assessmentStore.setAssessmentStatus(id, status); showToast?.(status === "Published" ? "Assessment published" : "Moved to drafts"); }} />}
         {view === VIEWS.SUBMISSIONS && <SubmissionsPage state={assessmentStore.state} onGrade={assessmentStore.gradeSubmission} showToast={showToast} students={students} batches={batchStore.state.batches} />}
         {view === VIEWS.QUESTIONS && <QuestionsPage state={assessmentStore.state} onAnswer={assessmentStore.answerQuestion} showToast={showToast} />}
-        {view === VIEWS.BATCHES && <TeacherBatchWorkspace mode="batches" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
-        {view === VIEWS.SUBJECTS && <TeacherBatchWorkspace mode="subjects" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
-        {view === VIEWS.CALENDAR && <TeacherBatchWorkspace mode="calendar" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
-        {view === VIEWS.ANALYTICS && <TeacherBatchWorkspace mode="analytics" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
+        {view === VIEWS.BATCHES && <TeacherBatchWorkspace mode="batches" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
+        {view === VIEWS.SUBJECTS && <TeacherBatchWorkspace mode="subjects" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
+        {view === VIEWS.CALENDAR && <TeacherBatchWorkspace mode="calendar" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
+        {view === VIEWS.ANALYTICS && <TeacherBatchWorkspace mode="analytics" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
         {view === VIEWS.EVENTS && <TeacherEventsView store={store} />}
       </main>
     </div>

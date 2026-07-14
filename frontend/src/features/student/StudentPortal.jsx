@@ -27,7 +27,9 @@ import {
   Clock,
   UserCheck,
   Search,
-  Calendar
+  Calendar,
+  Link,
+  ExternalLink
 } from "lucide-react";
 import StudentContentRenderer from "./StudentContentRenderer.jsx";
 import { useStudentPortal } from "./useStudentPortal.js";
@@ -617,6 +619,22 @@ function StudentEventsView({ store, studentId, studentName, studentEmail, cohort
                       <MapPin size={14} />
                       <span><strong>Location:</strong> {event.location}</span>
                     </div>
+                    {event.meetingUrl && (
+                      <div className="meta-item">
+                        <Link size={14} />
+                        <span>
+                          <strong>Link: </strong>
+                          <a 
+                            href={event.meetingUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            style={{ color: "var(--color-primary)", textDecoration: "underline", fontWeight: 600 }}
+                          >
+                            Join Meeting <ExternalLink size={11} style={{ display: "inline", verticalAlign: "middle", marginLeft: "2px" }} />
+                          </a>
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="student-event-footer">
@@ -741,9 +759,9 @@ export default function StudentPortal({ store, theme, onThemeToggle, user, onLog
           }} />}
           {view === STUDENT_VIEWS.COURSE && course && <CourseView store={store} course={course} studentState={portal.studentState} onBack={() => navigate(STUDENT_VIEWS.LEARNING)} onComplete={completeLesson} onComment={portal.addComment} onReply={portal.addReply} />}
           {view === STUDENT_VIEWS.ASSESSMENTS && <StudentAssessments assessmentStore={assessmentStore} batchStore={batchStore} user={user} showToast={showToast} />}
-          {view === STUDENT_VIEWS.BATCHES && <StudentBatchWorkspace mode="batches" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
-          {view === STUDENT_VIEWS.CALENDAR && <StudentBatchWorkspace mode="calendar" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
-          {view === STUDENT_VIEWS.ANALYTICS && <StudentBatchWorkspace mode="analytics" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} />}
+          {view === STUDENT_VIEWS.BATCHES && <StudentBatchWorkspace mode="batches" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
+          {view === STUDENT_VIEWS.CALENDAR && <StudentBatchWorkspace mode="calendar" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
+          {view === STUDENT_VIEWS.ANALYTICS && <StudentBatchWorkspace mode="analytics" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
           {view === STUDENT_VIEWS.NOTIFICATIONS && <NotificationsView notifications={portal.studentState.notifications} onRead={portal.markNotificationRead} />}
           {view === STUDENT_VIEWS.FEEDBACK && <FeedbackView courses={courses} submitted={portal.studentState.feedback} onSubmit={submitFeedback} />}
           {view === STUDENT_VIEWS.EVENTS && <StudentEventsView store={store} studentId={studentId} studentName={studentName} studentEmail={studentEmail} cohort={cohort} upsertEntity={upsertEntity} showToast={showToast} />}
