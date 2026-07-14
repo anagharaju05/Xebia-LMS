@@ -1,0 +1,22 @@
+-- Seed Assessments Data from Datasets
+INSERT INTO assessments (id, organization_id, title, subject, type, instructions, points, assignment_scope, status) VALUES
+('b0a80101-0000-0000-0000-000000000001', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 1', 'Sub 1', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000002', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 2', 'Sub 2', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000003', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 3', 'Sub 3', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000004', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 4', 'Sub 4', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000005', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 5', 'Sub 5', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000006', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 6', 'Sub 6', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000007', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 7', 'Sub 7', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000008', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 8', 'Sub 8', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000009', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 9', 'Sub 9', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000010', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 10', 'Sub 10', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000011', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 11', 'Sub 11', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000012', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 12', 'Sub 12', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000013', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 13', 'Sub 13', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000014', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 14', 'Sub 14', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000015', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 15', 'Sub 15', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000016', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 16', 'Sub 16', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000017', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 17', 'Sub 17', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000018', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 18', 'Sub 18', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000019', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 19', 'Sub 19', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT'),
+('b0a80101-0000-0000-0000-000000000020', '123e4567-e89b-12d3-a456-426614174000', 'Load Assessment 20', 'Sub 20', 'QUIZ', 'Please complete all questions.', 100, 'ALL_STUDENTS', 'DRAFT');
