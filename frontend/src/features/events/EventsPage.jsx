@@ -121,6 +121,7 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
     <div className="events-admin-page">
       <header className="events-admin-header">
         <PageTitle 
+          icon={CalendarDays}
           title="Events Manager" 
           subtitle="Publish training workshops, hackathons, and tech sessions for students and instructors."
         />
