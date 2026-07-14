@@ -37,7 +37,8 @@ const EMPTY_EVENT = {
   deadline: "",
   location: "Xebia Gurgaon HQ (Sector 45)",
   meetingUrl: "",
-  status: "Published"
+  status: "Published",
+  maxCapacity: 0
 };
 
 export default function EventsPage({ store, upsertEvent, deleteEvent, showToast }) {
@@ -70,7 +71,10 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
     const total = events.length;
     const now = new Date();
     const active = events.filter(e => new Date(e.deadline) > now).length;
-    const totalReg = registrations.length;
+    
+    const validEventIds = new Set(events.map(e => e.id));
+    const totalReg = registrations.filter(r => validEventIds.has(r.eventId)).length;
+    
     return { total, active, totalReg };
   }, [events, registrations]);
 
@@ -163,6 +167,14 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
       return;
     }
 
+    if (formState.meetingUrl && formState.meetingUrl.trim()) {
+      const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+      if (!urlPattern.test(formState.meetingUrl.trim())) {
+        showToast("Please enter a valid Meeting Link URL", "danger");
+        return;
+      }
+    }
+
     const nextStatus = customStatus || formState.status || "Published";
 
     const payload = {
@@ -202,7 +214,7 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
   };
 
   return (
-    <div className="events-admin-page">
+    <div className="events-admin-page" style={{ zoom: 0.9 }}>
       <header className="events-admin-header">
         <PageTitle 
           icon={CalendarDays}
@@ -257,6 +269,36 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
 
       <div className="events-admin-grid-layout">
         <div className="events-list-section">
+          
+          {/* Registration Analytics */}
+          {events.length > 0 && (
+            <div style={{ marginBottom: "24px", background: "var(--color-surface)", padding: "16px", borderRadius: "12px", border: "1px solid var(--color-border)" }}>
+              <h3 style={{ fontSize: "14px", margin: "0 0 16px 0", color: "var(--color-text-primary)", display: "flex", alignItems: "center", gap: "8px" }}>
+                <Sparkles size={16} /> Registration Analytics
+              </h3>
+              <div style={{ display: "flex", gap: "12px", overflowX: "auto", paddingBottom: "8px" }}>
+                {events.map(event => {
+                  const regCount = registrations.filter(r => r.eventId === event.id).length;
+                  const capacity = event.maxCapacity || 50;
+                  const percent = Math.min(100, Math.round((regCount / capacity) * 100));
+                  return (
+                    <div key={event.id} style={{ minWidth: "120px", display: "flex", flexDirection: "column", gap: "8px" }}>
+                      <span style={{ fontSize: "12px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={event.title}>
+                        {event.title}
+                      </span>
+                      <div style={{ width: "100%", height: "8px", background: "var(--color-background)", borderRadius: "4px", overflow: "hidden" }}>
+                        <div style={{ height: "100%", width: `${percent}%`, background: percent >= 100 ? "#f43f5e" : "var(--color-primary)", borderRadius: "4px" }} />
+                      </div>
+                      <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>
+                        {regCount} / {capacity}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {filteredEvents.length === 0 ? (
             <div className="events-empty-state">
               <CalendarDays size={48} />
@@ -286,13 +328,15 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                     <div className="event-card-content">
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
                         <span 
-                          className={`event-status-badge ${event.status?.toLowerCase() === "draft" ? "draft" : "published"}`}
+                          className={`${event.status?.toLowerCase() === "draft" ? "draft" : "published"}`}
                           style={{
+                            position: "static",
                             padding: "2px 6px",
                             borderRadius: "4px",
                             fontSize: "10px",
                             fontWeight: 700,
                             textTransform: "uppercase",
+                            letterSpacing: "0.5px",
                             background: event.status?.toLowerCase() === "draft" ? "var(--color-surface-secondary)" : "rgba(1, 172, 159, 0.12)",
                             color: event.status?.toLowerCase() === "draft" ? "var(--color-text-secondary)" : "var(--color-success)"
                           }}
@@ -455,8 +499,9 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                     <thead>
                       <tr>
                         <th>Student</th>
-                        <th>Cohort</th>
+                        <th>Status</th>
                         <th>Registered On</th>
+                        <th>Check-In</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -474,10 +519,23 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                             </div>
                           </td>
                           <td>
-                            <span className="cohort-tag">{reg.cohort || "N/A"}</span>
+                            <span className="cohort-tag" style={{ background: reg.status === "WAITLISTED" ? "#fef08a" : "var(--color-surface)", color: reg.status === "WAITLISTED" ? "#a16207" : "var(--color-text-primary)" }}>
+                              {reg.status || "REGISTERED"}
+                            </span>
                           </td>
                           <td>
                             <time>{formatDateTime(reg.registeredAt)}</time>
+                          </td>
+                          <td>
+                            <div style={{ display: "flex", gap: "4px" }}>
+                              <label style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "12px", cursor: "pointer" }}>
+                                <input type="checkbox" checked={reg.attendanceStatus === "ATTENDED"} onChange={(e) => {
+                                  // Optimsitic UI update (in real app, call API)
+                                  reg.attendanceStatus = e.target.checked ? "ATTENDED" : "PENDING";
+                                  showToast(`Marked ${reg.studentName} as ${e.target.checked ? "Attended" : "Pending"}`, "success");
+                                }} /> Present
+                              </label>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -535,7 +593,55 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                 />
               </div>
 
-              <label className="field" id="event-location">
+              <div className="field">
+                <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--color-text-secondary)", marginBottom: "8px", display: "block" }}>Banner Image</span>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px", marginBottom: "8px" }}>
+                  {PRESET_IMAGES.map((preset, idx) => (
+                    <div 
+                      key={idx} 
+                      onClick={() => setFormState({ ...formState, image: preset.url })}
+                      style={{ 
+                        height: "60px", 
+                        borderRadius: "6px", 
+                        cursor: "pointer",
+                        overflow: "hidden",
+                        border: formState.image === preset.url ? "3px solid var(--color-primary)" : "1px solid var(--color-border)",
+                        position: "relative"
+                      }}
+                    >
+                      <img src={preset.url} alt={preset.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "rgba(0,0,0,0.6)", color: "white", fontSize: "10px", padding: "2px 4px", textAlign: "center" }}>
+                        {preset.name}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <input 
+                  type="url" 
+                  placeholder="Or enter custom image URL"
+                  value={formState.image || ""}
+                  onChange={(e) => setFormState({ ...formState, image: e.target.value })}
+                  style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--color-border)", borderRadius: "8px", fontSize: "14px", background: "var(--color-surface)", color: "var(--color-text-primary)" }}
+                />
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                <Field 
+                  label="Meeting URL (Optional)" 
+                  placeholder="https://zoom.us/j/123..."
+                  value={formState.meetingUrl || ""}
+                  onChange={(val) => setFormState({ ...formState, meetingUrl: val })}
+                />
+                <Field 
+                  label="Max Seats (0 for unlimited)" 
+                  type="number"
+                  placeholder="e.g. 50"
+                  value={formState.maxCapacity || 0}
+                  onChange={(val) => setFormState({ ...formState, maxCapacity: parseInt(val, 10) || 0 })}
+                />
+              </div>
+
+              <label className="field" id="event-location" style={{ marginTop: "16px" }}>
                 <span>Location <em>*</em></span>
                 <select
                   value={locationType}

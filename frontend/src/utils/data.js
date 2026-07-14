@@ -476,14 +476,5 @@ export const seedState = {
       location: "Virtual (Teams Link will be sent upon registration)"
     }
   ],
-  registrations: [
-    {
-      id: "reg-1",
-      eventId: "evt-1",
-      studentId: "student-aarav",
-      studentName: "Aarav Kumar",
-      studentEmail: "student@xebia.com",
-      registeredAt: "2026-07-14T12:00:00Z"
-    }
-  ]
+  registrations: []
 };

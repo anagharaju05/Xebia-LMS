@@ -480,7 +480,7 @@ function FeedbackView({ courses, submitted, onSubmit }) {
   );
 }
 
-function StudentEventsView({ store, studentId, studentName, studentEmail, cohort, upsertEntity, deleteEntity }) {
+function StudentEventsView({ store, studentId, studentName, studentEmail, cohort, upsertEntity, deleteEntity, showToast, setView, STUDENT_VIEWS }) {
   const events = (store.events || []).filter(e => e.status !== "Draft");
   const registrations = store.registrations || [];
   const [searchQuery, setSearchQuery] = useState("");
@@ -507,7 +507,40 @@ function StudentEventsView({ store, studentId, studentName, studentEmail, cohort
     return { total, registered, open };
   }, [events, registeredEventIds]);
 
+  const upcomingEvent = useMemo(() => {
+    const now = new Date();
+    return events.find(e => {
+      if (!registeredEventIds.includes(e.id)) return false;
+      const start = new Date(e.timeline);
+      const diffMins = (start.getTime() - now.getTime()) / (1000 * 60);
+      return diffMins > 0 && diffMins <= 60;
+    });
+  }, [events, registeredEventIds]);
+
+  function handleDownloadIcs(event) {
+    if (setView && STUDENT_VIEWS) {
+      setView(STUDENT_VIEWS.CALENDAR);
+      if (showToast) {
+        showToast("View your events in the Portal Calendar", "success");
+      }
+    }
+  }
+
+  function copyLink(link) {
+    navigator.clipboard.writeText(link);
+    alert("Link copied!");
+  }
+
   function handleRegister(eventId, eventTitle) {
+    const event = events.find(e => e.id === eventId);
+    const capacity = event?.maxCapacity || 0;
+    const currentRegs = registrations.filter(r => r.eventId === eventId).length;
+    
+    let status = "REGISTERED";
+    if (capacity > 0 && currentRegs >= capacity) {
+      status = "WAITLISTED";
+    }
+
     const reg = {
       id: "reg-" + Math.random().toString(36).substr(2, 9),
       eventId: eventId,
@@ -515,9 +548,10 @@ function StudentEventsView({ store, studentId, studentName, studentEmail, cohort
       studentName: studentName,
       studentEmail: studentEmail,
       cohort: cohort,
-      registeredAt: new Date().toISOString()
+      registeredAt: new Date().toISOString(),
+      status: status
     };
-    upsertEntity("registrations", reg, `Registered for ${eventTitle}`);
+    upsertEntity("registrations", reg, status === "WAITLISTED" ? `Waitlisted for ${eventTitle}` : `Registered for ${eventTitle}`);
   }
 
   function handleUnregister(eventId, eventTitle) {
@@ -525,6 +559,27 @@ function StudentEventsView({ store, studentId, studentName, studentEmail, cohort
     const reg = registrations.find(r => r.eventId === eventId && r.studentId === studentId);
     if (reg) {
       deleteEntity("registrations", reg.id, `Unregistered from ${eventTitle}`);
+      
+      const event = events.find(e => e.id === eventId);
+      const capacity = event?.maxCapacity || 0;
+      if (capacity > 0) {
+        // Small delay to let delete complete before promoting
+        setTimeout(() => {
+          const updatedRegs = store.registrations.filter(r => r.eventId === eventId && r.id !== reg.id);
+          const currentRegistered = updatedRegs.filter(r => r.status !== "WAITLISTED").length;
+          
+          if (currentRegistered < capacity) {
+            const waitlisted = updatedRegs
+              .filter(r => r.status === "WAITLISTED")
+              .sort((a, b) => new Date(a.registeredAt) - new Date(b.registeredAt));
+            
+            if (waitlisted.length > 0) {
+              const nextInLine = waitlisted[0];
+              upsertEntity("registrations", { ...nextInLine, status: "REGISTERED" }, `Auto-promoted ${nextInLine.studentName} from Waitlist`);
+            }
+          }
+        }, 100);
+      }
     }
   }
 
@@ -554,6 +609,20 @@ function StudentEventsView({ store, studentId, studentName, studentEmail, cohort
           <p>Register for tech summits, expert workshops, hackathons, and guest lectures.</p>
         </div>
       </div>
+
+      {upcomingEvent && (
+        <div className="live-reminder-banner">
+          <div>
+            <h4>You have an event starting soon!</h4>
+            <p>"{upcomingEvent.title}" begins in less than 60 minutes.</p>
+          </div>
+          {upcomingEvent.meetingUrl && (
+            <a href={upcomingEvent.meetingUrl} target="_blank" rel="noopener noreferrer">
+              <button>Join Now</button>
+            </a>
+          )}
+        </div>
+      )}
 
       <div className="student-stats-row">
         <div className="student-stat-card">
@@ -601,15 +670,19 @@ function StudentEventsView({ store, studentId, studentName, studentEmail, cohort
           {filteredEvents.map(event => {
             const isRegistered = registeredEventIds.includes(event.id);
             const closed = isRegistrationClosed(event);
+            const diffHours = (new Date(event.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60);
+            const isUrgent = !isRegistered && !closed && diffHours > 0 && diffHours < 24;
+            const accent = event.id.length % 2 === 0 ? "violet" : "emerald"; // Fallback pseudo-random accent
 
             return (
               <article 
                 key={event.id} 
-                className={`student-event-card ${isRegistered ? "registered" : ""}`}
+                className={`student-event-card ${isRegistered ? "registered" : ""} ${isUrgent ? "urgent" : ""}`}
+                data-accent={event.accentColor || accent}
               >
                 <div className="student-event-img">
                   <img src={event.image} alt={event.title} />
-                  {isRegistered && <span className="reg-badge"><UserCheck size={14} /> Registered</span>}
+                  {isRegistered && <span className="reg-badge glass"><UserCheck size={14} /> Registered</span>}
                 </div>
                 <div className="student-event-body">
                   <h3>{event.title}</h3>
@@ -629,9 +702,9 @@ function StudentEventsView({ store, studentId, studentName, studentEmail, cohort
                       <span><strong>Location:</strong> {event.location}</span>
                     </div>
                     {event.meetingUrl && isRegistered && (
-                      <div className="meta-item">
+                      <div className="meta-item" style={{ alignItems: "center" }}>
                         <Link size={14} />
-                        <span>
+                        <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                           <strong>Link: </strong>
                           <a 
                             href={event.meetingUrl} 
@@ -641,6 +714,9 @@ function StudentEventsView({ store, studentId, studentName, studentEmail, cohort
                           >
                             Join Meeting <ExternalLink size={11} style={{ display: "inline", verticalAlign: "middle", marginLeft: "2px" }} />
                           </a>
+                          <button className="copy-link-btn" onClick={() => copyLink(event.meetingUrl)} title="Copy link">
+                            📋
+                          </button>
                         </span>
                       </div>
                     )}
@@ -648,33 +724,51 @@ function StudentEventsView({ store, studentId, studentName, studentEmail, cohort
 
                   <div className="student-event-footer">
                     {isRegistered ? (
-                      <div style={{ display: "flex", gap: "8px", width: "100%" }}>
-                        <button className="success-btn" disabled style={{ flex: 1 }}>
-                          <UserCheck size={16} /> Registered
-                        </button>
-                        <button 
-                          className="closed-btn" 
-                          onClick={() => handleUnregister(event.id, event.title)}
-                          style={{ 
-                            width: "auto", 
-                            padding: "8px 12px", 
-                            color: "#e11d48", 
-                            borderColor: "rgba(225, 29, 72, 0.3)", 
-                            background: "rgba(225, 29, 72, 0.05)",
-                            cursor: "pointer",
-                            fontSize: "13px"
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "rgba(225, 29, 72, 0.12)";
-                            e.currentTarget.style.borderColor = "#e11d48";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "rgba(225, 29, 72, 0.05)";
-                            e.currentTarget.style.borderColor = "rgba(225, 29, 72, 0.3)";
-                          }}
-                        >
-                          Unregister
-                        </button>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px", width: "100%" }}>
+                        <div style={{ display: "flex", gap: "8px", width: "100%" }}>
+                          <button className="success-btn" disabled style={{ flex: 1 }}>
+                            <UserCheck size={16} /> Registered
+                          </button>
+                          <button 
+                            className="closed-btn" 
+                            onClick={() => handleUnregister(event.id, event.title)}
+                            style={{ 
+                              width: "auto", 
+                              padding: "8px 12px", 
+                              color: "#e11d48", 
+                              borderColor: "rgba(225, 29, 72, 0.3)", 
+                              background: "rgba(225, 29, 72, 0.05)",
+                              cursor: "pointer",
+                              fontSize: "13px"
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background = "rgba(225, 29, 72, 0.12)";
+                              e.currentTarget.style.borderColor = "#e11d48";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = "rgba(225, 29, 72, 0.05)";
+                              e.currentTarget.style.borderColor = "rgba(225, 29, 72, 0.3)";
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                        <div style={{ display: "flex", gap: "8px", width: "100%" }}>
+                          <button 
+                            style={{ flex: 1, padding: "6px", fontSize: "12px", background: "var(--color-surface)", border: "1px solid var(--color-border)", borderRadius: "6px", cursor: "pointer" }}
+                            onClick={() => handleDownloadIcs(event)}
+                          >
+                            📅 Add to Calendar
+                          </button>
+                          {new Date(event.timeline) < new Date() && (
+                            <button 
+                              style={{ flex: 1, padding: "6px", fontSize: "12px", background: "var(--color-primary)", color: "white", border: "none", borderRadius: "6px", cursor: "pointer" }}
+                              onClick={() => alert("Feedback system opening soon!")}
+                            >
+                              ⭐ Leave Feedback
+                            </button>
+                          )}
+                        </div>
                       </div>
                     ) : closed ? (
                       <button className="closed-btn" disabled>
@@ -800,7 +894,7 @@ export default function StudentPortal({ store, theme, onThemeToggle, user, onLog
           {view === STUDENT_VIEWS.FEEDBACK && <FeedbackView courses={courses} submitted={portal.studentState.feedback} onSubmit={submitFeedback} />}
           {view === STUDENT_VIEWS.EVENTS && (
             <ErrorBoundary>
-              <StudentEventsView store={store} studentId={studentId} studentName={studentName} studentEmail={studentEmail} cohort={cohort} upsertEntity={upsertEntity} deleteEntity={deleteEntity} showToast={showToast} />
+              <StudentEventsView store={store} studentId={studentId} studentName={studentName} studentEmail={studentEmail} cohort={cohort} upsertEntity={upsertEntity} deleteEntity={deleteEntity} showToast={showToast} setView={setView} STUDENT_VIEWS={STUDENT_VIEWS} />
             </ErrorBoundary>
           )}
         </main>

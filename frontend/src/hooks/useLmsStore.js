@@ -265,6 +265,39 @@ export function useLmsStore(showToast) {
       };
     });
 
+    let events = seedState.events || [];
+    try {
+      const pgEvents = await api.get("/api/events");
+      events = pgEvents.map(e => ({
+        id: e.id,
+        title: e.title,
+        description: e.description || "",
+        location: e.locationOrLink || "Virtual",
+        deadline: e.endTime,
+        timeline: e.startTime,
+        status: e.status === "PUBLISHED" || e.status === "SCHEDULED" ? "Published" : "Draft",
+        image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87",
+        meetingUrl: e.locationOrLink || ""
+      }));
+    } catch(err) {
+      console.warn("Failed to fetch events", err);
+    }
+
+    let registrations = seedState.registrations || [];
+    try {
+      const pgRegs = await api.get("/api/event-registrations");
+      registrations = pgRegs.map(r => ({
+        id: r.id,
+        eventId: r.eventId,
+        studentId: r.studentId,
+        studentName: r.studentName,
+        studentEmail: r.studentEmail,
+        registeredAt: r.registeredAt
+      }));
+    } catch(err) {
+      console.warn("Failed to fetch registrations", err);
+    }
+
     const contentBlocks = pgContents.map(c => {
       try {
         if (c.contentData) {
@@ -289,6 +322,8 @@ export function useLmsStore(showToast) {
       modules,
       submodules,
       contentBlocks,
+      events,
+      registrations,
       audit: currentStore.audit
     }));
   }
@@ -318,7 +353,7 @@ export function useLmsStore(showToast) {
     addAudit(label, getRecordLabel(record));
     showToast(label);
 
-    if (isOffline || entity === "events" || entity === "registrations") {
+    if (isOffline) {
       return id;
     }
 
@@ -408,6 +443,31 @@ export function useLmsStore(showToast) {
         } else {
           await api.post("/api/content", payload);
         }
+      } else if (entity === "events") {
+        const payload = {
+          id: toUUID(id),
+          title: finalRecord.title,
+          description: finalRecord.description || "",
+          startTime: finalRecord.timeline || new Date().toISOString(),
+          endTime: finalRecord.deadline || new Date().toISOString(),
+          eventType: "WEBINAR",
+          locationOrLink: finalRecord.location || "",
+          status: finalRecord.status === "Published" ? "SCHEDULED" : "DRAFT"
+        };
+        if (isUpdate) {
+          await api.put(`/api/events/${toUUID(id)}`, payload);
+        } else {
+          await api.post("/api/events", payload);
+        }
+      } else if (entity === "registrations") {
+        const payload = {
+          id: toUUID(id),
+          eventId: toUUID(finalRecord.eventId),
+          studentId: finalRecord.studentId,
+          studentName: finalRecord.studentName,
+          studentEmail: finalRecord.studentEmail
+        };
+        await api.post("/api/event-registrations", payload);
       }
     } catch (err) {
       console.error("API error while upserting:", err);
@@ -437,6 +497,16 @@ export function useLmsStore(showToast) {
     }));
     addAudit("Event deleted", event?.title || "Event");
     showToast("Event deleted");
+    
+    if (!isOffline) {
+      try {
+        await api.delete(`/api/events/${toUUID(id)}`);
+      } catch (err) {
+        console.error("API error while deleting event:", err);
+        showToast("DB write failed. Running in offline/cached mode.", "warning");
+      }
+    }
+    
     return true;
   }
 
