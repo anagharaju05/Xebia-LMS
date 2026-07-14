@@ -1,4 +1,4 @@
-import { BookOpen, Boxes, Layers3, LayoutDashboard, Tags, UsersRound, TrendingUp, BarChart2, CheckSquare, Clock, Shield, Zap, Award, Star, Target, Users, Briefcase, GraduationCap, ClipboardCheck } from "lucide-react";
+import { BookOpen, Boxes, Layers3, LayoutDashboard, Tags, UsersRound, TrendingUp, BarChart2, CheckSquare, Clock, Shield, Zap, Award, Star, Target, Users, Briefcase, GraduationCap, ClipboardCheck, CalendarDays } from "lucide-react";
 
 export const STORAGE_KEY = "xebia-lms-admin-react-state-v1";
 export const THEME_KEY = "xebia-lms-admin-react-theme-v1";
@@ -10,6 +10,7 @@ export const NAV_ITEMS = [
   { id: "content", label: "Content", path: "/content", icon: Boxes },
   { id: "students", label: "Students", path: "/students", icon: UsersRound },
   { id: "assessments", label: "Assessments", path: "/assessments", icon: ClipboardCheck },
+  { id: "events", label: "Events", path: "/events", icon: CalendarDays },
   { 
     id: "analytics", 
     label: "Learning Analytics", 

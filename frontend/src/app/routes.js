@@ -17,6 +17,7 @@ export const APP_ROUTES = {
   CONTENT: "/content",
   STUDENTS: "/students",
   ASSESSMENTS: "/assessments",
+  EVENTS: "/events",
   ANALYTICS_EXEC_SUMMARY: "/admin/learning-analytics/executive-summary",
   ANALYTICS_COVERAGE: "/admin/learning-analytics/coverage",
   ANALYTICS_HOURS: "/admin/learning-analytics/learning-hours",
@@ -34,5 +35,6 @@ export const APP_ROUTES = {
 export function getActiveNavigationView(pathname) {
   if (pathname.startsWith("/categories")) return APP_ROUTES.CATEGORIES;
   if (pathname.startsWith("/courses")) return APP_ROUTES.COURSES;
+  if (pathname.startsWith("/events")) return APP_ROUTES.EVENTS;
   return pathname;
 }

@@ -12,6 +12,7 @@ import CurriculumPage from "../features/curriculum/CurriculumPage.jsx";
 import ContentLibraryPage from "../features/content/ContentLibraryPage.jsx";
 import StudentsPage from "../features/students/StudentsPage.jsx";
 import AdminAssessmentsPage from "../features/assessments/AdminAssessmentsPage.jsx";
+import EventsPage from "../features/events/EventsPage.jsx";
 import { ErrorBoundary } from "../components/ErrorBoundary.jsx";
 import LoginPage from "../features/auth/LoginPage.jsx";
 import { useAssessmentStore } from "../features/assessments/useAssessmentStore.js";
@@ -23,6 +24,7 @@ import { useToast } from "../hooks/useToast.js";
 import { createSlug } from "../utils/slug.utils.js";
 import { APP_ROUTES } from "./routes.js";
 import "../styles/analytics.css";
+import "../styles/events.css";
 
 // Analytics Pages
 import ExecutiveSummary from "../features/analytics/components/sections/ExecutiveSummary.jsx";
@@ -80,6 +82,7 @@ export default function App() {
     upsertEntity,
     handleDeleteCategory,
     handleDeleteCourse,
+    handleDeleteEvent,
     handleDeleteModule,
     handleDeleteSubmodule,
     handleDeleteContentBlock,
@@ -145,7 +148,7 @@ export default function App() {
   if (auth.session.role === "student") {
     return (
       <>
-        <Suspense fallback={<PortalLoading />}><StudentPortal store={store} theme={theme} onThemeToggle={toggleTheme} user={auth.session} onLogout={auth.logout} showToast={showToast} assessmentStore={assessmentStore} batchStore={batchStore} /></Suspense>
+        <Suspense fallback={<PortalLoading />}><StudentPortal store={store} theme={theme} onThemeToggle={toggleTheme} user={auth.session} onLogout={auth.logout} showToast={showToast} assessmentStore={assessmentStore} batchStore={batchStore} upsertEntity={upsertEntity} /></Suspense>
         <Toast message={toastMessage} />
       </>
     );
@@ -154,7 +157,7 @@ export default function App() {
   if (auth.session.role === "teacher") {
     return (
       <>
-        <Suspense fallback={<PortalLoading />}><TeacherPortal assessmentStore={assessmentStore} batchStore={batchStore} theme={theme} onThemeToggle={toggleTheme} user={auth.session} onLogout={auth.logout} showToast={showToast} /></Suspense>
+        <Suspense fallback={<PortalLoading />}><TeacherPortal store={store} assessmentStore={assessmentStore} batchStore={batchStore} theme={theme} onThemeToggle={toggleTheme} user={auth.session} onLogout={auth.logout} showToast={showToast} /></Suspense>
         <Toast message={toastMessage} />
       </>
     );
@@ -178,6 +181,7 @@ export default function App() {
             <Route path={APP_ROUTES.CONTENT} element={<ContentLibraryPage store={store} upsert={upsertEntity} removeContentBlock={handleDeleteContentBlock} toggleEntity={handleToggleEntity} />} />
             <Route path={APP_ROUTES.STUDENTS} element={<StudentsPage store={store} showToast={showToast} />} />
             <Route path="/assessments" element={<AdminAssessmentsPage showToast={showToast} />} />
+            <Route path={APP_ROUTES.EVENTS} element={<EventsPage store={store} upsertEvent={upsertEntity} deleteEvent={handleDeleteEvent} showToast={showToast} />} />
                 
             {/* Analytics Routes */}
             <Route path={APP_ROUTES.ANALYTICS_EXEC_SUMMARY} element={<ExecutiveSummary />} />
