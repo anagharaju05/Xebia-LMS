@@ -104,28 +104,29 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
     setShowForm(true);
   }
 
-  const exportToExcel = async () => {
-    if (!selectedEvent) return;
+  const exportToExcelForEvent = async (event) => {
+    if (!event) return;
     try {
       const XLSX = await import('xlsx');
       const data = [
         ["Student Name", "Email ID", "Enrolled Event"]
       ];
-      selectedRegistrations.forEach((reg) => {
-        data.push([reg.studentName, reg.studentEmail, selectedEvent.title]);
+      const eventRegs = registrations.filter(r => r.eventId === event.id);
+      eventRegs.forEach((reg) => {
+        data.push([reg.studentName, reg.studentEmail, event.title]);
       });
       const worksheet = XLSX.utils.aoa_to_sheet(data);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Attendees");
-      XLSX.writeFile(workbook, `${selectedEvent.title.replace(/\s+/g, "_")}_attendees.xlsx`);
+      XLSX.writeFile(workbook, `${event.title.replace(/\s+/g, "_")}_attendees.xlsx`);
       showToast("Excel exported successfully", "success");
     } catch (err) {
       showToast("Failed to export to Excel: " + err.message, "danger");
     }
   };
 
-  const exportToCSV = () => {
-    if (!selectedEvent) return;
+  const exportToCSVForEvent = (event) => {
+    if (!event) return;
     const rows = [
       ["Student Name", "Email ID", "Enrolled Event"]
     ];
@@ -136,20 +137,24 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
       }
       return str;
     };
-    selectedRegistrations.forEach((reg) => {
-      rows.push([escape(reg.studentName), escape(reg.studentEmail), escape(selectedEvent.title)]);
+    const eventRegs = registrations.filter(r => r.eventId === event.id);
+    eventRegs.forEach((reg) => {
+      rows.push([escape(reg.studentName), escape(reg.studentEmail), escape(event.title)]);
     });
     const csvContent = rows.map(e => e.join(",")).join("\n");
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", `${selectedEvent.title.replace(/\s+/g, "_")}_attendees.csv`);
+    link.setAttribute("download", `${event.title.replace(/\s+/g, "_")}_attendees.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     showToast("CSV exported successfully", "success");
   };
+
+  const exportToExcel = () => exportToExcelForEvent(selectedEvent);
+  const exportToCSV = () => exportToCSVForEvent(selectedEvent);
 
   function handleSave(e, customStatus = null) {
     if (e) e.preventDefault();
@@ -336,6 +341,24 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                           <span>{regCount} registered</span>
                         </div>
                         <div className="action-btns">
+                          {regCount > 0 && (
+                            <>
+                              <button 
+                                className="icon-action-btn edit" 
+                                title="Export registrations to Excel"
+                                onClick={() => exportToExcelForEvent(event)}
+                              >
+                                <FileSpreadsheet size={15} style={{ color: "var(--color-success)" }} />
+                              </button>
+                              <button 
+                                className="icon-action-btn delete" 
+                                title="Export registrations to CSV"
+                                onClick={() => exportToCSVForEvent(event)}
+                              >
+                                <Download size={15} style={{ color: "var(--color-primary)" }} />
+                              </button>
+                            </>
+                          )}
                           <button 
                             className="icon-action-btn edit" 
                             title="Edit Event"
@@ -572,6 +595,14 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                   ))}
                 </div>
               </div>
+
+              <Field 
+                label="Or Enter Custom Image URL" 
+                type="url"
+                value={PRESET_IMAGES.some(img => img.url === formState.image) ? "" : formState.image}
+                onChange={(val) => setFormState({ ...formState, image: val })}
+                placeholder="e.g. https://images.unsplash.com/... or any image link"
+              />
 
               <div className="form-actions">
                 <button type="button" className="outline" onClick={() => setShowForm(false)}>
