@@ -9,6 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   </head>
   <body>
+    <script>
+      window.onerror = function(msg, url, lineNo, columnNo, error) {
+        fetch("http://127.0.0.1:9999/", { method: "POST", body: msg + " \n " + (error ? error.stack : "") });
+      };
+      window.onunhandledrejection = function(event) {
+        fetch("http://127.0.0.1:9999/", { method: "POST", body: "Unhandled Rejection: " + event.reason });
+      };
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

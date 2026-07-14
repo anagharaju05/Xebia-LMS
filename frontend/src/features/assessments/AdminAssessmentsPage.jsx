@@ -14,7 +14,8 @@ const TYPE_META = {
 };
 
 function TypeBadge({ type }) {
-  const meta = TYPE_META[type] || TYPE_META.file;
+  const safeType = (type || "file").toLowerCase();
+  const meta = TYPE_META[safeType] || TYPE_META.file;
   return <span className={`assessment-type ${meta.tone}`}>{meta.label}</span>;
 }
 

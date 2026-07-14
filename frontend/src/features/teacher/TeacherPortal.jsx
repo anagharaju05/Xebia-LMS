@@ -50,7 +50,8 @@ function formatDate(value, includeTime = true) {
 }
 
 function TypeBadge({ type }) {
-  const meta = TYPE_META[type] || TYPE_META.file;
+  const safeType = (type || "file").toLowerCase();
+  const meta = TYPE_META[safeType] || TYPE_META.file;
   const Icon = meta.icon;
   return <span className={`assessment-type ${meta.tone}`}><Icon />{meta.label}</span>;
 }
@@ -236,10 +237,12 @@ function AssessmentsPage({ state, onCreate, onEdit, onDelete, onStatus }) {
           const submissions = state.submissions.filter((item) => item.assessmentId === assessment.id);
           const graded = submissions.filter((item) => item.status === "Graded").length;
           const total = assessment.assignedStudentIds.length;
-          const AssessmentIcon = TYPE_META[assessment.type].icon;
+          const safeType = (assessment.type || "file").toLowerCase();
+          const meta = TYPE_META[safeType] || TYPE_META.file;
+          const AssessmentIcon = meta.icon;
           return <article key={assessment.id}>
-            <div className={`assessment-list-icon ${TYPE_META[assessment.type].tone}`}><AssessmentIcon /></div>
-            <div className="assessment-list-main"><div><TypeBadge type={assessment.type} /><StatusPill status={assessment.status} /></div><h2>{assessment.title}</h2><p>{assessment.subject} <span>•</span> {assessment.className}</p><div className="assessment-list-meta"><span><Clock3 />Due {formatDate(assessment.dueAt)}</span><span><BarChart3 />{assessment.points} marks</span><span><Users />{total} students</span></div></div>
+            <div className={`assessment-list-icon ${meta.tone}`}><AssessmentIcon /></div>
+            <div className="assessment-list-main"><div><TypeBadge type={safeType} /><StatusPill status={assessment.status} /></div><h2>{assessment.title}</h2><p>{assessment.subject} <span>•</span> {assessment.className}</p><div className="assessment-list-meta"><span><Clock3 />Due {formatDate(assessment.dueAt)}</span><span><BarChart3 />{assessment.points} marks</span><span><Users />{total} students</span></div></div>
             <div className="assessment-progress"><strong>{submissions.length}/{total}</strong><span>submitted</span><div><i style={{ width: `${total ? (submissions.length / total) * 100 : 0}%` }} /></div><small>{graded} graded</small></div>
             <div className="assessment-card-actions"><button title="Edit" onClick={() => onEdit(assessment)}><Pencil /></button><button title={assessment.status === "Published" ? "Move to draft" : "Publish"} onClick={() => onStatus(assessment.id, assessment.status === "Published" ? "Draft" : "Published")}>{assessment.status === "Published" ? <RotateCcw /> : <Send />}</button><button className="danger" title="Delete" onClick={() => onDelete(assessment)}><Trash2 /></button></div>
           </article>;

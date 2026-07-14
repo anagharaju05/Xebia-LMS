@@ -34,6 +34,11 @@ function getRecordLabel(record) {
 export function useLmsStore(showToast) {
   const [store, setStore] = useState(() => {
     const data = readStorageValue(STORAGE_KEY, seedState);
+    if (!data.categories) data.categories = seedState.categories || [];
+    if (!data.courses) data.courses = seedState.courses || [];
+    if (!data.modules) data.modules = seedState.modules || [];
+    if (!data.submodules) data.submodules = seedState.submodules || [];
+    if (!data.contentBlocks) data.contentBlocks = seedState.contentBlocks || [];
     if (!data.events) data.events = seedState.events || [];
     if (!data.registrations) data.registrations = seedState.registrations || [];
     return data;

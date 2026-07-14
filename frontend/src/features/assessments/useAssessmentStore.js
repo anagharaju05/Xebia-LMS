@@ -18,7 +18,13 @@ function ensureUUID(id) {
 }
 
 export function useAssessmentStore() {
-  const [state, setState] = useState(INITIAL_ASSESSMENT_STATE);
+  const [state, setState] = useState(() => {
+    return {
+      assessments: INITIAL_ASSESSMENT_STATE.assessments || [],
+      questions: INITIAL_ASSESSMENT_STATE.questions || [],
+      submissions: INITIAL_ASSESSMENT_STATE.submissions || []
+    };
+  });
 
   // Synchronize with API when active
   async function syncStore() {

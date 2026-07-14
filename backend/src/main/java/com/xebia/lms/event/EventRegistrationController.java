@@ -16,6 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/event-registrations")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Event Registrations", description = "Endpoints for managing student event registrations")
 public class EventRegistrationController {
 

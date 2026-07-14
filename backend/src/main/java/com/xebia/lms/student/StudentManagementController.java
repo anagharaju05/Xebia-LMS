@@ -10,6 +10,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/management/students")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class StudentManagementController {
 
     private final StudentManagementService service;
