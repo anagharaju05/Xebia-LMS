@@ -38,6 +38,7 @@ import StudentAssessments from "./StudentAssessments.jsx";
 import { getLearningIcon } from "../../utils/learningIcon.utils.js";
 import { useStudentManagement } from "../students/useStudentManagement.js";
 import StudentBatchWorkspace from "./StudentBatchWorkspace.jsx";
+import { ErrorBoundary } from "../../components/ErrorBoundary.jsx";
 
 const STUDENT_VIEWS = {
   HOME: "home",
@@ -695,7 +696,7 @@ function StudentEventsView({ store, studentId, studentName, studentEmail, cohort
   );
 }
 
-export default function StudentPortal({ store, theme, onThemeToggle, user, onLogout, showToast, assessmentStore, batchStore, upsertEntity }) {
+export default function StudentPortal({ store, theme, onThemeToggle, user, onLogout, showToast, assessmentStore, batchStore, upsertEntity, deleteEntity }) {
   const [view, setView] = useState(STUDENT_VIEWS.HOME);
   const studentManagement = useStudentManagement();
   const studentRecord = studentManagement.management.students.find(
@@ -797,7 +798,11 @@ export default function StudentPortal({ store, theme, onThemeToggle, user, onLog
           {view === STUDENT_VIEWS.ANALYTICS && <StudentBatchWorkspace mode="analytics" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
           {view === STUDENT_VIEWS.NOTIFICATIONS && <NotificationsView notifications={portal.studentState.notifications} onRead={portal.markNotificationRead} />}
           {view === STUDENT_VIEWS.FEEDBACK && <FeedbackView courses={courses} submitted={portal.studentState.feedback} onSubmit={submitFeedback} />}
-          {view === STUDENT_VIEWS.EVENTS && <StudentEventsView store={store} studentId={studentId} studentName={studentName} studentEmail={studentEmail} cohort={cohort} upsertEntity={upsertEntity} deleteEntity={deleteEntity} showToast={showToast} />}
+          {view === STUDENT_VIEWS.EVENTS && (
+            <ErrorBoundary>
+              <StudentEventsView store={store} studentId={studentId} studentName={studentName} studentEmail={studentEmail} cohort={cohort} upsertEntity={upsertEntity} deleteEntity={deleteEntity} showToast={showToast} />
+            </ErrorBoundary>
+          )}
         </main>
       </div>
     </div>
