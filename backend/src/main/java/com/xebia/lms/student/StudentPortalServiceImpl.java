@@ -41,6 +41,52 @@ public class StudentPortalServiceImpl implements StudentPortalService {
         // Fetch all comments (for simplicity fetching all, ideally filter by active lessons)
         state.setComments(commentRepository.findAll());
         
+        // Populate dynamic dashboard and analytics fields (Mock implementations to replace hardcoded frontend)
+        state.setNextLiveSession(Map.of(
+            "title", "Introduction to Spring Boot",
+            "time", "Tomorrow, 10:00 AM",
+            "host", "60 minutes with Meera S."
+        ));
+        
+        state.setRecentActivity(List.of(
+            Map.of("id", UUID.randomUUID().toString(), "title", "Assessment feedback received", "message", "Your REST API Design Brief has been graded.", "time", "Today")
+        ));
+        
+        state.setLearningStreak(Map.of(
+            "current", "6 days",
+            "best", "11 days",
+            "days", List.of(
+                Map.of("day", "M", "active", true),
+                Map.of("day", "T", "active", true),
+                Map.of("day", "W", "active", true),
+                Map.of("day", "T", "active", true),
+                Map.of("day", "F", "active", true),
+                Map.of("day", "S", "active", true),
+                Map.of("day", "S", "active", false)
+            )
+        ));
+        
+        state.setRecommendedCourses(List.of(
+            "Cloud Native Foundations",
+            "Practical AI for Engineers",
+            "Communication for Tech Leads"
+        ));
+        
+        state.setWeeklyLearning(Map.of(
+            "totalHours", "7.5h",
+            "chartData", List.of(
+                List.of("Mon", 55),
+                List.of("Tue", 82),
+                List.of("Wed", 45),
+                List.of("Thu", 90),
+                List.of("Fri", 68),
+                List.of("Sat", 35),
+                List.of("Sun", 60)
+            )
+        ));
+        
+        state.setAssessmentAverage(86);
+        
         return state;
     }
 

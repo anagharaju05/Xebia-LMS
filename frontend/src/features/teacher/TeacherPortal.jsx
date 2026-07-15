@@ -192,15 +192,17 @@ function AssessmentEditor({ initial, onClose, onSave, showToast, batchStore, stu
   );
 }
 
-function TeacherDashboard({ state, onNavigate, onCreate }) {
+function TeacherDashboard({ state, onNavigate, onCreate, user }) {
   const published = state.assessments.filter((item) => item.status === "Published");
   const awaiting = state.submissions.filter((item) => item.status === "Submitted");
   const graded = state.submissions.filter((item) => item.status === "Graded");
   const unanswered = state.questions.filter((item) => !item.answer);
   const recent = [...state.submissions].sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt)).slice(0, 4);
+  const today = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
+  const firstName = user?.name?.split(" ")[0] || "Teacher";
   return (
     <section className="teacher-page">
-      <div className="teacher-hero"><div><span>Monday, 6 July</span><h1>Good afternoon, Meera.</h1><p>Here’s what needs your attention across your classes.</p><button onClick={onCreate}><Plus /> Create assessment</button></div><GraduationCap /></div>
+      <div className="teacher-hero"><div><span>{today}</span><h1>Good afternoon, {firstName}.</h1><p>Here’s what needs your attention across your classes.</p><button onClick={onCreate}><Plus /> Create assessment</button></div><GraduationCap /></div>
       <div className="teacher-metrics">
         <button onClick={() => onNavigate(VIEWS.ASSESSMENTS)}><span className="purple"><ClipboardList /></span><div><strong>{published.length}</strong><small>Live assessments</small></div><ChevronRight /></button>
         <button onClick={() => onNavigate(VIEWS.SUBMISSIONS)}><span className="orange"><Inbox /></span><div><strong>{awaiting.length}</strong><small>Awaiting review</small></div><ChevronRight /></button>
@@ -618,7 +620,7 @@ export default function TeacherPortal({ store, assessmentStore, batchStore, them
     <aside className={mobileNav ? "open" : ""}><div className="teacher-brand"><img src="/brand/Logo-Purple.png" alt="Xebia" /><span><strong>Xebia LMS</strong><small>Teacher Portal</small></span><button onClick={() => setMobileNav(false)}><X /></button></div><nav><p>Workspace</p>{nav.map(([id, Icon, label, count]) => <button key={id} className={view === id ? "active" : ""} onClick={() => { setView(id); setMobileNav(false); }}><Icon /><span>{label}</span>{count > 0 && <b>{count}</b>}</button>)}</nav><div className="teacher-profile"><span>{user?.name?.split(" ").map((w) => w[0]).join("") || "MT"}</span><div><strong>{user?.name || "Meera Thomas"}</strong><small>Senior Instructor</small></div><button onClick={onLogout} title="Sign out"><LogOut /></button></div></aside>
     <div className="teacher-main"><header className="teacher-topbar"><button className="teacher-menu" onClick={() => setMobileNav(true)}><Menu /></button><div><strong>{nav.find((item) => item[0] === view)?.[2]}</strong><span>Teacher workspace</span></div><div><button onClick={onThemeToggle} title="Toggle theme"><ThemeIcon /></button><button className="notification-button" onClick={() => setView(VIEWS.QUESTIONS)}><Bell />{unanswered > 0 && <span>{unanswered}</span>}</button><div className="teacher-top-profile"><b>{user?.name?.charAt(0) || "M"}</b><span><strong>{user?.name || "Meera Thomas"}</strong><small>Teacher</small></span></div></div></header>
       <main>
-        {view === VIEWS.DASHBOARD && <TeacherDashboard state={assessmentStore.state} onNavigate={setView} onCreate={() => setEditor(createBlankAssessment())} />}
+        {view === VIEWS.DASHBOARD && <TeacherDashboard state={assessmentStore.state} user={user} onNavigate={setView} onCreate={() => setEditor(createBlankAssessment())} />}
         {view === VIEWS.ASSESSMENTS && <AssessmentsPage state={assessmentStore.state} onCreate={() => setEditor(createBlankAssessment())} onEdit={setEditor} onDelete={requestDelete} onStatus={(id, status) => { assessmentStore.setAssessmentStatus(id, status); showToast?.(status === "Published" ? "Assessment published" : "Moved to drafts"); }} />}
         {view === VIEWS.SUBMISSIONS && <SubmissionsPage state={assessmentStore.state} onGrade={assessmentStore.gradeSubmission} showToast={showToast} students={students} batches={batchStore.state.batches} />}
         {view === VIEWS.QUESTIONS && <QuestionsPage state={assessmentStore.state} onAnswer={assessmentStore.answerQuestion} showToast={showToast} />}

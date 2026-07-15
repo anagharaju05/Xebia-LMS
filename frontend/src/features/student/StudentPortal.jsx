@@ -164,31 +164,52 @@ function StudentHome({ store, courses, studentState, tasks, user, onOpenCourse, 
             })}
           </div>
         </section>
-        <section className="student-panel student-session">
-          <header><div><span>Next live session</span><h2>Introduction to Spring Boot</h2></div></header>
-          <div className="student-session-time"><Clock3 /><span><strong>Tomorrow, 10:00 AM</strong><small>60 minutes with Meera S.</small></span></div>
-          <button className="secondary">View session details</button>
-        </section>
+        {studentState.nextLiveSession && (
+          <section className="student-panel student-session">
+            <header><div><span>Next live session</span><h2>{studentState.nextLiveSession.title}</h2></div></header>
+            <div className="student-session-time"><Clock3 /><span><strong>{studentState.nextLiveSession.time}</strong><small>{studentState.nextLiveSession.host}</small></span></div>
+            <button className="secondary">View session details</button>
+          </section>
+        )}
       </div>
 
       <div className="student-dashboard-lower">
         <section className="student-panel student-activity-panel">
           <header><div><span>Timeline</span><h2>Recent activity</h2></div><Activity /></header>
-          <div>{recentAnnouncements.map((item) => <article key={item.id}><i><MegaphoneIcon /></i><span><strong>{item.title}</strong><small>{item.message}</small></span><time>Recent</time></article>)}<article><i><CheckCircle2 /></i><span><strong>Assessment feedback received</strong><small>Your REST API Design Brief has been graded.</small></span><time>Today</time></article></div>
+          <div>
+            {recentAnnouncements.map((item) => <article key={item.id}><i><MegaphoneIcon /></i><span><strong>{item.title}</strong><small>{item.message}</small></span><time>Recent</time></article>)}
+            {(studentState.recentActivity || []).map((item) => (
+              <article key={item.id}>
+                <i><CheckCircle2 /></i>
+                <span><strong>{item.title}</strong><small>{item.message}</small></span>
+                <time>{item.time}</time>
+              </article>
+            ))}
+          </div>
         </section>
         <section className="student-panel student-deadline-panel">
           <header><div><span>Plan ahead</span><h2>Upcoming deadlines</h2></div><CalendarClock /></header>
           <div>{deadlines.map((item) => <article key={item.id}><time><strong>{new Date(item.dueAt).getDate()}</strong><small>{new Date(item.dueAt).toLocaleString("en", { month: "short" })}</small></time><span><strong>{item.title}</strong><small>{item.subject} • {item.points} marks</small></span></article>)}</div>
         </section>
-        <section className="student-panel student-streak-panel">
-          <header><div><span>Consistency</span><h2>Learning streak</h2></div><Flame /></header>
-          <div className="streak-count"><Flame /><span><strong>6 days</strong><small>Your best streak is 11 days</small></span></div><div className="streak-days">{["M", "T", "W", "T", "F", "S", "S"].map((day, index) => <span className={index < 6 ? "active" : ""} key={`${day}-${index}`}>{index < 6 && <CheckCircle2 />}<small>{day}</small></span>)}</div>
-        </section>
+        {studentState.learningStreak && (
+          <section className="student-panel student-streak-panel">
+            <header><div><span>Consistency</span><h2>Learning streak</h2></div><Flame /></header>
+            <div className="streak-count"><Flame /><span><strong>{studentState.learningStreak.current}</strong><small>Your best streak is {studentState.learningStreak.best}</small></span></div>
+            <div className="streak-days">
+              {(studentState.learningStreak.days || []).map((dayData, index) => (
+                <span className={dayData.active ? "active" : ""} key={`${dayData.day}-${index}`}>
+                  {dayData.active && <CheckCircle2 />}
+                  <small>{dayData.day}</small>
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
 
       <section className="student-recommended">
         <header><div><span>Future-ready learning</span><h2>Recommended for you</h2><p>Personalized recommendations will appear as your learning profile grows.</p></div><Sparkles /></header>
-        <div>{["Cloud Native Foundations", "Practical AI for Engineers", "Communication for Tech Leads"].map((title, index) => <article key={title}><span><Sparkles /></span><div><small>{["Cloud", "Artificial Intelligence", "Leadership"][index]}</small><h3>{title}</h3><p>Recommendation preview based on your active learning path.</p></div><button disabled>Coming soon</button></article>)}</div>
+        <div>{(studentState.recommendedCourses || []).map((title, index) => <article key={title}><span><Sparkles /></span><div><small>{["Cloud", "Artificial Intelligence", "Leadership", "Technology"][index % 4]}</small><h3>{title}</h3><p>Recommendation preview based on your active learning path.</p></div><button disabled>Coming soon</button></article>)}</div>
       </section>
     </>
   );
@@ -887,9 +908,9 @@ export default function StudentPortal({ store, theme, onThemeToggle, user, onLog
           }} />}
           {view === STUDENT_VIEWS.COURSE && course && <CourseView store={store} course={course} studentState={portal.studentState} onBack={() => navigate(STUDENT_VIEWS.LEARNING)} onComplete={completeLesson} onComment={portal.addComment} onReply={portal.addReply} />}
           {view === STUDENT_VIEWS.ASSESSMENTS && <StudentAssessments assessmentStore={assessmentStore} batchStore={batchStore} user={user} showToast={showToast} />}
-          {view === STUDENT_VIEWS.BATCHES && <StudentBatchWorkspace mode="batches" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
-          {view === STUDENT_VIEWS.CALENDAR && <StudentBatchWorkspace mode="calendar" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
-          {view === STUDENT_VIEWS.ANALYTICS && <StudentBatchWorkspace mode="analytics" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} />}
+          {view === STUDENT_VIEWS.BATCHES && <StudentBatchWorkspace mode="batches" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} studentState={portal.studentState} />}
+          {view === STUDENT_VIEWS.CALENDAR && <StudentBatchWorkspace mode="calendar" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} studentState={portal.studentState} />}
+          {view === STUDENT_VIEWS.ANALYTICS && <StudentBatchWorkspace mode="analytics" batchStore={batchStore} assessmentStore={assessmentStore} user={user} showToast={showToast} store={store} studentState={portal.studentState} />}
           {view === STUDENT_VIEWS.NOTIFICATIONS && <NotificationsView notifications={portal.studentState.notifications} onRead={portal.markNotificationRead} />}
           {view === STUDENT_VIEWS.FEEDBACK && <FeedbackView courses={courses} submitted={portal.studentState.feedback} onSubmit={submitFeedback} />}
           {view === STUDENT_VIEWS.EVENTS && (

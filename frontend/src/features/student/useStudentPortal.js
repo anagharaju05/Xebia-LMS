@@ -9,7 +9,13 @@ export function useStudentPortal(user) {
     assessmentResults: {},
     notifications: INITIAL_NOTIFICATIONS,
     comments: INITIAL_COMMENTS,
-    feedback: []
+    feedback: [],
+    nextLiveSession: null,
+    recentActivity: [],
+    learningStreak: null,
+    recommendedCourses: [],
+    weeklyLearning: null,
+    assessmentAverage: 0
   });
   
   const studentId = user?.studentId || user?.id || "student-aarav"; // Fallback for mock user id if missing
@@ -43,7 +49,13 @@ export function useStudentPortal(user) {
           assessmentResults: data.assessmentResults || {},
           notifications: data.notifications || [],
           comments: data.comments || [],
-          feedback: data.feedback || []
+          feedback: data.feedback || [],
+          nextLiveSession: data.nextLiveSession || null,
+          recentActivity: data.recentActivity || [],
+          learningStreak: data.learningStreak || null,
+          recommendedCourses: data.recommendedCourses || [],
+          weeklyLearning: data.weeklyLearning || null,
+          assessmentAverage: data.assessmentAverage || 0
         });
       }
     } catch (e) {

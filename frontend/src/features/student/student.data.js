@@ -47,32 +47,7 @@ export const ASSESSMENTS = [
   }
 ];
 
-export const INITIAL_NOTIFICATIONS = [
-  {
-    id: "notification-1",
-    title: "Course assigned",
-    message: "Spring Boot Masterclass is ready in My Learning.",
-    channel: "Email",
-    time: "Today, 9:20 AM",
-    read: false
-  },
-  {
-    id: "notification-2",
-    title: "Live session reminder",
-    message: "Introduction to Spring Boot starts tomorrow at 10:00 AM.",
-    channel: "WhatsApp",
-    time: "Today, 8:05 AM",
-    read: false
-  },
-  {
-    id: "notification-3",
-    title: "Assessment result available",
-    message: "Your latest knowledge check has been reviewed.",
-    channel: "In app",
-    time: "Yesterday",
-    read: true
-  }
-];
+export const INITIAL_NOTIFICATIONS = [];
 
 export const INITIAL_COMMENTS = [
   {
