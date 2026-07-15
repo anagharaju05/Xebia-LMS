@@ -273,17 +273,20 @@ export function useLmsStore(showToast) {
     let events = seedState.events || [];
     try {
       const pgEvents = await api.get("/api/events");
-      events = pgEvents.map(e => ({
-        id: e.id,
-        title: e.title,
-        description: e.description || "",
-        location: e.locationOrLink || "Virtual",
-        deadline: e.endTime,
-        timeline: e.startTime,
-        status: e.status === "PUBLISHED" || e.status === "SCHEDULED" ? "Published" : "Draft",
-        image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87",
-        meetingUrl: e.locationOrLink || ""
-      }));
+      events = pgEvents.map(e => {
+        const isLocUrl = e.locationOrLink?.startsWith("http");
+        return {
+          id: e.id,
+          title: e.title,
+          description: e.description || "",
+          location: isLocUrl ? "Virtual" : (e.locationOrLink || "Virtual"),
+          deadline: e.endTime,
+          timeline: e.startTime,
+          status: e.status === "PUBLISHED" || e.status === "SCHEDULED" ? "Published" : "Draft",
+          image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87",
+          meetingUrl: isLocUrl ? e.locationOrLink : ""
+        };
+      });
     } catch(err) {
       console.warn("Failed to fetch events", err);
     }
@@ -456,7 +459,7 @@ export function useLmsStore(showToast) {
           startTime: finalRecord.timeline || new Date().toISOString(),
           endTime: finalRecord.deadline || new Date().toISOString(),
           eventType: "WEBINAR",
-          locationOrLink: finalRecord.location || "",
+          locationOrLink: finalRecord.meetingUrl || finalRecord.location || "",
           status: finalRecord.status === "Published" ? "SCHEDULED" : "DRAFT"
         };
         if (isUpdate) {
