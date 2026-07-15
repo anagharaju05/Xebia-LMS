@@ -18,12 +18,15 @@ export function useAnalytics(endpoint, filters = {}) {
         if (filters.region) queryParams.append('region', filters.region);
         if (filters.businessUnit) queryParams.append('businessUnit', filters.businessUnit);
         
+        let mappedRole = session?.role?.toUpperCase() || 'SUPER_ADMIN';
+        if (mappedRole === 'ADMIN') mappedRole = 'SUPER_ADMIN';
+
         const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8080";
         const res = await fetch(`${baseUrl}/api/analytics/${endpoint}?${queryParams.toString()}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'X-User-Role': session?.role?.toUpperCase() || 'SUPER_ADMIN',
+            'X-User-Role': mappedRole,
             'X-Organization-ID': session?.organizationId || '123e4567-e89b-12d3-a456-426614174000',
             'X-User-Id': session?.id || 'admin-1'
           }
