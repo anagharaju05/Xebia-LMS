@@ -55,8 +55,17 @@ public class AnalyticsService {
     @org.springframework.cache.annotation.Cacheable("analytics_filters")
     public Map<String, Object> getFilters() {
         Map<String, Object> filters = new HashMap<>();
-        filters.put("regions", List.of("Global", "North America", "Europe", "APAC"));
-        filters.put("businessUnits", List.of("All Units", "Engineering", "Sales", "HR"));
+        
+        List<String> regions = new java.util.ArrayList<>();
+        regions.add("Global");
+        regions.addAll(jdbcTemplate.queryForList("SELECT DISTINCT region FROM students WHERE region IS NOT NULL ORDER BY region", String.class));
+        
+        List<String> businessUnits = new java.util.ArrayList<>();
+        businessUnits.add("All Units");
+        businessUnits.addAll(jdbcTemplate.queryForList("SELECT DISTINCT business_unit FROM students WHERE business_unit IS NOT NULL ORDER BY business_unit", String.class));
+        
+        filters.put("regions", regions);
+        filters.put("businessUnits", businessUnits);
         return filters;
     }
 
@@ -91,6 +100,14 @@ public class AnalyticsService {
         Double avgFeedback = jdbcTemplate.queryForObject("SELECT AVG(session_rating) FROM student_feedback", Double.class);
         double avgFeedbackScore = avgFeedback != null ? avgFeedback : 0.0;
         
+        Integer lastMonthCerts = jdbcTemplate.queryForObject("SELECT COUNT(sc.id) FROM student_certifications sc JOIN students s ON sc.student_id = s.id WHERE sc.created_at >= CURRENT_DATE - INTERVAL '60 days' AND sc.created_at < CURRENT_DATE - INTERVAL '30 days'", Integer.class);
+        Integer thisMonthCerts = jdbcTemplate.queryForObject("SELECT COUNT(sc.id) FROM student_certifications sc JOIN students s ON sc.student_id = s.id WHERE sc.created_at >= CURRENT_DATE - INTERVAL '30 days'", Integer.class);
+        double certGrowth = (lastMonthCerts != null && lastMonthCerts > 0) ? ((thisMonthCerts != null ? thisMonthCerts : 0) - lastMonthCerts) * 100.0 / lastMonthCerts : 0.0;
+
+        Integer totalFeedbacks = jdbcTemplate.queryForObject("SELECT COUNT(id) FROM student_feedback", Integer.class);
+        Integer promoters = jdbcTemplate.queryForObject("SELECT COUNT(id) FROM student_feedback WHERE session_rating >= 4", Integer.class);
+        int recPct = totalFeedbacks != null && totalFeedbacks > 0 ? (int) Math.round((promoters != null ? promoters : 0) * 100.0 / totalFeedbacks) : 0;
+
         data.put("totalEmployees", totalEmployees != null ? totalEmployees : 0);
         data.put("nominatedEmployees", nominatedEmployees != null ? nominatedEmployees : 0);
         data.put("trainedEmployees", trainedEmployees != null ? trainedEmployees : 0);
@@ -100,13 +117,13 @@ public class AnalyticsService {
         data.put("totalLearningHours", totalLearningHours);
         data.put("avgHoursPerSession", Math.round(avgHoursPerSession * 10.0) / 10.0);
         data.put("totalCertifications", totalCertifications != null ? totalCertifications : 0);
-        data.put("certificationGrowth", 0.0); // Historical data not available in schema
+        data.put("certificationGrowth", Math.round(certGrowth * 10.0) / 10.0);
         data.put("aiTrained", aiTrained != null ? aiTrained : 0);
         data.put("aiCertifications", aiCertifications != null ? aiCertifications : 0);
         data.put("aiLearningHours", aiLearningHours);
         data.put("avgFeedbackScore", Math.round(avgFeedbackScore * 10.0) / 10.0);
-        data.put("satisfactionScore", 85); // Added a valid placeholder instead of 0
-        data.put("recommendationPercentage", 90); // Added a valid placeholder instead of 0
+        data.put("satisfactionScore", (int) Math.round((avgFeedbackScore / 5.0) * 100.0));
+        data.put("recommendationPercentage", recPct);
         return data;
     }
 
@@ -222,8 +239,8 @@ public class AnalyticsService {
 
     public Map<String, Object> getAiTransformation(AnalyticsFilterRequest request) {
         Map<String, Object> data = new HashMap<>();
-        Integer trained = jdbcTemplate.queryForObject("SELECT COUNT(DISTINCT student_id) FROM ai_tool_adoptions", Integer.class);
-        Integer certifications = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM student_certifications WHERE technology ILIKE '%AI%'", Integer.class);
+        Integer trained = jdbcTemplate.queryForObject("SELECT COUNT(DISTINCT a.student_id) FROM ai_tool_adoptions a JOIN students s ON a.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "a", false), Integer.class);
+        Integer certifications = jdbcTemplate.queryForObject("SELECT COUNT(sc.id) FROM student_certifications sc JOIN students s ON sc.student_id = s.id WHERE sc.technology ILIKE '%AI%'" + buildFilterWhereClause(request, "s", "created_at", "sc", true), Integer.class);
         
         Double aiHours = jdbcTemplate.queryForObject(
             "SELECT SUM(sa.actual_learning_hours) FROM session_attendances sa JOIN courses c ON sa.course_id = c.id JOIN students s ON sa.student_id = s.id WHERE c.is_ai_training = true" + buildFilterWhereClause(request, "s", "created_at", "sa", true), 
