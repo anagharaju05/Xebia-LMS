@@ -21,6 +21,7 @@ import PageTitle from "../../components/common/PageTitle.jsx";
 import Metric from "../../components/common/Metric.jsx";
 import Field from "../../components/common/Field.jsx";
 import TextArea from "../../components/common/TextArea.jsx";
+import { api } from "../../services/api.js";
 
 const PRESET_IMAGES = [
   { name: "Tech Summit", url: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80" },
@@ -610,13 +611,35 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                 </div>
               </div>
 
-              <Field 
-                label="Or Enter Custom Image URL" 
-                type="url"
-                value={PRESET_IMAGES.some(img => img.url.split('?')[0] === formState.image?.split('?')[0]) ? "" : formState.image}
-                onChange={(val) => setFormState({ ...formState, image: val })}
-                placeholder="e.g. https://images.unsplash.com/... or any image link"
-              />
+              <div className="field">
+                <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--color-text-secondary)", marginBottom: "8px", display: "block" }}>
+                  Or Upload Custom Image from Desktop
+                </span>
+                <input 
+                  type="file"
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    try {
+                      showToast("Uploading image...", "info");
+                      const formData = new FormData();
+                      formData.append("file", file);
+                      const res = await api.upload("/api/portal/files/upload", formData);
+                      if (res && res.fileUrl) {
+                        setFormState({ ...formState, image: res.fileUrl });
+                        showToast("Image uploaded successfully!", "success");
+                      }
+                    } catch (err) {
+                      console.error(err);
+                      showToast("Failed to upload image", "danger");
+                    }
+                  }}
+                  style={{
+                    width: "100%", padding: "8px", border: "1px dashed var(--color-border)", borderRadius: "8px", background: "var(--color-surface)", color: "var(--color-text-primary)"
+                  }}
+                />
+              </div>
 
               <label className="field" id="event-location" style={{ marginTop: "16px" }}>
                 <span>Location <em>*</em></span>
