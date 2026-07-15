@@ -15,7 +15,8 @@ import {
   ExternalLink,
   Link,
   Download,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Image as ImageIcon
 } from "lucide-react";
 import PageTitle from "../../components/common/PageTitle.jsx";
 import Metric from "../../components/common/Metric.jsx";
@@ -268,7 +269,13 @@ export default function EventsPage({ store, deleteEvent, showToast, onCreate, on
                     onClick={() => setSelectedEventId(event.id)}
                   >
                     <div className="event-card-img">
-                      <img src={event.image || PRESET_IMAGES[0].url} alt={event.title} />
+                      {event.image && event.image !== PRESET_IMAGES[0].url ? (
+                        <img src={event.image} alt={event.title} />
+                      ) : (
+                        <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--color-surface-secondary)", color: "var(--color-text-secondary)" }}>
+                          <ImageIcon size={32} />
+                        </div>
+                      )}
                       <span className={`event-status-badge ${closed ? "closed" : "active"}`}>
                         {closed ? "Registration Closed" : "Open to Register"}
                       </span>

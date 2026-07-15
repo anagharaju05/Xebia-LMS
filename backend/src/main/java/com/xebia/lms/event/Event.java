@@ -43,7 +43,7 @@ public class Event {
     @Column(name = "location_or_link", length = 500)
     private String locationOrLink;
 
-    @Column(name = "thumbnail_url")
+    @Column(name = "thumbnail_url", columnDefinition = "TEXT")
     private String thumbnailUrl;
 
     @Column(name = "metadata", columnDefinition = "TEXT")

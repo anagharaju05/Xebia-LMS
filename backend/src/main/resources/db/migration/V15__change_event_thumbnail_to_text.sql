@@ -1,0 +1,1 @@
+ALTER TABLE events ALTER COLUMN thumbnail_url TYPE TEXT;
