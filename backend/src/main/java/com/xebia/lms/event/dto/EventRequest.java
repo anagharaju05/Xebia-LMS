@@ -20,6 +20,7 @@ public class EventRequest {
     private LocalDateTime endTime;
     private String eventType;
     private String locationOrLink;
+    private String thumbnailUrl;
     private UUID courseId;
     private UUID organizerId;
     private String status;

@@ -36,6 +36,7 @@ public class EventServiceImpl implements EventService {
         event.setOrganizationId(orgId);
         event.setMaxCapacity(request.getMaxCapacity());
         event.setAccentColor(request.getAccentColor());
+        event.setThumbnailUrl(request.getThumbnailUrl());
         
         Event saved = eventRepository.save(event);
         return eventMapper.toResponse(saved);
@@ -62,6 +63,7 @@ public class EventServiceImpl implements EventService {
         existing.setOrganizerId(request.getOrganizerId());
         existing.setMaxCapacity(request.getMaxCapacity());
         existing.setAccentColor(request.getAccentColor());
+        existing.setThumbnailUrl(request.getThumbnailUrl());
         
         if (request.getStatus() != null) {
             existing.setStatus(request.getStatus());
