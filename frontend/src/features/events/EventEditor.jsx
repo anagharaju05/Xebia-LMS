@@ -173,29 +173,16 @@ export default function EventEditor({ initial, onCancel, onSave }) {
 
         <section className="form-section">
           <SectionHeader icon={ImageIcon} title="Banner Image" />
-          <div className="image-preset-picker">
-            <span className="preset-label">Choose Event Image Banner:</span>
-            <div className="preset-grid">
-              {PRESET_IMAGES.map((img) => (
-                <button 
-                  key={img.name} 
-                  type="button"
-                  className={`preset-btn ${form.image?.split('?')[0] === img.url.split('?')[0] ? "selected" : ""}`}
-                  onClick={() => patch("image", img.url)}
-                >
-                  <img src={img.url} alt={img.name} />
-                  <span>{img.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="field" style={{ marginTop: "16px" }}>
+          <div className="field" style={{ marginTop: "8px" }}>
             <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--color-text-secondary)", marginBottom: "8px", display: "block" }}>
-              Or Upload Custom Image from Desktop
+              Upload Custom Event Banner
             </span>
-            <label className="upload-control" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "8px 16px", border: "1px dashed var(--color-border)", borderRadius: "8px", color: "var(--color-primary)", fontWeight: 600, cursor: "pointer", background: "var(--color-surface-secondary)", width: "fit-content" }}>
-              <ImageIcon size={16} />
-              <span>Choose Image File...</span>
+            <label className="upload-control dropzone-area" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "12px", padding: "48px 16px", border: "2px dashed var(--color-border)", borderRadius: "12px", color: "var(--color-text-secondary)", cursor: "pointer", background: "var(--color-surface-secondary)", width: "100%", transition: "all 0.2s ease" }}>
+              <ImageIcon size={40} style={{ color: "var(--color-primary)", opacity: 0.8 }} />
+              <div style={{ textAlign: "center" }}>
+                <span style={{ fontWeight: 600, fontSize: "15px", color: "var(--color-text-primary)", display: "block", marginBottom: "4px" }}>Click to browse for an image</span>
+                <span style={{ fontSize: "13px", opacity: 0.8 }}>Supports JPG, PNG, GIF, WebP</span>
+              </div>
               <input 
                 type="file"
                 accept="image/*"
