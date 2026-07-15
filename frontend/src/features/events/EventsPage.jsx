@@ -593,53 +593,30 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                 />
               </div>
 
-              <div className="field">
-                <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--color-text-secondary)", marginBottom: "8px", display: "block" }}>Banner Image</span>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px", marginBottom: "8px" }}>
-                  {PRESET_IMAGES.map((preset, idx) => (
-                    <div 
-                      key={idx} 
-                      onClick={() => setFormState({ ...formState, image: preset.url })}
-                      style={{ 
-                        height: "60px", 
-                        borderRadius: "6px", 
-                        cursor: "pointer",
-                        overflow: "hidden",
-                        border: formState.image === preset.url ? "3px solid var(--color-primary)" : "1px solid var(--color-border)",
-                        position: "relative"
-                      }}
+              <div className="image-preset-picker" style={{ marginTop: "16px" }}>
+                <span className="preset-label">Choose Event Image Banner:</span>
+                <div className="preset-grid">
+                  {PRESET_IMAGES.map((img) => (
+                    <button 
+                      key={img.name} 
+                      type="button"
+                      className={`preset-btn ${formState.image === img.url ? "selected" : ""}`}
+                      onClick={() => setFormState({ ...formState, image: img.url })}
                     >
-                      <img src={preset.url} alt={preset.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "rgba(0,0,0,0.6)", color: "white", fontSize: "10px", padding: "2px 4px", textAlign: "center" }}>
-                        {preset.name}
-                      </div>
-                    </div>
+                      <img src={img.url} alt={img.name} />
+                      <span>{img.name}</span>
+                    </button>
                   ))}
                 </div>
-                <input 
-                  type="url" 
-                  placeholder="Or enter custom image URL"
-                  value={formState.image || ""}
-                  onChange={(e) => setFormState({ ...formState, image: e.target.value })}
-                  style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--color-border)", borderRadius: "8px", fontSize: "14px", background: "var(--color-surface)", color: "var(--color-text-primary)" }}
-                />
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-                <Field 
-                  label="Meeting URL (Optional)" 
-                  placeholder="https://zoom.us/j/123..."
-                  value={formState.meetingUrl || ""}
-                  onChange={(val) => setFormState({ ...formState, meetingUrl: val })}
-                />
-                <Field 
-                  label="Max Seats (0 for unlimited)" 
-                  type="number"
-                  placeholder="e.g. 50"
-                  value={formState.maxCapacity || 0}
-                  onChange={(val) => setFormState({ ...formState, maxCapacity: parseInt(val, 10) || 0 })}
-                />
-              </div>
+              <Field 
+                label="Or Enter Custom Image URL" 
+                type="url"
+                value={PRESET_IMAGES.some(img => img.url === formState.image) ? "" : formState.image}
+                onChange={(val) => setFormState({ ...formState, image: val })}
+                placeholder="e.g. https://images.unsplash.com/... or any image link"
+              />
 
               <label className="field" id="event-location" style={{ marginTop: "16px" }}>
                 <span>Location <em>*</em></span>
@@ -677,38 +654,22 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                 />
               )}
 
-              <Field 
-                label="Meeting Link / URL (Optional)" 
-                type="url"
-                value={formState.meetingUrl || ""}
-                onChange={(val) => setFormState({ ...formState, meetingUrl: val })}
-                placeholder="e.g. https://teams.microsoft.com/l/meetup-join/..."
-              />
-
-              <div className="image-preset-picker">
-                <span className="preset-label">Choose Event Image Banner:</span>
-                <div className="preset-grid">
-                  {PRESET_IMAGES.map((img) => (
-                    <button 
-                      key={img.name} 
-                      type="button"
-                      className={`preset-btn ${formState.image === img.url ? "selected" : ""}`}
-                      onClick={() => setFormState({ ...formState, image: img.url })}
-                    >
-                      <img src={img.url} alt={img.name} />
-                      <span>{img.name}</span>
-                    </button>
-                  ))}
-                </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginTop: "16px" }}>
+                <Field 
+                  label="Meeting Link / URL (Optional)" 
+                  type="url"
+                  value={formState.meetingUrl || ""}
+                  onChange={(val) => setFormState({ ...formState, meetingUrl: val })}
+                  placeholder="e.g. https://teams.microsoft.com/..."
+                />
+                <Field 
+                  label="Max Seats (0 for unlimited)" 
+                  type="number"
+                  placeholder="e.g. 50"
+                  value={formState.maxCapacity || 0}
+                  onChange={(val) => setFormState({ ...formState, maxCapacity: parseInt(val, 10) || 0 })}
+                />
               </div>
-
-              <Field 
-                label="Or Enter Custom Image URL" 
-                type="url"
-                value={PRESET_IMAGES.some(img => img.url === formState.image) ? "" : formState.image}
-                onChange={(val) => setFormState({ ...formState, image: val })}
-                placeholder="e.g. https://images.unsplash.com/... or any image link"
-              />
 
               <div className="form-actions">
                 <button type="button" className="outline" onClick={() => setShowForm(false)}>
