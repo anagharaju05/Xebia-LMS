@@ -6,6 +6,15 @@ import {
   ShieldCheck, Trash2, TrendingUp, UserCheck, UserMinus, Users, X
 } from "lucide-react";
 import { BATCH_STUDENTS, blankBatch, blankSubject } from "../batches/batch.data.js";
+import { AUTH_USERS } from "../auth/auth.data.js";
+
+function getStudentDetails(id) {
+  const found = BATCH_STUDENTS.find(s => s.id === id);
+  if (found) return found;
+  const authUser = AUTH_USERS.find(u => u.studentId === id || u.id === id);
+  if (authUser) return { id, name: authUser.name, email: authUser.email, department: "Engineering" };
+  return { id, name: "Student User", email: `${id}@xebia.com`, department: "Engineering" };
+}
 
 function date(value) { return new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric", hour: value?.includes("T") ? "numeric" : undefined, minute: value?.includes("T") ? "2-digit" : undefined }).format(new Date(value)); }
 
@@ -39,7 +48,7 @@ function OverviewTab({ batch, state, assessmentStore, store, showToast }) {
 }
 
 function StudentsTab({ batch }) {
-  const students = BATCH_STUDENTS.filter((student) => batch.studentIds.includes(student.id));
+  const students = batch.studentIds.map(getStudentDetails);
   return <section className="workspace-panel batch-student-table"><header><div><span>Enrollment</span><h3>{students.length} students</h3></div><label><Search /><input placeholder="Search students" /></label></header><div className="table-head"><span>Student</span><span>Department</span><span>Progress</span><span>Attendance</span><span>Status</span></div>{students.map((student, index) => <article key={student.id}><span className="batch-student"><b>{student.name.split(" ").map((word) => word[0]).join("")}</b><span><strong>{student.name}</strong><small>{student.email}</small></span></span><span>{student.department}</span><span><strong>{72 + index * 8}%</strong><i><b style={{ width: `${72 + index * 8}%` }} /></i></span><span>{index ? "88%" : "96%"}</span><span className="batch-status active">Active</span></article>)}</section>;
 }
 
@@ -65,7 +74,7 @@ function AttendanceTab({ batch, state, store, showToast }) {
   const [subjectId, setSubjectId] = useState(batch.subjectIds[0] || "");
   const existing = state.attendance.find((item) => item.batchId === batch.id && item.date === today && item.subjectId === subjectId);
   const [statuses, setStatuses] = useState(existing?.statuses || Object.fromEntries(batch.studentIds.map((id) => [id, "Present"])));
-  const students = BATCH_STUDENTS.filter((item) => batch.studentIds.includes(item.id));
+  const students = batch.studentIds.map(getStudentDetails);
   return <div className="attendance-workspace"><header><div><h3>Mark attendance</h3><p>{date(today)} • Changes can be edited anytime.</p></div><label>Subject<select value={subjectId} onChange={(e) => { setSubjectId(e.target.value); const record = state.attendance.find((item) => item.batchId === batch.id && item.date === today && item.subjectId === e.target.value); setStatuses(record?.statuses || Object.fromEntries(batch.studentIds.map((id) => [id, "Present"]))); }}>{state.subjects.filter((item) => batch.subjectIds.includes(item.id)).map((subject) => <option value={subject.id} key={subject.id}>{subject.name}</option>)}</select></label></header><section className="attendance-list">{students.map((student) => <article key={student.id}><span className="batch-student"><b>{student.name.split(" ").map((word) => word[0]).join("")}</b><span><strong>{student.name}</strong><small>{student.email}</small></span></span><div>{["Present", "Late", "Absent"].map((status) => <button className={`${status.toLowerCase()} ${statuses[student.id] === status ? "active" : ""}`} key={status} onClick={() => setStatuses({ ...statuses, [student.id]: status })}>{status === "Present" ? <UserCheck /> : status === "Absent" ? <UserMinus /> : <Clock3 />}{status}</button>)}</div></article>)}</section><button className="primary attendance-save" onClick={() => { store.saveAttendance(batch.id, subjectId, today, statuses); showToast?.("Attendance saved"); }}><Check /> Save attendance</button></div>;
 }
 
@@ -113,7 +122,7 @@ function TeacherCalendar({ batchStore, assessmentStore, store }) {
 
 function TeacherAnalytics({ batchStore }) {
   const active = batchStore.state.batches.filter((item) => item.status === "Active");
-  const students = BATCH_STUDENTS.map((student, index) => ({ ...student, progress: [82, 91, 48][index], score: [86, 92, 58][index] }));
+  const students = Array.from(new Set(active.flatMap((item) => item.studentIds))).map(getStudentDetails).map((student, index) => ({ ...student, progress: [82, 91, 48][index % 3] || 60, score: [86, 92, 58][index % 3] || 70 }));
   return <section className="teacher-page"><div className="teacher-page-heading"><div><span>Performance intelligence</span><h1>Teacher Analytics</h1><p>Student progress, completion, marks, and cohort health.</p></div></div><div className="analytics-kpi-grid"><article><Users /><span><strong>{new Set(active.flatMap((item) => item.studentIds)).size}</strong>Active students</span></article><article><TrendingUp /><span><strong>{Math.round(active.reduce((sum, item) => sum + item.completion, 0) / active.length)}%</strong>Course completion</span></article><article><BarChart3 /><span><strong>{Math.round(active.reduce((sum, item) => sum + item.averageAssignment, 0) / active.length)}%</strong>Average marks</span></article><article><FileText /><span><strong>{active.reduce((sum, item) => sum + item.pendingAssignments, 0)}</strong>Pending assignments</span></article></div><div className="analytics-main-grid"><section className="workspace-panel"><header><div><span>Cohort comparison</span><h3>Batch performance</h3></div></header><div className="batch-performance-bars">{active.map((batch) => <article key={batch.id}><div><strong>{batch.name}</strong><small>{batch.studentIds.length} students</small></div><span><i style={{ width: `${batch.completion}%` }} /></span><b>{batch.completion}%</b></article>)}</div></section><section className="workspace-panel"><header><div><span>Needs attention</span><h3>Weak students</h3></div></header><div className="analytics-student-list">{students.filter((item) => item.progress < 60).map((student) => <article key={student.id}><span>{student.name.split(" ").map((word) => word[0]).join("")}</span><div><strong>{student.name}</strong><small>{student.progress}% progress • {student.score}% average</small></div><button>View</button></article>)}</div></section><section className="workspace-panel top-performers"><header><div><span>High achievement</span><h3>Top performers</h3></div></header>{students.sort((a, b) => b.score - a.score).slice(0, 3).map((student, index) => <article key={student.id}><b>{index + 1}</b><span><strong>{student.name}</strong><small>{student.progress}% completion</small></span><em>{student.score}%</em></article>)}</section></div></section>;
 }
 
