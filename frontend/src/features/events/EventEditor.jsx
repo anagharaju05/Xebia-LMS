@@ -31,6 +31,7 @@ const EMPTY_EVENT = {
 export default function EventEditor({ initial, onCancel, onSave }) {
   const { showToast } = useToast();
   const [form, setForm] = useState(initial || EMPTY_EVENT);
+  const [previewImage, setPreviewImage] = useState(form.image);
   const isEdit = Boolean(initial?.id);
 
   const standardOptions = [
@@ -177,10 +178,10 @@ export default function EventEditor({ initial, onCancel, onSave }) {
             <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--color-text-secondary)", marginBottom: "8px", display: "block" }}>
               Upload Custom Event Banner
             </span>
-            <label className="upload-control dropzone-area" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "12px", padding: form.image && form.image !== PRESET_IMAGES[0].url ? "0" : "48px 16px", border: "2px dashed var(--color-border)", borderRadius: "12px", color: "var(--color-text-secondary)", cursor: "pointer", background: "var(--color-surface-secondary)", width: "100%", transition: "all 0.2s ease", overflow: "hidden", position: "relative" }}>
-              {form.image && form.image !== PRESET_IMAGES[0].url ? (
+            <label className="upload-control dropzone-area" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "12px", padding: previewImage && previewImage !== PRESET_IMAGES[0].url ? "0" : "48px 16px", border: "2px dashed var(--color-border)", borderRadius: "12px", color: "var(--color-text-secondary)", cursor: "pointer", background: "var(--color-surface-secondary)", width: "100%", transition: "all 0.2s ease", overflow: "hidden", position: "relative" }}>
+              {previewImage && previewImage !== PRESET_IMAGES[0].url ? (
                 <>
-                  <img src={form.image} alt="Event Banner" style={{ width: "100%", height: "200px", objectFit: "cover" }} />
+                  <img src={previewImage} alt="Event Banner" style={{ width: "100%", height: "200px", objectFit: "cover" }} onError={(e) => { e.target.onerror = null; e.target.src = PRESET_IMAGES[0].url; }} />
                   <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.5)", color: "white", opacity: 0, transition: "opacity 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.opacity = 1} onMouseLeave={(e) => e.currentTarget.style.opacity = 0}>
                     <ImageIcon size={32} style={{ marginBottom: "8px" }} />
                     <span style={{ fontWeight: 600 }}>Click to change image</span>
@@ -205,7 +206,7 @@ export default function EventEditor({ initial, onCancel, onSave }) {
                   
                   // Immediately show local preview
                   const localUrl = URL.createObjectURL(file);
-                  patch("image", localUrl);
+                  setPreviewImage(localUrl);
                   
                   try {
                     showToast("Uploading image...", "info");
@@ -249,7 +250,7 @@ export default function EventEditor({ initial, onCancel, onSave }) {
         <h3>Live Preview</h3>
         <article className="event-admin-card" style={{ cursor: 'default', transform: 'none', boxShadow: 'var(--shadow-md)' }}>
           <div className="event-card-img">
-            <img src={form.image || PRESET_IMAGES[0].url} alt={form.title} />
+            <img src={previewImage || PRESET_IMAGES[0].url} alt={form.title} onError={(e) => { e.target.onerror = null; e.target.src = PRESET_IMAGES[0].url; }} />
             <span className="event-status-badge active">
               Open to Register
             </span>
