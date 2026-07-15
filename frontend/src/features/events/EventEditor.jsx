@@ -193,30 +193,32 @@ export default function EventEditor({ initial, onCancel, onSave }) {
             <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--color-text-secondary)", marginBottom: "8px", display: "block" }}>
               Or Upload Custom Image from Desktop
             </span>
-            <input 
-              type="file"
-              accept="image/*"
-              onChange={async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                try {
-                  showToast("Uploading image...", "info");
-                  const formData = new FormData();
-                  formData.append("file", file);
-                  const res = await api.upload("/api/portal/files/upload", formData);
-                  if (res && res.fileUrl) {
-                    patch("image", res.fileUrl);
-                    showToast("Image uploaded successfully!", "success");
+            <label className="upload-control" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "8px 16px", border: "1px dashed var(--color-border)", borderRadius: "8px", color: "var(--color-primary)", fontWeight: 600, cursor: "pointer", background: "var(--color-surface-secondary)", width: "fit-content" }}>
+              <ImageIcon size={16} />
+              <span>Choose Image File...</span>
+              <input 
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={async (e) => {
+                  const file = e.target.files[0];
+                  if (!file) return;
+                  try {
+                    showToast("Uploading image...", "info");
+                    const formData = new FormData();
+                    formData.append("file", file);
+                    const res = await api.upload("/api/portal/files/upload", formData);
+                    if (res && res.fileUrl) {
+                      patch("image", res.fileUrl);
+                      showToast("Image uploaded successfully!", "success");
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    showToast("Failed to upload image", "danger");
                   }
-                } catch (err) {
-                  console.error(err);
-                  showToast("Failed to upload image", "danger");
-                }
-              }}
-              style={{
-                width: "100%", padding: "8px", border: "1px dashed var(--color-border)", borderRadius: "8px", background: "var(--color-surface)", color: "var(--color-text-primary)"
-              }}
-            />
+                }}
+              />
+            </label>
           </div>
         </section>
 
