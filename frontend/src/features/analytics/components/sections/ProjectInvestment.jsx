@@ -66,7 +66,12 @@ export default function ProjectInvestment() {
             <div className="data-list-header">
               <h3>Highest Investment Areas</h3>
             </div>
-            <div style={{ padding: '16px', color: 'var(--color-text-secondary)' }}>Coming Soon</div>
+            {analytics.highestInvestmentAreas?.length > 0 ? analytics.highestInvestmentAreas.map((area, i) => (
+              <div className="data-list-row" key={i}>
+                <span className="data-list-title">{area.name}</span>
+                <span className="data-list-value">{area.cost}</span>
+              </div>
+            )) : <div style={{ padding: '16px', color: 'var(--color-text-secondary)' }}>No investment data available</div>}
           </div>
         </div>
       </div>

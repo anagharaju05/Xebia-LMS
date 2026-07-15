@@ -69,7 +69,12 @@ export default function LearningChampions() {
             <div className="data-list-header">
               <h3>Top Departments</h3>
             </div>
-            <div style={{ padding: '16px', color: 'var(--color-text-secondary)' }}>Coming Soon</div>
+            {analytics.topDepartments?.length > 0 ? analytics.topDepartments.map((dept, i) => (
+              <div className="data-list-row" key={i}>
+                <span className="data-list-title">{dept.name}</span>
+                <span className="data-list-value">{dept.hours} hrs</span>
+              </div>
+            )) : <div style={{ padding: '16px', color: 'var(--color-text-secondary)' }}>No department data available</div>}
           </div>
         </div>
       </div>

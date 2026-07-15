@@ -72,7 +72,12 @@ export default function TrainingEffectiveness() {
             <div className="data-list-header">
               <h3>Feedback Distribution</h3>
             </div>
-            <div style={{ padding: '16px', color: 'var(--color-text-secondary)' }}>Coming Soon</div>
+            {analytics.feedbackDistribution?.length > 0 ? analytics.feedbackDistribution.map((feedback, i) => (
+              <div className="data-list-row" key={i}>
+                <span className="data-list-title">{feedback.rating}</span>
+                <span className="data-list-value">{feedback.count} ratings</span>
+              </div>
+            )) : <div style={{ padding: '16px', color: 'var(--color-text-secondary)' }}>No feedback data available</div>}
           </div>
         </div>
       </div>

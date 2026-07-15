@@ -343,7 +343,7 @@ public class AnalyticsService {
             Integer.class
         );
         Integer completedSessions = jdbcTemplate.queryForObject(
-            "SELECT COUNT(sa.id) FROM session_attendances sa JOIN students s ON sa.student_id = s.id WHERE sa.completion_status = 'COMPLETED'" + buildFilterWhereClause(request, "s", "created_at", "sa", true),
+            "SELECT COUNT(sa.id) FROM session_attendances sa JOIN students s ON sa.student_id = s.id WHERE sa.progress_percentage = 100" + buildFilterWhereClause(request, "s", "created_at", "sa", true),
             Integer.class
         );
         int completionRate = (totalEnrollments != null && totalEnrollments > 0) ? (int) Math.round((completedSessions != null ? completedSessions : 0) * 100.0 / totalEnrollments) : 0;
@@ -408,7 +408,7 @@ public class AnalyticsService {
     public Map<String, Object> getLearningChampions(AnalyticsFilterRequest request) {
         Map<String, Object> data = new HashMap<>();
         
-        Integer activeLearners = jdbcTemplate.queryForObject("SELECT COUNT(DISTINCT sa.student_id) FROM session_attendances sa JOIN students s ON sa.student_id = s.id WHERE sa.actual_learning_hours > 0" + buildFilterWhereClause(request, "s", "created_at", "sa", true), Integer.class);
+        Integer activeLearners = jdbcTemplate.queryForObject("SELECT COUNT(DISTINCT sa.student_id) FROM session_attendances sa JOIN students s ON sa.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "sa", false), Integer.class);
         data.put("activeLearners", activeLearners != null ? activeLearners : 0);
         
         Integer totalBadges = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM student_certifications sc JOIN students s ON sc.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "sc", false), Integer.class);
@@ -419,6 +419,12 @@ public class AnalyticsService {
             (rs, rowNum) -> Map.of("name", rs.getString("name"), "hours", rs.getInt("hours"))
         );
         data.put("championsList", champions);
+        List<Map<String, Object>> topDepartments = jdbcTemplate.query(
+            "SELECT s.department as name, SUM(sa.actual_learning_hours) as hours FROM session_attendances sa JOIN students s ON sa.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "sa", false) + " GROUP BY s.department ORDER BY hours DESC LIMIT 5",
+            (rs, rowNum) -> Map.of("name", rs.getString("name") != null ? rs.getString("name") : "General", "hours", rs.getInt("hours"))
+        );
+        data.put("topDepartments", topDepartments);
+
         return data;
     }
 
@@ -444,6 +450,12 @@ public class AnalyticsService {
             (rs, rowNum) -> Map.of("name", rs.getString("name"), "sessions", rs.getInt("sessions"))
         );
         data.put("investmentData", projects);
+        List<Map<String, Object>> highestInvestmentAreas = jdbcTemplate.query(
+            "SELECT c.learning_pillar as name, COUNT(sa.id) * 50 as cost FROM session_attendances sa JOIN courses c ON sa.course_id::uuid = c.id JOIN students s ON sa.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "sa", false) + " GROUP BY c.learning_pillar ORDER BY cost DESC LIMIT 5",
+            (rs, rowNum) -> Map.of("name", rs.getString("name") != null ? rs.getString("name") : "General", "cost", "$" + rs.getInt("cost"))
+        );
+        data.put("highestInvestmentAreas", highestInvestmentAreas);
+
         return data;
     }
 
