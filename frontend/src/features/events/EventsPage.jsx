@@ -600,7 +600,7 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
                     <button 
                       key={img.name} 
                       type="button"
-                      className={`preset-btn ${formState.image === img.url ? "selected" : ""}`}
+                      className={`preset-btn ${formState.image?.split('?')[0] === img.url.split('?')[0] ? "selected" : ""}`}
                       onClick={() => setFormState({ ...formState, image: img.url })}
                     >
                       <img src={img.url} alt={img.name} />
@@ -613,7 +613,7 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
               <Field 
                 label="Or Enter Custom Image URL" 
                 type="url"
-                value={PRESET_IMAGES.some(img => img.url === formState.image) ? "" : formState.image}
+                value={PRESET_IMAGES.some(img => img.url.split('?')[0] === formState.image?.split('?')[0]) ? "" : formState.image}
                 onChange={(val) => setFormState({ ...formState, image: val })}
                 placeholder="e.g. https://images.unsplash.com/... or any image link"
               />
