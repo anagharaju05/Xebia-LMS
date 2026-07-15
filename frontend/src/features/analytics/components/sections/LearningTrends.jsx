@@ -16,20 +16,20 @@ export default function LearningTrends() {
       <div className="analytics-grid-kpi">
         <div className="stat-card-purple">
           <h3 style={{ margin: '0 0 16px 0', fontSize: '12px', textTransform: 'uppercase', opacity: 0.9 }}>Monthly Active Learners</h3>
-          <div style={{ fontSize: '36px', fontWeight: 'bold' }}>14.2k</div>
-          <div style={{ fontSize: '13px', opacity: 0.8, marginTop: '8px' }}>Peak activity in March</div>
+          <div style={{ fontSize: '36px', fontWeight: 'bold' }}>{analytics.activeLearners?.toLocaleString() || 0}</div>
+          <div style={{ fontSize: '13px', opacity: 0.8, marginTop: '8px' }}>Total unique learners</div>
         </div>
         
         <div className="stat-card-purple">
           <h3 style={{ margin: '0 0 16px 0', fontSize: '12px', textTransform: 'uppercase', opacity: 0.9 }}>Avg Completions</h3>
-          <div style={{ fontSize: '36px', fontWeight: 'bold' }}>62%</div>
+          <div style={{ fontSize: '36px', fontWeight: 'bold' }}>{analytics.avgCompletions || 0}%</div>
           <div style={{ fontSize: '13px', opacity: 0.8, marginTop: '8px' }}>Enrollment to completion ratio</div>
         </div>
 
         <div className="stat-card-purple">
           <h3 style={{ margin: '0 0 16px 0', fontSize: '12px', textTransform: 'uppercase', opacity: 0.9 }}>Busiest Time</h3>
-          <div style={{ fontSize: '36px', fontWeight: 'bold' }}>Fridays</div>
-          <div style={{ fontSize: '13px', opacity: 0.8, marginTop: '8px' }}>Between 2 PM and 5 PM</div>
+          <div style={{ fontSize: '36px', fontWeight: 'bold' }}>{analytics.busiestTime || 'N/A'}</div>
+          <div style={{ fontSize: '13px', opacity: 0.8, marginTop: '8px' }}>Peak activity period</div>
         </div>
       </div>
 
@@ -54,52 +54,24 @@ export default function LearningTrends() {
             <div className="data-list-header">
               <h3>Fastest Growing Topics</h3>
             </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Generative AI</span>
-              <span className="data-list-value">↑ 340%</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Cybersecurity</span>
-              <span className="data-list-value">↑ 210%</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Cloud Architecture</span>
-              <span className="data-list-value">↑ 185%</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Data Privacy</span>
-              <span className="data-list-value">↑ 150%</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Change Management</span>
-              <span className="data-list-value">↑ 110%</span>
-            </div>
+            {analytics.fastestGrowingTopics?.length > 0 ? analytics.fastestGrowingTopics.map((topic, i) => (
+              <div className="data-list-row" key={i}>
+                <span className="data-list-title">{topic.name}</span>
+                <span className="data-list-value" style={{color: 'var(--color-success)'}}>{topic.value}</span>
+              </div>
+            )) : <div style={{ padding: '16px', color: 'var(--color-text-secondary)' }}>No data available</div>}
           </div>
 
           <div className="data-list-card">
             <div className="data-list-header">
               <h3>Declining Topics</h3>
             </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Legacy Systems (Mainframe)</span>
-              <span className="data-list-value">↓ 45%</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Basic Office Skills</span>
-              <span className="data-list-value">↓ 32%</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">On-Premises Infrastructure</span>
-              <span className="data-list-value">↓ 28%</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Waterfall Methodology</span>
-              <span className="data-list-value">↓ 25%</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">General IT Support</span>
-              <span className="data-list-value">↓ 15%</span>
-            </div>
+            {analytics.decliningTopics?.length > 0 ? analytics.decliningTopics.map((topic, i) => (
+              <div className="data-list-row" key={i}>
+                <span className="data-list-title">{topic.name}</span>
+                <span className="data-list-value" style={{color: 'var(--color-error)'}}>{topic.value}</span>
+              </div>
+            )) : <div style={{ padding: '16px', color: 'var(--color-text-secondary)' }}>No data available</div>}
           </div>
         </div>
       </div>

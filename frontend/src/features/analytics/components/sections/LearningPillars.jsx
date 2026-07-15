@@ -57,52 +57,24 @@ export default function LearningPillars() {
             <div className="data-list-header">
               <h3>Top Technical Programs</h3>
             </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Advanced React Patterns</span>
-              <span className="data-list-value">1200 enrollments</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Cloud Native Architecture</span>
-              <span className="data-list-value">950 enrollments</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Kubernetes Mastery</span>
-              <span className="data-list-value">840 enrollments</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Spring Boot Microservices</span>
-              <span className="data-list-value">720 enrollments</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Data Engineering Basics</span>
-              <span className="data-list-value">610 enrollments</span>
-            </div>
+            {analytics.topTechnicalPrograms?.length > 0 ? analytics.topTechnicalPrograms.map((prog, i) => (
+              <div className="data-list-row" key={i}>
+                <span className="data-list-title">{prog.name}</span>
+                <span className="data-list-value">{prog.enrollments} enrollments</span>
+              </div>
+            )) : <div style={{ padding: '16px', color: 'var(--color-text-secondary)' }}>No data available</div>}
           </div>
 
           <div className="data-list-card">
             <div className="data-list-header">
               <h3>Top Leadership Programs</h3>
             </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Executive Presence</span>
-              <span className="data-list-value">450 enrollments</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Agile Transformation</span>
-              <span className="data-list-value">420 enrollments</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Strategic Thinking</span>
-              <span className="data-list-value">380 enrollments</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Managing Remote Teams</span>
-              <span className="data-list-value">310 enrollments</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Conflict Resolution</span>
-              <span className="data-list-value">290 enrollments</span>
-            </div>
+            {analytics.topLeadershipPrograms?.length > 0 ? analytics.topLeadershipPrograms.map((prog, i) => (
+              <div className="data-list-row" key={i}>
+                <span className="data-list-title">{prog.name}</span>
+                <span className="data-list-value">{prog.enrollments} enrollments</span>
+              </div>
+            )) : <div style={{ padding: '16px', color: 'var(--color-text-secondary)' }}>No data available</div>}
           </div>
         </div>
       </div>

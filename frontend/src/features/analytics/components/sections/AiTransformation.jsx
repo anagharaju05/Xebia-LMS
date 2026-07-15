@@ -3,13 +3,6 @@ import AnalyticsLayout from '../../AnalyticsLayout.jsx';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAnalytics } from '../../useAnalytics.js';
 
-const data = [
-  { name: 'Jan', score: 65 },
-  { name: 'Feb', score: 68 },
-  { name: 'Mar', score: 75 },
-  { name: 'Apr', score: 82 },
-];
-
 export default function AiTransformation() {
   const { data: aiData, loading, error } = useAnalytics('ai-transformation');
 
@@ -57,7 +50,7 @@ export default function AiTransformation() {
           <h3 style={{ marginBottom: '24px' }}>Maturity Score Trend</h3>
           <div style={{ flex: 1, minHeight: 0 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <LineChart data={aiData.maturityTrend || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
@@ -73,52 +66,24 @@ export default function AiTransformation() {
             <div className="data-list-header">
               <h3>Top GenAI Adoption by Unit</h3>
             </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Data Science</span>
-              <span className="data-list-value">95%</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Engineering</span>
-              <span className="data-list-value">88%</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Product Management</span>
-              <span className="data-list-value">75%</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Marketing</span>
-              <span className="data-list-value">62%</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">HR & Operations</span>
-              <span className="data-list-value">45%</span>
-            </div>
+            {aiData.topAdoptionByUnit?.length > 0 ? aiData.topAdoptionByUnit.map((unit, i) => (
+              <div className="data-list-row" key={i}>
+                <span className="data-list-title">{unit.name}</span>
+                <span className="data-list-value">{unit.value}%</span>
+              </div>
+            )) : <div style={{ padding: '16px', color: 'var(--color-text-secondary)' }}>No data available</div>}
           </div>
 
           <div className="data-list-card">
             <div className="data-list-header">
               <h3>Top AI Champions</h3>
             </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Alex Mercer</span>
-              <span className="data-list-value">LLM Integration</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Sarah Jenkins</span>
-              <span className="data-list-value">Prompt Engineering</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Raj Patel</span>
-              <span className="data-list-value">AI Ethics</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Elena Rodriguez</span>
-              <span className="data-list-value">Copilot Mastery</span>
-            </div>
-            <div className="data-list-row">
-              <span className="data-list-title">Wei Chen</span>
-              <span className="data-list-value">Machine Learning</span>
-            </div>
+            {aiData.topAiChampions?.length > 0 ? aiData.topAiChampions.map((champion, i) => (
+              <div className="data-list-row" key={i}>
+                <span className="data-list-title">{champion.name}</span>
+                <span className="data-list-value">{champion.tool}</span>
+              </div>
+            )) : <div style={{ padding: '16px', color: 'var(--color-text-secondary)' }}>No champions found</div>}
           </div>
         </div>
       </div>
