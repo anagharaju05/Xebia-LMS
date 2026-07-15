@@ -13,6 +13,7 @@ import ContentLibraryPage from "../features/content/ContentLibraryPage.jsx";
 import StudentsPage from "../features/students/StudentsPage.jsx";
 import AdminAssessmentsPage from "../features/assessments/AdminAssessmentsPage.jsx";
 import EventsPage from "../features/events/EventsPage.jsx";
+import EventEditor from "../features/events/EventEditor.jsx";
 import { ErrorBoundary } from "../components/ErrorBoundary.jsx";
 import LoginPage from "../features/auth/LoginPage.jsx";
 import { useAssessmentStore } from "../features/assessments/useAssessmentStore.js";
@@ -182,7 +183,8 @@ export default function App() {
             <Route path={APP_ROUTES.CONTENT} element={<ContentLibraryPage store={store} upsert={upsertEntity} removeContentBlock={handleDeleteContentBlock} toggleEntity={handleToggleEntity} />} />
             <Route path={APP_ROUTES.STUDENTS} element={<StudentsPage store={store} showToast={showToast} />} />
             <Route path="/assessments" element={<AdminAssessmentsPage showToast={showToast} />} />
-            <Route path={APP_ROUTES.EVENTS} element={<EventsPage store={store} upsertEvent={upsertEntity} deleteEvent={handleDeleteEvent} showToast={showToast} />} />
+            <Route path={APP_ROUTES.EVENTS} element={<EventsPage store={store} upsertEvent={upsertEntity} deleteEvent={handleDeleteEvent} showToast={showToast} onCreate={() => { setEditing({ type: "event", id: "" }); handleNavigate("/events/new"); }} onEdit={(id) => { setEditing({ type: "event", id }); handleNavigate(`/events/${id}`); }} />} />
+            <Route path="/events/:id" element={<EventEditor key={editing.id || "new-event"} initial={store.events.find((item) => item.id === editing.id)} onCancel={() => handleNavigate(APP_ROUTES.EVENTS)} onSave={(record) => { upsertEntity("events", record, record.id ? "Event updated" : "Event created"); handleNavigate(APP_ROUTES.EVENTS); }} />} />
                 
             {/* Analytics Routes */}
             <Route path={APP_ROUTES.ANALYTICS_EXEC_SUMMARY} element={<ExecutiveSummary />} />

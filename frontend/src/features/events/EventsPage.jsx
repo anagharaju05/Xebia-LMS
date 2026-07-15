@@ -42,18 +42,12 @@ const EMPTY_EVENT = {
   maxCapacity: 0
 };
 
-export default function EventsPage({ store, upsertEvent, deleteEvent, showToast }) {
+export default function EventsPage({ store, deleteEvent, showToast, onCreate, onEdit }) {
   const events = store.events || [];
   const registrations = store.registrations || [];
 
-  const [showForm, setShowForm] = useState(false);
-  const [editingEvent, setEditingEvent] = useState(null);
-  const [formState, setFormState] = useState(EMPTY_EVENT);
   const [selectedEventId, setSelectedEventId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const [locationType, setLocationType] = useState("Xebia Gurgaon HQ (Sector 45)");
-  const [customLocation, setCustomLocation] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
 
   const filteredEvents = useMemo(() => {
@@ -83,30 +77,11 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
   const selectedRegistrations = registrations.filter(r => r.eventId === selectedEventId);
 
   function openCreate() {
-    setFormState(EMPTY_EVENT);
-    setLocationType("Xebia Gurgaon HQ (Sector 45)");
-    setCustomLocation("");
-    setEditingEvent(null);
-    setShowForm(true);
+    if (onCreate) onCreate();
   }
 
   function openEdit(event) {
-    setFormState(event);
-    const standardOptions = [
-      "Xebia Gurgaon HQ (Sector 45)",
-      "Xebia Noida Office (Sector 62)",
-      "Virtual (Microsoft Teams)",
-      "Virtual (Zoom)"
-    ];
-    if (standardOptions.includes(event.location)) {
-      setLocationType(event.location);
-      setCustomLocation("");
-    } else {
-      setLocationType("Other");
-      setCustomLocation(event.location);
-    }
-    setEditingEvent(event);
-    setShowForm(true);
+    if (onEdit) onEdit(event.id);
   }
 
   const exportToExcelForEvent = async (event) => {
@@ -161,34 +136,6 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
   const exportToExcel = () => exportToExcelForEvent(selectedEvent);
   const exportToCSV = () => exportToCSVForEvent(selectedEvent);
 
-  function handleSave(e, customStatus = null) {
-    if (e) e.preventDefault();
-    if (!formState.title.trim() || !formState.timeline || !formState.deadline) {
-      showToast("Please fill in all required fields", "warning");
-      return;
-    }
-
-    if (formState.meetingUrl && formState.meetingUrl.trim()) {
-      const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
-      if (!urlPattern.test(formState.meetingUrl.trim())) {
-        showToast("Please enter a valid Meeting Link URL", "danger");
-        return;
-      }
-    }
-
-    const nextStatus = customStatus || formState.status || "Published";
-
-    const payload = {
-      ...formState,
-      status: nextStatus,
-      id: editingEvent ? editingEvent.id : undefined
-    };
-
-    upsertEvent("events", payload, editingEvent ? "Event updated" : `Event created as ${nextStatus}`);
-    setShowForm(false);
-    setFormState(EMPTY_EVENT);
-    setEditingEvent(null);
-  }
 
   function handleDelete(id) {
     deleteEvent(id);
@@ -549,181 +496,6 @@ export default function EventsPage({ store, upsertEvent, deleteEvent, showToast 
         )}
       </div>
 
-      {/* Create / Edit Modal Form */}
-      {showForm && (
-        <div className="events-modal-backdrop" onClick={() => setShowForm(false)}>
-          <div className="events-modal-dialog" onClick={(e) => e.stopPropagation()}>
-            <header className="modal-header">
-              <h2>{editingEvent ? "Edit Event" : "Create New Event"}</h2>
-              <button className="close-btn" onClick={() => setShowForm(false)}>
-                <X size={20} />
-              </button>
-            </header>
-            
-            <form onSubmit={handleSave} className="events-form">
-              <Field 
-                label="Event Title" 
-                required 
-                value={formState.title}
-                onChange={(val) => setFormState({ ...formState, title: val })}
-                placeholder="e.g. Hackathon 2026, React 19 Session"
-              />
-
-              <TextArea 
-                label="Description" 
-                id="event-desc"
-                value={formState.description}
-                onChange={(val) => setFormState({ ...formState, description: val })}
-                placeholder="Details about the event, objectives, prerequisites..."
-              />
-
-              <div className="form-row-2">
-                <Field 
-                  label="Timeline (Start Date & Time)" 
-                  required 
-                  type="datetime-local"
-                  value={formState.timeline}
-                  onChange={(val) => setFormState({ ...formState, timeline: val })}
-                />
-                <Field 
-                  label="Registration Deadline" 
-                  required 
-                  type="datetime-local"
-                  value={formState.deadline}
-                  onChange={(val) => setFormState({ ...formState, deadline: val })}
-                />
-              </div>
-
-              <div className="image-preset-picker" style={{ marginTop: "16px" }}>
-                <span className="preset-label">Choose Event Image Banner:</span>
-                <div className="preset-grid">
-                  {PRESET_IMAGES.map((img) => (
-                    <button 
-                      key={img.name} 
-                      type="button"
-                      className={`preset-btn ${formState.image?.split('?')[0] === img.url.split('?')[0] ? "selected" : ""}`}
-                      onClick={() => setFormState({ ...formState, image: img.url })}
-                    >
-                      <img src={img.url} alt={img.name} />
-                      <span>{img.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="field">
-                <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--color-text-secondary)", marginBottom: "8px", display: "block" }}>
-                  Or Upload Custom Image from Desktop
-                </span>
-                <input 
-                  type="file"
-                  accept="image/*"
-                  onChange={async (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    try {
-                      showToast("Uploading image...", "info");
-                      const formData = new FormData();
-                      formData.append("file", file);
-                      const res = await api.upload("/api/portal/files/upload", formData);
-                      if (res && res.fileUrl) {
-                        setFormState({ ...formState, image: res.fileUrl });
-                        showToast("Image uploaded successfully!", "success");
-                      }
-                    } catch (err) {
-                      console.error(err);
-                      showToast("Failed to upload image", "danger");
-                    }
-                  }}
-                  style={{
-                    width: "100%", padding: "8px", border: "1px dashed var(--color-border)", borderRadius: "8px", background: "var(--color-surface)", color: "var(--color-text-primary)"
-                  }}
-                />
-              </div>
-
-              <label className="field" id="event-location" style={{ marginTop: "16px" }}>
-                <span>Location <em>*</em></span>
-                <select
-                  value={locationType}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setLocationType(val);
-                    if (val !== "Other") {
-                      setFormState({ ...formState, location: val });
-                    } else {
-                      setFormState({ ...formState, location: customLocation });
-                    }
-                  }}
-                  style={{ width: "100%", padding: "10px 12px", border: "1px solid var(--color-border)", borderRadius: "8px", background: "var(--color-surface)", color: "var(--color-text-primary)", fontWeight: 500 }}
-                >
-                  <option value="Xebia Gurgaon HQ (Sector 45)">Xebia Gurgaon HQ (Sector 45)</option>
-                  <option value="Xebia Noida Office (Sector 62)">Xebia Noida Office (Sector 62)</option>
-                  <option value="Virtual (Microsoft Teams)">Virtual (Microsoft Teams)</option>
-                  <option value="Virtual (Zoom)">Virtual (Zoom)</option>
-                  <option value="Other">Other (Custom Location)</option>
-                </select>
-              </label>
-
-              {locationType === "Other" && (
-                <Field 
-                  label="Specify Custom Location" 
-                  required 
-                  value={customLocation}
-                  onChange={(val) => {
-                    setCustomLocation(val);
-                    setFormState({ ...formState, location: val });
-                  }}
-                  placeholder="Enter custom venue address or details..."
-                />
-              )}
-
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginTop: "16px" }}>
-                <Field 
-                  label="Meeting Link / URL (Optional)" 
-                  type="url"
-                  value={formState.meetingUrl || ""}
-                  onChange={(val) => setFormState({ ...formState, meetingUrl: val })}
-                  placeholder="e.g. https://teams.microsoft.com/..."
-                />
-                <Field 
-                  label="Max Seats (0 for unlimited)" 
-                  type="number"
-                  placeholder="e.g. 50"
-                  value={formState.maxCapacity || 0}
-                  onChange={(val) => setFormState({ ...formState, maxCapacity: parseInt(val, 10) || 0 })}
-                />
-              </div>
-
-              <div className="form-actions">
-                <button type="button" className="outline" onClick={() => setShowForm(false)}>
-                  Cancel
-                </button>
-                {editingEvent ? (
-                  <>
-                    {formState.status === "Draft" && (
-                      <button type="button" className="outline" onClick={() => handleSave(null, "Published")} style={{ color: "var(--color-success)", borderColor: "var(--color-success)" }}>
-                        Publish Now
-                      </button>
-                    )}
-                    <button type="submit" className="primary">
-                      Save Changes
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button type="button" className="outline" onClick={() => handleSave(null, "Draft")} style={{ color: "var(--color-primary)", borderColor: "var(--color-primary)" }}>
-                      Save as Draft
-                    </button>
-                    <button type="button" className="primary" onClick={() => handleSave(null, "Published")}>
-                      Publish Event
-                    </button>
-                  </>
-                )}
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
