@@ -283,7 +283,7 @@ export function useLmsStore(showToast) {
           deadline: e.endTime,
           timeline: e.startTime,
           status: e.status === "PUBLISHED" || e.status === "SCHEDULED" ? "Published" : "Draft",
-          image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87",
+          image: e.thumbnailUrl || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80",
           meetingUrl: isLocUrl ? e.locationOrLink : ""
         };
       });
@@ -460,6 +460,7 @@ export function useLmsStore(showToast) {
           endTime: finalRecord.deadline || new Date().toISOString(),
           eventType: "WEBINAR",
           locationOrLink: finalRecord.meetingUrl || finalRecord.location || "",
+          thumbnailUrl: finalRecord.image || "",
           status: finalRecord.status === "Published" ? "SCHEDULED" : "DRAFT"
         };
         if (isUpdate) {
