@@ -42,7 +42,7 @@ public class Batch {
     private List<String> studentIds = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name = "batch_subjects", joinColumns = @JoinColumn(name = "batch_id"))
+    @CollectionTable(name = "batch_subject_mappings", joinColumns = @JoinColumn(name = "batch_id"))
     @Column(name = "subject_id")
     private List<String> subjectIds = new ArrayList<>();
 }
