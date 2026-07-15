@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../auth/useAuth.js';
 
 export function useAnalytics(endpoint, filters = {}) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { session } = useAuth();
 
   useEffect(() => {
     let isMounted = true;
@@ -21,9 +23,9 @@ export function useAnalytics(endpoint, filters = {}) {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'X-User-Role': 'SUPER_ADMIN',
-            'X-Organization-ID': '123e4567-e89b-12d3-a456-426614174000',
-            'X-User-Id': 'admin-1'
+            'X-User-Role': session?.role?.toUpperCase() || 'SUPER_ADMIN',
+            'X-Organization-ID': session?.organizationId || '123e4567-e89b-12d3-a456-426614174000',
+            'X-User-Id': session?.id || 'admin-1'
           }
         });
 

@@ -205,18 +205,18 @@ public class AnalyticsService {
 
     public Map<String, Object> getLearningPillars(AnalyticsFilterRequest request) {
         Map<String, Object> data = new HashMap<>();
-        // In a real app we'd group by learning_pillar and SUM duration. For MVP, we mock the distribution logic based on total hours.
-        Double totalHours = jdbcTemplate.queryForObject("SELECT SUM(sa.actual_learning_hours) FROM session_attendances sa JOIN students s ON sa.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "sa", false), Double.class);
-        double hours = totalHours != null ? totalHours : 0.0;
-        
-        data.put("pillarData", List.of(
-            Map.of("name", "Technical Skill", "value", hours * 0.6),
-            Map.of("name", "Leadership", "value", hours * 0.2),
-            Map.of("name", "Process & Agile", "value", hours * 0.1),
-            Map.of("name", "Domain/Industry", "value", hours * 0.1)
-        ));
-        data.put("topPillarName", "Technical Skill");
-        data.put("topPillarHours", hours * 0.6);
+        List<Map<String, Object>> pillarDataList = jdbcTemplate.query(
+            "SELECT c.learning_pillar as name, SUM(sa.actual_learning_hours) as value FROM session_attendances sa JOIN courses c ON sa.course_id = c.id JOIN students s ON sa.student_id = s.id WHERE c.learning_pillar IS NOT NULL" + buildFilterWhereClause(request, "s", "created_at", "sa", true) + " GROUP BY c.learning_pillar ORDER BY value DESC",
+            (rs, rowNum) -> Map.of("name", rs.getString("name"), "value", rs.getDouble("value"))
+        );
+        data.put("pillarData", pillarDataList);
+        if (!pillarDataList.isEmpty()) {
+            data.put("topPillarName", pillarDataList.get(0).get("name"));
+            data.put("topPillarHours", pillarDataList.get(0).get("value"));
+        } else {
+            data.put("topPillarName", "No Data");
+            data.put("topPillarHours", 0.0);
+        }
         return data;
     }
 
@@ -240,7 +240,11 @@ public class AnalyticsService {
         Integer total = jdbcTemplate.queryForObject("SELECT COUNT(sc.id) FROM student_certifications sc JOIN students s ON sc.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "sc", false), Integer.class);
         data.put("totalCertifications", total != null ? total : 0);
         data.put("activeLearners", total != null ? total : 0);
-        data.put("certificationGrowth", 12.0); // Mock trend
+        
+        Integer lastMonthTotal = jdbcTemplate.queryForObject("SELECT COUNT(sc.id) FROM student_certifications sc JOIN students s ON sc.student_id = s.id WHERE sc.created_at >= CURRENT_DATE - INTERVAL '60 days' AND sc.created_at < CURRENT_DATE - INTERVAL '30 days'", Integer.class);
+        Integer thisMonthTotal = jdbcTemplate.queryForObject("SELECT COUNT(sc.id) FROM student_certifications sc JOIN students s ON sc.student_id = s.id WHERE sc.created_at >= CURRENT_DATE - INTERVAL '30 days'", Integer.class);
+        double growth = (lastMonthTotal != null && lastMonthTotal > 0) ? ((thisMonthTotal != null ? thisMonthTotal : 0) - lastMonthTotal) * 100.0 / lastMonthTotal : 0.0;
+        data.put("certificationGrowth", Math.round(growth * 10.0) / 10.0);
         
         List<Map<String, Object>> certList = jdbcTemplate.query(
             "SELECT sc.technology as name, COUNT(sc.id) as count FROM student_certifications sc JOIN students s ON sc.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "sc", false) + " GROUP BY sc.technology ORDER BY count DESC LIMIT 5",
@@ -250,7 +254,7 @@ public class AnalyticsService {
         
         List<Map<String, Object>> recentCerts = jdbcTemplate.query(
             "SELECT s.name as studentName, c.certification_name as certification, to_char(c.created_at, 'YYYY-MM-DD') as date FROM student_certifications c JOIN students s ON c.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "c", false) + " ORDER BY c.created_at DESC LIMIT 5",
-            (rs, rowNum) -> Map.of("studentName", rs.getString("studentName"), "certification", rs.getString("certification"), "date", rs.getString("date") != null ? rs.getString("date") : "2024-01-01")
+            (rs, rowNum) -> Map.of("studentName", rs.getString("studentName"), "certification", rs.getString("certification"), "date", rs.getString("date") != null ? rs.getString("date") : "Unknown Date")
         );
         data.put("recentCertifications", recentCerts);
         return data;
@@ -271,23 +275,36 @@ public class AnalyticsService {
 
     public Map<String, Object> getLearningTrends(AnalyticsFilterRequest request) {
         Map<String, Object> data = new HashMap<>();
-        data.put("trendData", List.of(
-            Map.of("month", "Jan", "hours", 100),
-            Map.of("month", "Feb", "hours", 200)
-        ));
+        List<Map<String, Object>> trendData = jdbcTemplate.query(
+            "SELECT to_char(sa.created_at, 'Mon') as month, SUM(sa.actual_learning_hours) as hours FROM session_attendances sa JOIN students s ON sa.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "sa", false) + " GROUP BY to_char(sa.created_at, 'Mon'), date_trunc('month', sa.created_at) ORDER BY date_trunc('month', sa.created_at) ASC LIMIT 6",
+            (rs, rowNum) -> Map.of("month", rs.getString("month"), "hours", rs.getDouble("hours"))
+        );
+        data.put("trendData", trendData.isEmpty() ? List.of(Map.of("month", "No Data", "hours", 0.0)) : trendData);
         return data;
     }
 
     public Map<String, Object> getTrainingEffectiveness(AnalyticsFilterRequest request) {
         Map<String, Object> data = new HashMap<>();
         Double avgRating = jdbcTemplate.queryForObject("SELECT AVG(f.session_rating) FROM student_feedback f JOIN students s ON f.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "f", false), Double.class);
-        data.put("avgRating", avgRating != null ? Math.round(avgRating * 10.0) / 10.0 : 0.0);
-        data.put("npsScore", 78);
-        data.put("knowledgeRetention", 85);
+        double avgRatingVal = avgRating != null ? Math.round(avgRating * 10.0) / 10.0 : 0.0;
+        data.put("avgRating", avgRatingVal);
+        
+        Integer promoters = jdbcTemplate.queryForObject("SELECT COUNT(f.id) FROM student_feedback f JOIN students s ON f.student_id = s.id WHERE f.session_rating = 5" + buildFilterWhereClause(request, "s", "created_at", "f", true), Integer.class);
+        Integer totalResponses = jdbcTemplate.queryForObject("SELECT COUNT(f.id) FROM student_feedback f JOIN students s ON f.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "f", false), Integer.class);
+        Integer detractors = jdbcTemplate.queryForObject("SELECT COUNT(f.id) FROM student_feedback f JOIN students s ON f.student_id = s.id WHERE f.session_rating <= 3" + buildFilterWhereClause(request, "s", "created_at", "f", true), Integer.class);
+        
+        int nps = 0;
+        if (totalResponses != null && totalResponses > 0) {
+            nps = (int) Math.round(((promoters != null ? promoters : 0) * 100.0 / totalResponses) - ((detractors != null ? detractors : 0) * 100.0 / totalResponses));
+        }
+        data.put("npsScore", nps);
+        
+        int retention = (int) Math.round((avgRatingVal / 5.0) * 100.0);
+        data.put("knowledgeRetention", retention);
         
         List<Map<String, Object>> metrics = jdbcTemplate.query(
-            "SELECT f.course_id as name, AVG(f.session_rating) as score FROM student_feedback f JOIN students s ON f.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "f", false) + " GROUP BY f.course_id LIMIT 5",
-            (rs, rowNum) -> Map.of("name", rs.getString("name"), "score", rs.getDouble("score"))
+            "SELECT c.title as name, AVG(f.session_rating) as score FROM student_feedback f JOIN courses c ON f.course_id = c.id JOIN students s ON f.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "f", false) + " GROUP BY c.title LIMIT 5",
+            (rs, rowNum) -> Map.of("name", rs.getString("name") != null ? rs.getString("name") : "Unknown", "score", rs.getDouble("score"))
         );
         data.put("effectivenessMetrics", metrics);
         
@@ -301,8 +318,12 @@ public class AnalyticsService {
 
     public Map<String, Object> getLearningChampions(AnalyticsFilterRequest request) {
         Map<String, Object> data = new HashMap<>();
-        data.put("activeLearners", 100);
-        data.put("totalBadges", 250);
+        
+        Integer activeLearners = jdbcTemplate.queryForObject("SELECT COUNT(DISTINCT sa.student_id) FROM session_attendances sa JOIN students s ON sa.student_id = s.id WHERE sa.actual_learning_hours > 0" + buildFilterWhereClause(request, "s", "created_at", "sa", true), Integer.class);
+        data.put("activeLearners", activeLearners != null ? activeLearners : 0);
+        
+        Integer totalBadges = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM student_certifications sc JOIN students s ON sc.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "sc", false), Integer.class);
+        data.put("totalBadges", totalBadges != null ? totalBadges : 0);
         
         List<Map<String, Object>> champions = jdbcTemplate.query(
             "SELECT s.name, SUM(sa.actual_learning_hours) as hours FROM session_attendances sa JOIN students s ON sa.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "sa", false) + " GROUP BY s.name ORDER BY hours DESC LIMIT 5",
@@ -314,8 +335,20 @@ public class AnalyticsService {
 
     public Map<String, Object> getProjectInvestment(AnalyticsFilterRequest request) {
         Map<String, Object> data = new HashMap<>();
-        data.put("totalInvestment", 1250000);
-        data.put("roiPercentage", 350);
+        
+        Double learningHours = jdbcTemplate.queryForObject("SELECT SUM(sa.actual_learning_hours) FROM session_attendances sa JOIN students s ON sa.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "sa", false), Double.class);
+        double totalLearningHours = learningHours != null ? learningHours : 0.0;
+        
+        Integer totalCertifications = jdbcTemplate.queryForObject("SELECT COUNT(sc.id) FROM student_certifications sc JOIN students s ON sc.student_id = s.id" + buildFilterWhereClause(request, "s", "created_at", "sc", false), Integer.class);
+        
+        long investment = (long) (totalLearningHours * 50);
+        data.put("totalInvestment", investment);
+        
+        int roi = 0;
+        if (investment > 0) {
+            roi = (int) Math.round((((totalCertifications != null ? totalCertifications : 0) * 1000.0) / investment) * 100);
+        }
+        data.put("roiPercentage", roi);
         
         List<Map<String, Object>> projects = jdbcTemplate.query(
             "SELECT project as name, COUNT(*) as sessions FROM training_sessions WHERE project IS NOT NULL GROUP BY project LIMIT 5",
@@ -328,14 +361,24 @@ public class AnalyticsService {
     public Map<String, Object> getFresherJourney(AnalyticsFilterRequest request) {
         Map<String, Object> data = new HashMap<>();
         Integer freshersCount = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM students s WHERE s.employment_type = 'Fresher'" + buildFilterWhereClause(request, "s", "created_at", "s", true), Integer.class);
-        data.put("totalFreshers", freshersCount != null ? freshersCount : 0);
-        data.put("avgTimeToDeploy", 45); // mocked days
-        data.put("deploymentRate", 92);
+        int freshers = freshersCount != null ? freshersCount : 0;
+        data.put("totalFreshers", freshers);
+        
+        Double avgTimeToDeploy = jdbcTemplate.queryForObject("SELECT AVG(EXTRACT(DAY FROM (billable_deployment_date - joining_date))) FROM students s WHERE s.employment_type = 'Fresher'" + buildFilterWhereClause(request, "s", "created_at", "s", true), Double.class);
+        data.put("avgTimeToDeploy", avgTimeToDeploy != null ? Math.round(avgTimeToDeploy) : 0);
+        
+        Integer deployedFreshers = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM students s WHERE s.employment_type = 'Fresher' AND billable_deployment_date IS NOT NULL" + buildFilterWhereClause(request, "s", "created_at", "s", true), Integer.class);
+        Integer allocatedFreshers = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM students s WHERE s.employment_type = 'Fresher' AND project_allocation_date IS NOT NULL" + buildFilterWhereClause(request, "s", "created_at", "s", true), Integer.class);
+        
+        int deploymentRate = freshers > 0 ? (int) Math.round(((deployedFreshers != null ? deployedFreshers : 0) * 100.0) / freshers) : 0;
+        data.put("deploymentRate", deploymentRate);
+        
+        int allocatedRate = freshers > 0 ? (int) Math.round(((allocatedFreshers != null ? allocatedFreshers : 0) * 100.0) / freshers) : 0;
         
         data.put("journeyMilestones", List.of(
-            Map.of("milestone", "Bootcamp", "completion", 100),
-            Map.of("milestone", "Shadowing", "completion", 80),
-            Map.of("milestone", "Deployed", "completion", 60)
+            Map.of("milestone", "Bootcamp", "completion", freshers > 0 ? 100 : 0),
+            Map.of("milestone", "Shadowing", "completion", allocatedRate),
+            Map.of("milestone", "Deployed", "completion", deploymentRate)
         ));
         return data;
     }
