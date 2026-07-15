@@ -1,61 +1,161 @@
 import { useEffect, useMemo, useState } from "react";
-import { BATCH_STORAGE_KEY, INITIAL_BATCH_STATE } from "./batch.data.js";
+import { INITIAL_BATCH_STATE } from "./batch.data.js";
 
-function readState() {
-  try { return JSON.parse(localStorage.getItem(BATCH_STORAGE_KEY)) || INITIAL_BATCH_STATE; }
-  catch { return INITIAL_BATCH_STATE; }
+const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8080";
+const BASE_URL = `${baseUrl}/api/batches`;
+
+function getHeaders() {
+  return {
+    "Content-Type": "application/json",
+  };
 }
 
-function id(prefix) { return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`; }
-function joinCode() { return `${Math.random().toString(36).slice(2, 5)}-${Math.random().toString(36).slice(2, 5)}`.toUpperCase(); }
-
 export function useBatchStore() {
-  const [state, setState] = useState(readState);
-  useEffect(() => localStorage.setItem(BATCH_STORAGE_KEY, JSON.stringify(state)), [state]);
+  const [state, setState] = useState({
+    batches: [],
+    subjects: [],
+    announcements: [],
+    attendance: [],
+    discussions: [],
+    sessions: [],
+    loading: true
+  });
+
+  const fetchState = async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/state`, { headers: getHeaders() });
+      if (res.ok) {
+        const data = await res.json();
+        setState({ ...data, loading: false });
+      }
+    } catch (e) {
+      console.error("Failed to fetch batch state", e);
+      setState({ ...INITIAL_BATCH_STATE, loading: false });
+    }
+  };
+
+  useEffect(() => {
+    fetchState();
+  }, []);
 
   const actions = useMemo(() => ({
-    saveBatch(record) {
-      const saved = { ...record, id: record.id || id("batch"), joinCode: record.joinCode || joinCode() };
-      setState((current) => ({ ...current, batches: current.batches.some((item) => item.id === saved.id) ? current.batches.map((item) => item.id === saved.id ? saved : item) : [saved, ...current.batches] }));
-      return saved;
+    async saveBatch(record) {
+      try {
+        const res = await fetch(BASE_URL, {
+          method: "POST",
+          headers: getHeaders(),
+          body: JSON.stringify(record)
+        });
+        if (res.ok) await fetchState();
+      } catch (e) { console.error(e); }
     },
-    deleteBatch(batchId) {
-      setState((current) => ({ ...current, batches: current.batches.filter((item) => item.id !== batchId), announcements: current.announcements.filter((item) => item.batchId !== batchId), attendance: current.attendance.filter((item) => item.batchId !== batchId), discussions: current.discussions.filter((item) => item.batchId !== batchId), sessions: current.sessions.filter((item) => item.batchId !== batchId), subjects: current.subjects.map((subject) => ({ ...subject, assignedBatchIds: subject.assignedBatchIds.filter((id) => id !== batchId) })) }));
+    async deleteBatch(batchId) {
+      try {
+        const res = await fetch(`${BASE_URL}/${batchId}`, { method: "DELETE", headers: getHeaders() });
+        if (res.ok) await fetchState();
+      } catch (e) { console.error(e); }
     },
-    archiveBatch(batchId) { setState((current) => ({ ...current, batches: current.batches.map((item) => item.id === batchId ? { ...item, status: item.status === "Archived" ? "Active" : "Archived" } : item) })); },
-    regenerateJoinCode(batchId) { setState((current) => ({ ...current, batches: current.batches.map((item) => item.id === batchId ? { ...item, joinCode: joinCode(), joinCodeEnabled: true } : item) })); },
-    toggleJoinCode(batchId) { setState((current) => ({ ...current, batches: current.batches.map((item) => item.id === batchId ? { ...item, joinCodeEnabled: !item.joinCodeEnabled } : item) })); },
-    joinBatch(code, studentId) {
-      let result = { ok: false, error: "Join code not found." };
-      setState((current) => {
-        const match = current.batches.find((batch) => batch.joinCode.toLowerCase() === code.trim().toLowerCase());
-        if (!match) return current;
-        if (!match.joinCodeEnabled) { result = { ok: false, error: "This join code is disabled." }; return current; }
-        if (match.status !== "Active") { result = { ok: false, error: "This batch is archived." }; return current; }
-        if (match.studentIds.includes(studentId)) { result = { ok: false, error: "You already belong to this batch." }; return current; }
-        if (match.studentIds.length >= match.capacity) { result = { ok: false, error: "This batch is full." }; return current; }
-        result = { ok: true, batch: match };
-        return { ...current, batches: current.batches.map((batch) => batch.id === match.id ? { ...batch, studentIds: [...batch.studentIds, studentId] } : batch) };
-      });
-      return result;
+    async archiveBatch(batchId) {
+      try {
+        const res = await fetch(`${BASE_URL}/${batchId}/archive`, { method: "PUT", headers: getHeaders() });
+        if (res.ok) await fetchState();
+      } catch (e) { console.error(e); }
     },
-    saveSubject(record) {
-      const saved = { ...record, id: record.id || id("subject") };
-      setState((current) => ({ ...current, subjects: current.subjects.some((item) => item.id === saved.id) ? current.subjects.map((item) => item.id === saved.id ? saved : item) : [saved, ...current.subjects], batches: current.batches.map((batch) => ({ ...batch, subjectIds: saved.assignedBatchIds.includes(batch.id) ? [...new Set([...batch.subjectIds, saved.id])] : batch.subjectIds.filter((subjectId) => subjectId !== saved.id) })) }));
-      return saved;
+    async regenerateJoinCode(batchId) {
+      try {
+        const res = await fetch(`${BASE_URL}/${batchId}/join-code/regenerate`, { method: "PUT", headers: getHeaders() });
+        if (res.ok) await fetchState();
+      } catch (e) { console.error(e); }
     },
-    deleteSubject(subjectId) { setState((current) => ({ ...current, subjects: current.subjects.filter((item) => item.id !== subjectId), batches: current.batches.map((batch) => ({ ...batch, subjectIds: batch.subjectIds.filter((id) => id !== subjectId) })), discussions: current.discussions.filter((item) => item.subjectId !== subjectId) })); },
-    saveAnnouncement(record) {
-      const saved = { ...record, id: record.id || id("announcement"), createdAt: record.createdAt || new Date().toISOString() };
-      setState((current) => ({ ...current, announcements: current.announcements.some((item) => item.id === saved.id) ? current.announcements.map((item) => item.id === saved.id ? saved : item) : [saved, ...current.announcements] }));
+    async toggleJoinCode(batchId) {
+      try {
+        const res = await fetch(`${BASE_URL}/${batchId}/join-code/toggle`, { method: "PUT", headers: getHeaders() });
+        if (res.ok) await fetchState();
+      } catch (e) { console.error(e); }
     },
-    deleteAnnouncement(announcementId) { setState((current) => ({ ...current, announcements: current.announcements.filter((item) => item.id !== announcementId) })); },
-    saveAttendance(batchId, subjectId, date, statuses) {
-      setState((current) => { const existing = current.attendance.find((item) => item.batchId === batchId && item.date === date && item.subjectId === subjectId); const record = { id: existing?.id || id("attendance"), batchId, subjectId, date, statuses }; return { ...current, attendance: existing ? current.attendance.map((item) => item.id === existing.id ? record : item) : [record, ...current.attendance] }; });
+    async joinBatch(code, studentId) {
+      try {
+        const res = await fetch(`${BASE_URL}/join`, {
+          method: "POST",
+          headers: getHeaders(),
+          body: JSON.stringify({ code, studentId })
+        });
+        if (res.ok) {
+          const result = await res.json();
+          await fetchState();
+          return result;
+        }
+      } catch (e) { console.error(e); }
+      return { ok: false, error: "Network error" };
     },
-    createDiscussion(record) { setState((current) => ({ ...current, discussions: [{ ...record, id: id("discussion"), pinned: false, createdAt: new Date().toISOString(), replies: [] }, ...current.discussions] })); },
-    replyDiscussion(discussionId, reply) { setState((current) => ({ ...current, discussions: current.discussions.map((item) => item.id === discussionId ? { ...item, replies: [...item.replies, { ...reply, id: id("reply"), createdAt: new Date().toISOString() }] } : item) })); },
-    togglePin(discussionId) { setState((current) => ({ ...current, discussions: current.discussions.map((item) => item.id === discussionId ? { ...item, pinned: !item.pinned } : item) })); }
+    async saveSubject(record) {
+      try {
+        const res = await fetch(`${BASE_URL}/subjects`, {
+          method: "POST",
+          headers: getHeaders(),
+          body: JSON.stringify(record)
+        });
+        if (res.ok) await fetchState();
+      } catch (e) { console.error(e); }
+    },
+    async deleteSubject(subjectId) {
+      try {
+        const res = await fetch(`${BASE_URL}/subjects/${subjectId}`, { method: "DELETE", headers: getHeaders() });
+        if (res.ok) await fetchState();
+      } catch (e) { console.error(e); }
+    },
+    async saveAnnouncement(record) {
+      try {
+        const res = await fetch(`${BASE_URL}/announcements`, {
+          method: "POST",
+          headers: getHeaders(),
+          body: JSON.stringify(record)
+        });
+        if (res.ok) await fetchState();
+      } catch (e) { console.error(e); }
+    },
+    async deleteAnnouncement(announcementId) {
+      try {
+        const res = await fetch(`${BASE_URL}/announcements/${announcementId}`, { method: "DELETE", headers: getHeaders() });
+        if (res.ok) await fetchState();
+      } catch (e) { console.error(e); }
+    },
+    async saveAttendance(batchId, subjectId, date, statuses) {
+      try {
+        const res = await fetch(`${BASE_URL}/attendance`, {
+          method: "POST",
+          headers: getHeaders(),
+          body: JSON.stringify({ batchId, subjectId, date, statuses })
+        });
+        if (res.ok) await fetchState();
+      } catch (e) { console.error(e); }
+    },
+    async createDiscussion(record) {
+      try {
+        const res = await fetch(`${BASE_URL}/discussions`, {
+          method: "POST",
+          headers: getHeaders(),
+          body: JSON.stringify(record)
+        });
+        if (res.ok) await fetchState();
+      } catch (e) { console.error(e); }
+    },
+    async replyDiscussion(discussionId, reply) {
+      try {
+        const res = await fetch(`${BASE_URL}/discussions/${discussionId}/reply`, {
+          method: "POST",
+          headers: getHeaders(),
+          body: JSON.stringify(reply)
+        });
+        if (res.ok) await fetchState();
+      } catch (e) { console.error(e); }
+    },
+    async togglePin(discussionId) {
+      try {
+        const res = await fetch(`${BASE_URL}/discussions/${discussionId}/pin`, { method: "PUT", headers: getHeaders() });
+        if (res.ok) await fetchState();
+      } catch (e) { console.error(e); }
+    }
   }), []);
   return { state, ...actions };
 }

@@ -127,6 +127,7 @@ function TeacherAnalytics({ batchStore }) {
 }
 
 export default function TeacherBatchWorkspace({ mode, batchStore, assessmentStore, user, showToast, store }) {
+  if (batchStore.state.loading) return <section className="teacher-page"><div className="workspace-empty"><p>Loading batches...</p></div></section>;
   if (mode === "subjects") return <SubjectsPage batchStore={batchStore} showToast={showToast} />;
   if (mode === "calendar") return <TeacherCalendar batchStore={batchStore} assessmentStore={assessmentStore} store={store} />;
   if (mode === "analytics") return <TeacherAnalytics batchStore={batchStore} />;
