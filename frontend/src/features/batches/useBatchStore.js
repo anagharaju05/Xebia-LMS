@@ -5,9 +5,22 @@ const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8080";
 const BASE_URL = `${baseUrl}/api/batches`;
 
 function getHeaders() {
-  return {
+  const headers = {
     "Content-Type": "application/json",
+    "X-Organization-ID": "123e4567-e89b-12d3-a456-426614174000",
+    "X-User-Id": "admin-1",
+    "X-User-Role": "TEACHER"
   };
+  try {
+    const sessionStr = localStorage.getItem("xebia-lms-auth-session-v1");
+    if (sessionStr) {
+      const session = JSON.parse(sessionStr);
+      if (session.id) headers["X-User-Id"] = session.id;
+      if (session.role) headers["X-User-Role"] = session.role.toUpperCase();
+      if (session.organizationId) headers["X-Organization-ID"] = session.organizationId;
+    }
+  } catch (e) {}
+  return headers;
 }
 
 export function useBatchStore() {
@@ -27,6 +40,8 @@ export function useBatchStore() {
       if (res.ok) {
         const data = await res.json();
         setState({ ...data, loading: false });
+      } else {
+        throw new Error(`HTTP error! status: ${res.status}`);
       }
     } catch (e) {
       console.error("Failed to fetch batch state", e);
