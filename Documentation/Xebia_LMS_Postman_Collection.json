@@ -2,38 +2,37 @@
   "info": {
     "_postman_id": "b1a7d8c9-3a6b-4c2d-9e5f-1234567890ab",
     "name": "Xebia LMS API Testing",
-    "description": "Complete API testing suite with 20-payload datasets for load testing and validation.",
+    "description": "Complete API testing suite with 50-payload datasets for testing and validation.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Courses",
+      "name": "Authentication",
       "item": [
         {
-          "name": "Get All Courses",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/api/courses",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "courses"]
-            }
-          }
-        },
-        {
-          "name": "Create Course",
+          "name": "Auth Login",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Postman Load Course\",\n  \"description\": \"Load test\",\n  \"instructor\": \"Admin\",\n  \"tags\": [\"Test\"]\n}"
+              "raw": "{\n  \"email\": \"{{auth_email}}\",\n  \"password\": \"{{auth_password}}\",\n  \"role\": \"{{auth_role}}\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/courses",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "courses"]
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
             }
           }
         }
@@ -43,30 +42,95 @@
       "name": "Students",
       "item": [
         {
+          "name": "Create Student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{student_name}}\",\n  \"email\": \"{{student_email}}\",\n  \"cohort\": \"{{student_cohort}}\",\n  \"password\": \"{{student_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/management/students",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "management",
+                "students"
+              ]
+            }
+          }
+        },
+        {
           "name": "Get All Students",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/management/students",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "management", "students"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "management",
+                "students"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Courses",
+      "item": [
+        {
+          "name": "Create Course",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryId\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"trainerId\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"courseCode\": \"{{assignment_courseSlug}}\",\n  \"courseName\": \"{{subject_name}}\",\n  \"shortDescription\": \"{{subject_description}}\",\n  \"difficulty\": \"BEGINNER\",\n  \"status\": \"PUBLISHED\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/courses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "courses"
+              ]
             }
           }
         },
         {
-          "name": "Create Student",
+          "name": "Get All Courses",
           "request": {
-            "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Postman Student\",\n  \"email\": \"postman@load.com\",\n  \"password\": \"pass\",\n  \"cohort\": \"Batch X\",\n  \"courseSlugs\": []\n}"
-            },
+            "method": "GET",
+            "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/management/students",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "management", "students"]
+              "raw": "{{baseUrl}}/api/courses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "courses"
+              ]
             }
           }
         }
@@ -76,34 +140,146 @@
       "name": "Assessments",
       "item": [
         {
+          "name": "Create Assessment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"{{assessment_title}}\",\n  \"subject\": \"{{assessment_subject}}\",\n  \"type\": \"{{assessment_type}}\",\n  \"instructions\": \"{{assessment_instructions}}\",\n  \"dueAt\": \"{{assessment_dueAt}}\",\n  \"points\": {{assessment_points}},\n  \"assignmentScope\": \"{{assessment_assignmentScope}}\",\n  \"status\": \"{{assessment_status}}\",\n  \"language\": \"{{assessment_language}}\",\n  \"starterCode\": \"{{assessment_starterCode}}\",\n  \"quizFileName\": \"{{assessment_quizFileName}}\",\n  \"allowedFileTypes\": {{assessment_allowedFileTypes}},\n  \"attachmentName\": \"{{assessment_attachmentName}}\",\n  \"className\": \"{{assessment_className}}\",\n  \"teacherId\": \"{{assessment_teacherId}}\",\n  \"quizQuestions\": {{assessment_quizQuestions}},\n  \"testCases\": {{assessment_testCases}},\n  \"assignedBatchIds\": {{assessment_assignedBatchIds}},\n  \"assignedStudentIds\": {{assessment_assignedStudentIds}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/assessments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "assessments"
+              ]
+            }
+          }
+        },
+        {
           "name": "Get All Assessments",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/assessments",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "assessments"]
-            }
-          }
-        },
-        {
-          "name": "Create Assessment",
-          "request": {
-            "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"Postman Assessment\",\n  \"subject\": \"Test Subject\",\n  \"className\": \"Test Class\",\n  \"type\": \"quiz\",\n  \"points\": 10\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/assessments",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "assessments"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "assessments"
+              ]
             }
           }
         }
       ]
+    },
+    {
+      "name": "Assignments",
+      "item": [
+        {
+          "name": "Create Assignment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": \"{{assignment_studentId}}\",\n  \"courseSlug\": \"{{assignment_courseSlug}}\",\n  \"title\": \"{{assignment_title}}\",\n  \"instructions\": \"{{assignment_instructions}}\",\n  \"dueDate\": \"{{assignment_dueDate}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/management/students/assignments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "management",
+                "students",
+                "assignments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Assignments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/management/students/assignments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "management",
+                "students",
+                "assignments"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Discussions",
+      "item": [
+        {
+          "name": "Create Discussion",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subjectId\": \"{{discussion_subjectId}}\",\n  \"title\": \"{{discussion_title}}\",\n  \"body\": \"{{discussion_body}}\",\n  \"batchId\": \"{{discussion_batchId}}\",\n  \"author\": \"{{discussion_author}}\",\n  \"authorId\": \"{{discussion_authorId}}\",\n  \"role\": \"{{discussion_role}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/batches/discussions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "batches",
+                "discussions"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "exec": [
+          "pm.request.headers.upsert({ key: 'X-Organization-ID', value: '123e4567-e89b-12d3-a456-426614174000' });",
+          "pm.request.headers.upsert({ key: 'X-User-Id', value: 'load-tester' });",
+          "pm.request.headers.upsert({ key: 'X-User-Role', value: 'ADMIN' });"
+        ],
+        "type": "text/javascript"
+      }
     }
   ],
   "variable": [
