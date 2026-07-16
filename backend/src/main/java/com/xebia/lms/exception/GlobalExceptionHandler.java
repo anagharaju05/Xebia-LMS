@@ -68,11 +68,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({org.springframework.dao.DataIntegrityViolationException.class})
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(org.springframework.dao.DataIntegrityViolationException ex) {
+        String detailMessage = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage() : ex.getMessage();
         ErrorResponse response = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .message("Data integrity violation: Please check your input data constraints.")
+                .message("Data integrity violation: " + detailMessage)
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
