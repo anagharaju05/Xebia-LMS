@@ -42,7 +42,13 @@ export function useAssessmentStore() {
         ...current,
         assessments: (assessments || []).map(a => ({
           ...a,
-          teacherId: a.teacherId || "teacher-user-1"
+          teacherId: a.teacherId || "teacher-user-1",
+          testCases: (a.testCases || []).map(tc => ({
+            id: tc.id,
+            input: tc.input,
+            expected: tc.expectedOutput !== undefined ? tc.expectedOutput : (tc.expected || ""),
+            hidden: tc.isHidden !== undefined ? tc.isHidden : (tc.hidden || false)
+          }))
         })),
         questions: (questions || []).map(q => ({
           id: q.id,
@@ -127,8 +133,8 @@ export function useAssessmentStore() {
         testCases: (record.testCases || []).map(tc => ({
           id: ensureUUID(tc.id),
           input: tc.input,
-          expectedOutput: tc.expected,
-          isHidden: tc.hidden || false
+          expectedOutput: tc.expected !== undefined ? tc.expected : (tc.expectedOutput || ""),
+          isHidden: tc.hidden !== undefined ? tc.hidden : (tc.isHidden || false)
         })),
         assignedBatchIds: (record.assignedBatchIds || []).map(ensureUUID),
         assignedStudentIds: (record.assignedStudentIds || []).map(ensureUUID)
@@ -188,7 +194,16 @@ export function useAssessmentStore() {
       try {
         const fullRecord = state.assessments.find(a => a.id === id);
         if (fullRecord) {
-          const updated = { ...fullRecord, status };
+          const updated = {
+            ...fullRecord,
+            status,
+            testCases: (fullRecord.testCases || []).map(tc => ({
+              id: ensureUUID(tc.id),
+              input: tc.input,
+              expectedOutput: tc.expected !== undefined ? tc.expected : (tc.expectedOutput || ""),
+              isHidden: tc.hidden !== undefined ? tc.hidden : (tc.isHidden || false)
+            }))
+          };
           await api.put(`/api/assessments/${ensureUUID(id)}`, updated);
           await syncStore();
         }
