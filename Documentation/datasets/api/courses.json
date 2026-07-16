@@ -1,0 +1,502 @@
+[
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-1",
+    "courseName": "Subject Area 1",
+    "shortDescription": "Curriculum details for subject area 1",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-2",
+    "courseName": "Subject Area 2",
+    "shortDescription": "Curriculum details for subject area 2",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-3",
+    "courseName": "Subject Area 3",
+    "shortDescription": "Curriculum details for subject area 3",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-4",
+    "courseName": "Subject Area 4",
+    "shortDescription": "Curriculum details for subject area 4",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-5",
+    "courseName": "Subject Area 5",
+    "shortDescription": "Curriculum details for subject area 5",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-6",
+    "courseName": "Subject Area 6",
+    "shortDescription": "Curriculum details for subject area 6",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-7",
+    "courseName": "Subject Area 7",
+    "shortDescription": "Curriculum details for subject area 7",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-8",
+    "courseName": "Subject Area 8",
+    "shortDescription": "Curriculum details for subject area 8",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-9",
+    "courseName": "Subject Area 9",
+    "shortDescription": "Curriculum details for subject area 9",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-10",
+    "courseName": "Subject Area 10",
+    "shortDescription": "Curriculum details for subject area 10",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-11",
+    "courseName": "Subject Area 11",
+    "shortDescription": "Curriculum details for subject area 11",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-12",
+    "courseName": "Subject Area 12",
+    "shortDescription": "Curriculum details for subject area 12",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-13",
+    "courseName": "Subject Area 13",
+    "shortDescription": "Curriculum details for subject area 13",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-14",
+    "courseName": "Subject Area 14",
+    "shortDescription": "Curriculum details for subject area 14",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-15",
+    "courseName": "Subject Area 15",
+    "shortDescription": "Curriculum details for subject area 15",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-16",
+    "courseName": "Subject Area 16",
+    "shortDescription": "Curriculum details for subject area 16",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-17",
+    "courseName": "Subject Area 17",
+    "shortDescription": "Curriculum details for subject area 17",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-18",
+    "courseName": "Subject Area 18",
+    "shortDescription": "Curriculum details for subject area 18",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-19",
+    "courseName": "Subject Area 19",
+    "shortDescription": "Curriculum details for subject area 19",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-20",
+    "courseName": "Subject Area 20",
+    "shortDescription": "Curriculum details for subject area 20",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-21",
+    "courseName": "Subject Area 21",
+    "shortDescription": "Curriculum details for subject area 21",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-22",
+    "courseName": "Subject Area 22",
+    "shortDescription": "Curriculum details for subject area 22",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-23",
+    "courseName": "Subject Area 23",
+    "shortDescription": "Curriculum details for subject area 23",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-24",
+    "courseName": "Subject Area 24",
+    "shortDescription": "Curriculum details for subject area 24",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-25",
+    "courseName": "Subject Area 25",
+    "shortDescription": "Curriculum details for subject area 25",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-26",
+    "courseName": "Subject Area 26",
+    "shortDescription": "Curriculum details for subject area 26",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-27",
+    "courseName": "Subject Area 27",
+    "shortDescription": "Curriculum details for subject area 27",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-28",
+    "courseName": "Subject Area 28",
+    "shortDescription": "Curriculum details for subject area 28",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-29",
+    "courseName": "Subject Area 29",
+    "shortDescription": "Curriculum details for subject area 29",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-30",
+    "courseName": "Subject Area 30",
+    "shortDescription": "Curriculum details for subject area 30",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-31",
+    "courseName": "Subject Area 31",
+    "shortDescription": "Curriculum details for subject area 31",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-32",
+    "courseName": "Subject Area 32",
+    "shortDescription": "Curriculum details for subject area 32",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-33",
+    "courseName": "Subject Area 33",
+    "shortDescription": "Curriculum details for subject area 33",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-34",
+    "courseName": "Subject Area 34",
+    "shortDescription": "Curriculum details for subject area 34",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-35",
+    "courseName": "Subject Area 35",
+    "shortDescription": "Curriculum details for subject area 35",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-36",
+    "courseName": "Subject Area 36",
+    "shortDescription": "Curriculum details for subject area 36",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-37",
+    "courseName": "Subject Area 37",
+    "shortDescription": "Curriculum details for subject area 37",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-38",
+    "courseName": "Subject Area 38",
+    "shortDescription": "Curriculum details for subject area 38",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-39",
+    "courseName": "Subject Area 39",
+    "shortDescription": "Curriculum details for subject area 39",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-40",
+    "courseName": "Subject Area 40",
+    "shortDescription": "Curriculum details for subject area 40",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-41",
+    "courseName": "Subject Area 41",
+    "shortDescription": "Curriculum details for subject area 41",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-42",
+    "courseName": "Subject Area 42",
+    "shortDescription": "Curriculum details for subject area 42",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-43",
+    "courseName": "Subject Area 43",
+    "shortDescription": "Curriculum details for subject area 43",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-44",
+    "courseName": "Subject Area 44",
+    "shortDescription": "Curriculum details for subject area 44",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-45",
+    "courseName": "Subject Area 45",
+    "shortDescription": "Curriculum details for subject area 45",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-46",
+    "courseName": "Subject Area 46",
+    "shortDescription": "Curriculum details for subject area 46",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-47",
+    "courseName": "Subject Area 47",
+    "shortDescription": "Curriculum details for subject area 47",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-48",
+    "courseName": "Subject Area 48",
+    "shortDescription": "Curriculum details for subject area 48",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-49",
+    "courseName": "Subject Area 49",
+    "shortDescription": "Curriculum details for subject area 49",
+    "difficulty": "BEGINNER",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  },
+  {
+    "categoryId": "123e4567-e89b-12d3-a456-426614174000",
+    "trainerId": "123e4567-e89b-12d3-a456-426614174000",
+    "courseCode": "course-slug-50",
+    "courseName": "Subject Area 50",
+    "shortDescription": "Curriculum details for subject area 50",
+    "difficulty": "INTERMEDIATE",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "status": "DRAFT"
+  }
+]

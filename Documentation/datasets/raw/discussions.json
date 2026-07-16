@@ -1,0 +1,452 @@
+[
+  {
+    "title": "Discussion Topic 1",
+    "body": "What are your thoughts on chapter 1 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 2",
+    "body": "What are your thoughts on chapter 2 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 3",
+    "body": "What are your thoughts on chapter 3 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 4",
+    "body": "What are your thoughts on chapter 4 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 5",
+    "body": "What are your thoughts on chapter 5 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 6",
+    "body": "What are your thoughts on chapter 6 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 7",
+    "body": "What are your thoughts on chapter 7 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 8",
+    "body": "What are your thoughts on chapter 8 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 9",
+    "body": "What are your thoughts on chapter 9 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 10",
+    "body": "What are your thoughts on chapter 10 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 11",
+    "body": "What are your thoughts on chapter 11 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 12",
+    "body": "What are your thoughts on chapter 12 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 13",
+    "body": "What are your thoughts on chapter 13 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 14",
+    "body": "What are your thoughts on chapter 14 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 15",
+    "body": "What are your thoughts on chapter 15 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 16",
+    "body": "What are your thoughts on chapter 16 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 17",
+    "body": "What are your thoughts on chapter 17 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 18",
+    "body": "What are your thoughts on chapter 18 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 19",
+    "body": "What are your thoughts on chapter 19 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 20",
+    "body": "What are your thoughts on chapter 20 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 21",
+    "body": "What are your thoughts on chapter 21 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 22",
+    "body": "What are your thoughts on chapter 22 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 23",
+    "body": "What are your thoughts on chapter 23 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 24",
+    "body": "What are your thoughts on chapter 24 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 25",
+    "body": "What are your thoughts on chapter 25 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 26",
+    "body": "What are your thoughts on chapter 26 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 27",
+    "body": "What are your thoughts on chapter 27 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 28",
+    "body": "What are your thoughts on chapter 28 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 29",
+    "body": "What are your thoughts on chapter 29 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 30",
+    "body": "What are your thoughts on chapter 30 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 31",
+    "body": "What are your thoughts on chapter 31 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 32",
+    "body": "What are your thoughts on chapter 32 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 33",
+    "body": "What are your thoughts on chapter 33 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 34",
+    "body": "What are your thoughts on chapter 34 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 35",
+    "body": "What are your thoughts on chapter 35 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 36",
+    "body": "What are your thoughts on chapter 36 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 37",
+    "body": "What are your thoughts on chapter 37 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 38",
+    "body": "What are your thoughts on chapter 38 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 39",
+    "body": "What are your thoughts on chapter 39 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 40",
+    "body": "What are your thoughts on chapter 40 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 41",
+    "body": "What are your thoughts on chapter 41 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 42",
+    "body": "What are your thoughts on chapter 42 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 43",
+    "body": "What are your thoughts on chapter 43 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 44",
+    "body": "What are your thoughts on chapter 44 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 45",
+    "body": "What are your thoughts on chapter 45 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 46",
+    "body": "What are your thoughts on chapter 46 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 47",
+    "body": "What are your thoughts on chapter 47 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 48",
+    "body": "What are your thoughts on chapter 48 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 49",
+    "body": "What are your thoughts on chapter 49 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  },
+  {
+    "title": "Discussion Topic 50",
+    "body": "What are your thoughts on chapter 50 assignment?",
+    "subjectId": "subject-java",
+    "batchId": "batch-backend-7",
+    "author": "Meera Thomas",
+    "authorId": "teacher-user-1",
+    "role": "Teacher"
+  }
+]

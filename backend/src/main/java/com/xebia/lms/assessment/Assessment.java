@@ -61,6 +61,12 @@ public class Assessment {
     @Column(name = "attachment_name")
     private String attachmentName;
 
+    @Column(name = "class_name")
+    private String className;
+
+    @Column(name = "teacher_id")
+    private String teacherId;
+
     @ElementCollection
     @CollectionTable(name = "assessment_allowed_file_types", joinColumns = @JoinColumn(name = "assessment_id"))
     @Column(name = "file_type")

@@ -1,0 +1,352 @@
+[
+  {
+    "studentId": "4d8126e7-5a2e-4871-aab3-b947013cb1c6",
+    "courseSlug": "course-slug-1",
+    "title": "Practical Homework 1",
+    "instructions": "Complete all exercises in lab sheet 1",
+    "dueDate": "2026-07-24T12:53:20.000Z"
+  },
+  {
+    "studentId": "e469f52a-a16e-48ec-baed-192901fc54be",
+    "courseSlug": "course-slug-2",
+    "title": "Practical Homework 2",
+    "instructions": "Complete all exercises in lab sheet 2",
+    "dueDate": "2026-07-25T12:53:20.000Z"
+  },
+  {
+    "studentId": "b30ddf45-b99e-4ac9-bdd1-054db6279b6b",
+    "courseSlug": "course-slug-3",
+    "title": "Practical Homework 3",
+    "instructions": "Complete all exercises in lab sheet 3",
+    "dueDate": "2026-07-26T12:53:20.000Z"
+  },
+  {
+    "studentId": "487597c1-1c70-4566-a38d-4a85c85e2c6f",
+    "courseSlug": "course-slug-4",
+    "title": "Practical Homework 4",
+    "instructions": "Complete all exercises in lab sheet 4",
+    "dueDate": "2026-07-27T12:53:20.000Z"
+  },
+  {
+    "studentId": "c00030ee-9f4f-4640-82e7-ba5a143e1407",
+    "courseSlug": "course-slug-5",
+    "title": "Practical Homework 5",
+    "instructions": "Complete all exercises in lab sheet 5",
+    "dueDate": "2026-07-28T12:53:20.000Z"
+  },
+  {
+    "studentId": "fb775283-2f4a-4f4f-94c0-4a9fba9c1759",
+    "courseSlug": "course-slug-6",
+    "title": "Practical Homework 6",
+    "instructions": "Complete all exercises in lab sheet 6",
+    "dueDate": "2026-07-29T12:53:20.000Z"
+  },
+  {
+    "studentId": "1ff828c9-b643-45c9-abc8-cff891db88c3",
+    "courseSlug": "course-slug-7",
+    "title": "Practical Homework 7",
+    "instructions": "Complete all exercises in lab sheet 7",
+    "dueDate": "2026-07-30T12:53:20.000Z"
+  },
+  {
+    "studentId": "8d448cd7-fac0-44a7-a5c7-de6794c9074d",
+    "courseSlug": "course-slug-8",
+    "title": "Practical Homework 8",
+    "instructions": "Complete all exercises in lab sheet 8",
+    "dueDate": "2026-07-31T12:53:20.000Z"
+  },
+  {
+    "studentId": "05266fff-1d68-4996-abb9-fc3c9223157b",
+    "courseSlug": "course-slug-9",
+    "title": "Practical Homework 9",
+    "instructions": "Complete all exercises in lab sheet 9",
+    "dueDate": "2026-08-01T12:53:20.000Z"
+  },
+  {
+    "studentId": "bc7b18a5-8cb9-427e-84a6-2a2cd0c2478b",
+    "courseSlug": "course-slug-10",
+    "title": "Practical Homework 10",
+    "instructions": "Complete all exercises in lab sheet 10",
+    "dueDate": "2026-08-02T12:53:20.000Z"
+  },
+  {
+    "studentId": "a56778e8-f79d-4caa-af68-b57ae3b31146",
+    "courseSlug": "course-slug-11",
+    "title": "Practical Homework 11",
+    "instructions": "Complete all exercises in lab sheet 11",
+    "dueDate": "2026-08-03T12:53:20.000Z"
+  },
+  {
+    "studentId": "7eebe1d4-93a1-4b06-b137-b59319af374a",
+    "courseSlug": "course-slug-12",
+    "title": "Practical Homework 12",
+    "instructions": "Complete all exercises in lab sheet 12",
+    "dueDate": "2026-08-04T12:53:20.000Z"
+  },
+  {
+    "studentId": "4110fe49-fdc6-4972-a0a9-24da5148bdac",
+    "courseSlug": "course-slug-13",
+    "title": "Practical Homework 13",
+    "instructions": "Complete all exercises in lab sheet 13",
+    "dueDate": "2026-08-05T12:53:20.000Z"
+  },
+  {
+    "studentId": "18283a73-dcb5-4e4d-94d2-981f9d6d9ebc",
+    "courseSlug": "course-slug-14",
+    "title": "Practical Homework 14",
+    "instructions": "Complete all exercises in lab sheet 14",
+    "dueDate": "2026-08-06T12:53:20.000Z"
+  },
+  {
+    "studentId": "fbc541eb-82c4-41d9-af54-5044a7e8eba8",
+    "courseSlug": "course-slug-15",
+    "title": "Practical Homework 15",
+    "instructions": "Complete all exercises in lab sheet 15",
+    "dueDate": "2026-08-07T12:53:20.000Z"
+  },
+  {
+    "studentId": "9daca72c-7e6f-4f34-951d-119f99b8851c",
+    "courseSlug": "course-slug-16",
+    "title": "Practical Homework 16",
+    "instructions": "Complete all exercises in lab sheet 16",
+    "dueDate": "2026-08-08T12:53:20.000Z"
+  },
+  {
+    "studentId": "d54da8a8-5ed0-4e94-a009-e9d18779be06",
+    "courseSlug": "course-slug-17",
+    "title": "Practical Homework 17",
+    "instructions": "Complete all exercises in lab sheet 17",
+    "dueDate": "2026-08-09T12:53:20.000Z"
+  },
+  {
+    "studentId": "5d82e442-aa6f-45ff-9a73-029b2d95d627",
+    "courseSlug": "course-slug-18",
+    "title": "Practical Homework 18",
+    "instructions": "Complete all exercises in lab sheet 18",
+    "dueDate": "2026-08-10T12:53:20.000Z"
+  },
+  {
+    "studentId": "3f8c0a8b-b6c5-42d6-9ade-491b26d4de87",
+    "courseSlug": "course-slug-19",
+    "title": "Practical Homework 19",
+    "instructions": "Complete all exercises in lab sheet 19",
+    "dueDate": "2026-08-11T12:53:20.000Z"
+  },
+  {
+    "studentId": "af95fede-45e3-4d69-8383-5aabf15936f4",
+    "courseSlug": "course-slug-20",
+    "title": "Practical Homework 20",
+    "instructions": "Complete all exercises in lab sheet 20",
+    "dueDate": "2026-08-12T12:53:20.000Z"
+  },
+  {
+    "studentId": "9ee2b1ae-da45-48a2-b5ae-3b9debe70315",
+    "courseSlug": "course-slug-21",
+    "title": "Practical Homework 21",
+    "instructions": "Complete all exercises in lab sheet 21",
+    "dueDate": "2026-08-13T12:53:20.000Z"
+  },
+  {
+    "studentId": "8226144c-988b-4771-83c8-a63740709cdd",
+    "courseSlug": "course-slug-22",
+    "title": "Practical Homework 22",
+    "instructions": "Complete all exercises in lab sheet 22",
+    "dueDate": "2026-08-14T12:53:20.000Z"
+  },
+  {
+    "studentId": "ac5b51d3-4a7e-4cd4-9518-88c5e2e0c125",
+    "courseSlug": "course-slug-23",
+    "title": "Practical Homework 23",
+    "instructions": "Complete all exercises in lab sheet 23",
+    "dueDate": "2026-08-15T12:53:20.000Z"
+  },
+  {
+    "studentId": "4c148e12-ca73-4d83-8545-bebe938dbaa5",
+    "courseSlug": "course-slug-24",
+    "title": "Practical Homework 24",
+    "instructions": "Complete all exercises in lab sheet 24",
+    "dueDate": "2026-08-16T12:53:20.000Z"
+  },
+  {
+    "studentId": "d05dbdbb-72e1-4052-9de5-15190ff56cc1",
+    "courseSlug": "course-slug-25",
+    "title": "Practical Homework 25",
+    "instructions": "Complete all exercises in lab sheet 25",
+    "dueDate": "2026-08-17T12:53:20.000Z"
+  },
+  {
+    "studentId": "d1556de6-587a-4c87-90ff-e6f94c4d0b00",
+    "courseSlug": "course-slug-26",
+    "title": "Practical Homework 26",
+    "instructions": "Complete all exercises in lab sheet 26",
+    "dueDate": "2026-08-18T12:53:20.000Z"
+  },
+  {
+    "studentId": "c592ed9a-617d-41b1-ae9b-49978a487802",
+    "courseSlug": "course-slug-27",
+    "title": "Practical Homework 27",
+    "instructions": "Complete all exercises in lab sheet 27",
+    "dueDate": "2026-08-19T12:53:20.000Z"
+  },
+  {
+    "studentId": "ce2e0905-c550-45cc-847b-eae219939745",
+    "courseSlug": "course-slug-28",
+    "title": "Practical Homework 28",
+    "instructions": "Complete all exercises in lab sheet 28",
+    "dueDate": "2026-08-20T12:53:20.000Z"
+  },
+  {
+    "studentId": "91cd4da3-0448-40fc-83b3-7b3276ad5d2a",
+    "courseSlug": "course-slug-29",
+    "title": "Practical Homework 29",
+    "instructions": "Complete all exercises in lab sheet 29",
+    "dueDate": "2026-08-21T12:53:20.000Z"
+  },
+  {
+    "studentId": "ef82b1ec-f3f8-4d3e-bd13-b62272c725cd",
+    "courseSlug": "course-slug-30",
+    "title": "Practical Homework 30",
+    "instructions": "Complete all exercises in lab sheet 30",
+    "dueDate": "2026-08-22T12:53:20.000Z"
+  },
+  {
+    "studentId": "4e4191e6-dd52-4e77-82b8-b33e95c7ca03",
+    "courseSlug": "course-slug-31",
+    "title": "Practical Homework 31",
+    "instructions": "Complete all exercises in lab sheet 31",
+    "dueDate": "2026-08-23T12:53:20.000Z"
+  },
+  {
+    "studentId": "d5156cda-889f-495a-ac0e-0bc9e7e624e2",
+    "courseSlug": "course-slug-32",
+    "title": "Practical Homework 32",
+    "instructions": "Complete all exercises in lab sheet 32",
+    "dueDate": "2026-08-24T12:53:20.000Z"
+  },
+  {
+    "studentId": "e29c8fab-dd08-457e-bdca-83818d1cc24c",
+    "courseSlug": "course-slug-33",
+    "title": "Practical Homework 33",
+    "instructions": "Complete all exercises in lab sheet 33",
+    "dueDate": "2026-08-25T12:53:20.000Z"
+  },
+  {
+    "studentId": "62189b8f-7731-4b6c-a6a9-c71b9329d2ba",
+    "courseSlug": "course-slug-34",
+    "title": "Practical Homework 34",
+    "instructions": "Complete all exercises in lab sheet 34",
+    "dueDate": "2026-08-26T12:53:20.000Z"
+  },
+  {
+    "studentId": "3f4d2339-7abe-4559-bf75-7f87592b99db",
+    "courseSlug": "course-slug-35",
+    "title": "Practical Homework 35",
+    "instructions": "Complete all exercises in lab sheet 35",
+    "dueDate": "2026-08-27T12:53:20.000Z"
+  },
+  {
+    "studentId": "14d700a5-0fad-45e7-b519-95e224bfbcfe",
+    "courseSlug": "course-slug-36",
+    "title": "Practical Homework 36",
+    "instructions": "Complete all exercises in lab sheet 36",
+    "dueDate": "2026-08-28T12:53:20.000Z"
+  },
+  {
+    "studentId": "973f8caa-ca69-40f1-95a5-c359f8e7600d",
+    "courseSlug": "course-slug-37",
+    "title": "Practical Homework 37",
+    "instructions": "Complete all exercises in lab sheet 37",
+    "dueDate": "2026-08-29T12:53:20.000Z"
+  },
+  {
+    "studentId": "4f514c61-2ee4-4f80-abaf-759ac599c9ba",
+    "courseSlug": "course-slug-38",
+    "title": "Practical Homework 38",
+    "instructions": "Complete all exercises in lab sheet 38",
+    "dueDate": "2026-08-30T12:53:20.000Z"
+  },
+  {
+    "studentId": "72c44a77-bfc8-4b05-8b7b-7f631b509e98",
+    "courseSlug": "course-slug-39",
+    "title": "Practical Homework 39",
+    "instructions": "Complete all exercises in lab sheet 39",
+    "dueDate": "2026-08-31T12:53:20.000Z"
+  },
+  {
+    "studentId": "349cba5e-cab8-4a02-94fb-d9d742b927a8",
+    "courseSlug": "course-slug-40",
+    "title": "Practical Homework 40",
+    "instructions": "Complete all exercises in lab sheet 40",
+    "dueDate": "2026-09-01T12:53:20.000Z"
+  },
+  {
+    "studentId": "000b87cb-aa5f-4b92-bfea-45aada18a79e",
+    "courseSlug": "course-slug-41",
+    "title": "Practical Homework 41",
+    "instructions": "Complete all exercises in lab sheet 41",
+    "dueDate": "2026-09-02T12:53:20.000Z"
+  },
+  {
+    "studentId": "3ddff411-f19a-4bce-bbc4-3095cf45bd94",
+    "courseSlug": "course-slug-42",
+    "title": "Practical Homework 42",
+    "instructions": "Complete all exercises in lab sheet 42",
+    "dueDate": "2026-09-03T12:53:20.000Z"
+  },
+  {
+    "studentId": "74d4d751-9fc7-484c-a29b-dde6b98e5095",
+    "courseSlug": "course-slug-43",
+    "title": "Practical Homework 43",
+    "instructions": "Complete all exercises in lab sheet 43",
+    "dueDate": "2026-09-04T12:53:20.000Z"
+  },
+  {
+    "studentId": "eddc39d0-94cf-4510-82d3-32562d78980d",
+    "courseSlug": "course-slug-44",
+    "title": "Practical Homework 44",
+    "instructions": "Complete all exercises in lab sheet 44",
+    "dueDate": "2026-09-05T12:53:20.000Z"
+  },
+  {
+    "studentId": "6aac1183-d402-4743-9a18-3ff380759a37",
+    "courseSlug": "course-slug-45",
+    "title": "Practical Homework 45",
+    "instructions": "Complete all exercises in lab sheet 45",
+    "dueDate": "2026-09-06T12:53:20.000Z"
+  },
+  {
+    "studentId": "5648598e-88bf-4bef-92f3-0fad4879a184",
+    "courseSlug": "course-slug-46",
+    "title": "Practical Homework 46",
+    "instructions": "Complete all exercises in lab sheet 46",
+    "dueDate": "2026-09-07T12:53:20.000Z"
+  },
+  {
+    "studentId": "63dda816-d6fc-4c96-9ead-e28ffa2ad631",
+    "courseSlug": "course-slug-47",
+    "title": "Practical Homework 47",
+    "instructions": "Complete all exercises in lab sheet 47",
+    "dueDate": "2026-09-08T12:53:20.000Z"
+  },
+  {
+    "studentId": "6533bba8-f958-466f-8b18-6a7176528203",
+    "courseSlug": "course-slug-48",
+    "title": "Practical Homework 48",
+    "instructions": "Complete all exercises in lab sheet 48",
+    "dueDate": "2026-09-09T12:53:20.000Z"
+  },
+  {
+    "studentId": "0fc478b8-3c9f-451e-91aa-701219a3c416",
+    "courseSlug": "course-slug-49",
+    "title": "Practical Homework 49",
+    "instructions": "Complete all exercises in lab sheet 49",
+    "dueDate": "2026-09-10T12:53:20.000Z"
+  },
+  {
+    "studentId": "9f949544-2062-4502-9b4c-c8c189b99fb8",
+    "courseSlug": "course-slug-50",
+    "title": "Practical Homework 50",
+    "instructions": "Complete all exercises in lab sheet 50",
+    "dueDate": "2026-09-11T12:53:20.000Z"
+  }
+]

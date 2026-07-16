@@ -1,0 +1,1502 @@
+[
+  {
+    "title": "Load Test Assessment 1",
+    "subject": "Subject Code 1",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_1.pdf",
+    "className": "Backend Engineering - Cohort 1",
+    "dueAt": "2026-07-24T18:00",
+    "instructions": "Complete task description for assignment 1",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-1",
+        "expectedOutput": "output-1",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 2",
+    "subject": "Subject Code 2",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_2.pdf",
+    "className": "Backend Engineering - Cohort 2",
+    "dueAt": "2026-07-25T18:00",
+    "instructions": "Complete task description for assignment 2",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-2",
+        "expectedOutput": "output-2",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 3",
+    "subject": "Subject Code 3",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_3.pdf",
+    "className": "Backend Engineering - Cohort 3",
+    "dueAt": "2026-07-26T18:00",
+    "instructions": "Complete task description for assignment 3",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-3",
+        "expectedOutput": "output-3",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 4",
+    "subject": "Subject Code 4",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_4.pdf",
+    "className": "Backend Engineering - Cohort 4",
+    "dueAt": "2026-07-27T18:00",
+    "instructions": "Complete task description for assignment 4",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-4",
+        "expectedOutput": "output-4",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 5",
+    "subject": "Subject Code 5",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_5.pdf",
+    "className": "Backend Engineering - Cohort 5",
+    "dueAt": "2026-07-28T18:00",
+    "instructions": "Complete task description for assignment 5",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-5",
+        "expectedOutput": "output-5",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 6",
+    "subject": "Subject Code 6",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_6.pdf",
+    "className": "Backend Engineering - Cohort 6",
+    "dueAt": "2026-07-29T18:00",
+    "instructions": "Complete task description for assignment 6",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-6",
+        "expectedOutput": "output-6",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 7",
+    "subject": "Subject Code 7",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_7.pdf",
+    "className": "Backend Engineering - Cohort 7",
+    "dueAt": "2026-07-30T18:00",
+    "instructions": "Complete task description for assignment 7",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-7",
+        "expectedOutput": "output-7",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 8",
+    "subject": "Subject Code 8",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_8.pdf",
+    "className": "Backend Engineering - Cohort 8",
+    "dueAt": "2026-07-31T18:00",
+    "instructions": "Complete task description for assignment 8",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-8",
+        "expectedOutput": "output-8",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 9",
+    "subject": "Subject Code 9",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_9.pdf",
+    "className": "Backend Engineering - Cohort 9",
+    "dueAt": "2026-08-01T18:00",
+    "instructions": "Complete task description for assignment 9",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-9",
+        "expectedOutput": "output-9",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 10",
+    "subject": "Subject Code 10",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_10.pdf",
+    "className": "Backend Engineering - Cohort 10",
+    "dueAt": "2026-08-02T18:00",
+    "instructions": "Complete task description for assignment 10",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-10",
+        "expectedOutput": "output-10",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 11",
+    "subject": "Subject Code 11",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_11.pdf",
+    "className": "Backend Engineering - Cohort 11",
+    "dueAt": "2026-08-03T18:00",
+    "instructions": "Complete task description for assignment 11",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-11",
+        "expectedOutput": "output-11",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 12",
+    "subject": "Subject Code 12",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_12.pdf",
+    "className": "Backend Engineering - Cohort 12",
+    "dueAt": "2026-08-04T18:00",
+    "instructions": "Complete task description for assignment 12",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-12",
+        "expectedOutput": "output-12",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 13",
+    "subject": "Subject Code 13",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_13.pdf",
+    "className": "Backend Engineering - Cohort 13",
+    "dueAt": "2026-08-05T18:00",
+    "instructions": "Complete task description for assignment 13",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-13",
+        "expectedOutput": "output-13",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 14",
+    "subject": "Subject Code 14",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_14.pdf",
+    "className": "Backend Engineering - Cohort 14",
+    "dueAt": "2026-08-06T18:00",
+    "instructions": "Complete task description for assignment 14",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-14",
+        "expectedOutput": "output-14",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 15",
+    "subject": "Subject Code 15",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_15.pdf",
+    "className": "Backend Engineering - Cohort 15",
+    "dueAt": "2026-08-07T18:00",
+    "instructions": "Complete task description for assignment 15",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-15",
+        "expectedOutput": "output-15",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 16",
+    "subject": "Subject Code 16",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_16.pdf",
+    "className": "Backend Engineering - Cohort 16",
+    "dueAt": "2026-08-08T18:00",
+    "instructions": "Complete task description for assignment 16",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-16",
+        "expectedOutput": "output-16",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 17",
+    "subject": "Subject Code 17",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_17.pdf",
+    "className": "Backend Engineering - Cohort 17",
+    "dueAt": "2026-08-09T18:00",
+    "instructions": "Complete task description for assignment 17",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-17",
+        "expectedOutput": "output-17",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 18",
+    "subject": "Subject Code 18",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_18.pdf",
+    "className": "Backend Engineering - Cohort 18",
+    "dueAt": "2026-08-10T18:00",
+    "instructions": "Complete task description for assignment 18",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-18",
+        "expectedOutput": "output-18",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 19",
+    "subject": "Subject Code 19",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_19.pdf",
+    "className": "Backend Engineering - Cohort 19",
+    "dueAt": "2026-08-11T18:00",
+    "instructions": "Complete task description for assignment 19",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-19",
+        "expectedOutput": "output-19",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 20",
+    "subject": "Subject Code 20",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_20.pdf",
+    "className": "Backend Engineering - Cohort 20",
+    "dueAt": "2026-08-12T18:00",
+    "instructions": "Complete task description for assignment 20",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-20",
+        "expectedOutput": "output-20",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 21",
+    "subject": "Subject Code 21",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_21.pdf",
+    "className": "Backend Engineering - Cohort 21",
+    "dueAt": "2026-08-13T18:00",
+    "instructions": "Complete task description for assignment 21",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-21",
+        "expectedOutput": "output-21",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 22",
+    "subject": "Subject Code 22",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_22.pdf",
+    "className": "Backend Engineering - Cohort 22",
+    "dueAt": "2026-08-14T18:00",
+    "instructions": "Complete task description for assignment 22",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-22",
+        "expectedOutput": "output-22",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 23",
+    "subject": "Subject Code 23",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_23.pdf",
+    "className": "Backend Engineering - Cohort 23",
+    "dueAt": "2026-08-15T18:00",
+    "instructions": "Complete task description for assignment 23",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-23",
+        "expectedOutput": "output-23",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 24",
+    "subject": "Subject Code 24",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_24.pdf",
+    "className": "Backend Engineering - Cohort 24",
+    "dueAt": "2026-08-16T18:00",
+    "instructions": "Complete task description for assignment 24",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-24",
+        "expectedOutput": "output-24",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 25",
+    "subject": "Subject Code 25",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_25.pdf",
+    "className": "Backend Engineering - Cohort 25",
+    "dueAt": "2026-08-17T18:00",
+    "instructions": "Complete task description for assignment 25",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-25",
+        "expectedOutput": "output-25",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 26",
+    "subject": "Subject Code 26",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_26.pdf",
+    "className": "Backend Engineering - Cohort 26",
+    "dueAt": "2026-08-18T18:00",
+    "instructions": "Complete task description for assignment 26",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-26",
+        "expectedOutput": "output-26",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 27",
+    "subject": "Subject Code 27",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_27.pdf",
+    "className": "Backend Engineering - Cohort 27",
+    "dueAt": "2026-08-19T18:00",
+    "instructions": "Complete task description for assignment 27",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-27",
+        "expectedOutput": "output-27",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 28",
+    "subject": "Subject Code 28",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_28.pdf",
+    "className": "Backend Engineering - Cohort 28",
+    "dueAt": "2026-08-20T18:00",
+    "instructions": "Complete task description for assignment 28",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-28",
+        "expectedOutput": "output-28",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 29",
+    "subject": "Subject Code 29",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_29.pdf",
+    "className": "Backend Engineering - Cohort 29",
+    "dueAt": "2026-08-21T18:00",
+    "instructions": "Complete task description for assignment 29",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-29",
+        "expectedOutput": "output-29",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 30",
+    "subject": "Subject Code 30",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_30.pdf",
+    "className": "Backend Engineering - Cohort 30",
+    "dueAt": "2026-08-22T18:00",
+    "instructions": "Complete task description for assignment 30",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-30",
+        "expectedOutput": "output-30",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 31",
+    "subject": "Subject Code 31",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_31.pdf",
+    "className": "Backend Engineering - Cohort 31",
+    "dueAt": "2026-08-23T18:00",
+    "instructions": "Complete task description for assignment 31",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-31",
+        "expectedOutput": "output-31",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 32",
+    "subject": "Subject Code 32",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_32.pdf",
+    "className": "Backend Engineering - Cohort 32",
+    "dueAt": "2026-08-24T18:00",
+    "instructions": "Complete task description for assignment 32",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-32",
+        "expectedOutput": "output-32",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 33",
+    "subject": "Subject Code 33",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_33.pdf",
+    "className": "Backend Engineering - Cohort 33",
+    "dueAt": "2026-08-25T18:00",
+    "instructions": "Complete task description for assignment 33",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-33",
+        "expectedOutput": "output-33",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 34",
+    "subject": "Subject Code 34",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_34.pdf",
+    "className": "Backend Engineering - Cohort 34",
+    "dueAt": "2026-08-26T18:00",
+    "instructions": "Complete task description for assignment 34",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-34",
+        "expectedOutput": "output-34",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 35",
+    "subject": "Subject Code 35",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_35.pdf",
+    "className": "Backend Engineering - Cohort 35",
+    "dueAt": "2026-08-27T18:00",
+    "instructions": "Complete task description for assignment 35",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-35",
+        "expectedOutput": "output-35",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 36",
+    "subject": "Subject Code 36",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_36.pdf",
+    "className": "Backend Engineering - Cohort 36",
+    "dueAt": "2026-08-28T18:00",
+    "instructions": "Complete task description for assignment 36",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-36",
+        "expectedOutput": "output-36",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 37",
+    "subject": "Subject Code 37",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_37.pdf",
+    "className": "Backend Engineering - Cohort 37",
+    "dueAt": "2026-08-29T18:00",
+    "instructions": "Complete task description for assignment 37",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-37",
+        "expectedOutput": "output-37",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 38",
+    "subject": "Subject Code 38",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_38.pdf",
+    "className": "Backend Engineering - Cohort 38",
+    "dueAt": "2026-08-30T18:00",
+    "instructions": "Complete task description for assignment 38",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-38",
+        "expectedOutput": "output-38",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 39",
+    "subject": "Subject Code 39",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_39.pdf",
+    "className": "Backend Engineering - Cohort 39",
+    "dueAt": "2026-08-31T18:00",
+    "instructions": "Complete task description for assignment 39",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-39",
+        "expectedOutput": "output-39",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 40",
+    "subject": "Subject Code 40",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_40.pdf",
+    "className": "Backend Engineering - Cohort 40",
+    "dueAt": "2026-09-01T18:00",
+    "instructions": "Complete task description for assignment 40",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-40",
+        "expectedOutput": "output-40",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 41",
+    "subject": "Subject Code 41",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_41.pdf",
+    "className": "Backend Engineering - Cohort 41",
+    "dueAt": "2026-09-02T18:00",
+    "instructions": "Complete task description for assignment 41",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-41",
+        "expectedOutput": "output-41",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 42",
+    "subject": "Subject Code 42",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_42.pdf",
+    "className": "Backend Engineering - Cohort 42",
+    "dueAt": "2026-09-03T18:00",
+    "instructions": "Complete task description for assignment 42",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-42",
+        "expectedOutput": "output-42",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 43",
+    "subject": "Subject Code 43",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_43.pdf",
+    "className": "Backend Engineering - Cohort 43",
+    "dueAt": "2026-09-04T18:00",
+    "instructions": "Complete task description for assignment 43",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-43",
+        "expectedOutput": "output-43",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 44",
+    "subject": "Subject Code 44",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_44.pdf",
+    "className": "Backend Engineering - Cohort 44",
+    "dueAt": "2026-09-05T18:00",
+    "instructions": "Complete task description for assignment 44",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-44",
+        "expectedOutput": "output-44",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 45",
+    "subject": "Subject Code 45",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_45.pdf",
+    "className": "Backend Engineering - Cohort 45",
+    "dueAt": "2026-09-06T18:00",
+    "instructions": "Complete task description for assignment 45",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-45",
+        "expectedOutput": "output-45",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 46",
+    "subject": "Subject Code 46",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_46.pdf",
+    "className": "Backend Engineering - Cohort 46",
+    "dueAt": "2026-09-07T18:00",
+    "instructions": "Complete task description for assignment 46",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-46",
+        "expectedOutput": "output-46",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 47",
+    "subject": "Subject Code 47",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_47.pdf",
+    "className": "Backend Engineering - Cohort 47",
+    "dueAt": "2026-09-08T18:00",
+    "instructions": "Complete task description for assignment 47",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-47",
+        "expectedOutput": "output-47",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 48",
+    "subject": "Subject Code 48",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_48.pdf",
+    "className": "Backend Engineering - Cohort 48",
+    "dueAt": "2026-09-09T18:00",
+    "instructions": "Complete task description for assignment 48",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-48",
+        "expectedOutput": "output-48",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 49",
+    "subject": "Subject Code 49",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_49.pdf",
+    "className": "Backend Engineering - Cohort 49",
+    "dueAt": "2026-09-10T18:00",
+    "instructions": "Complete task description for assignment 49",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-49",
+        "expectedOutput": "output-49",
+        "isHidden": false
+      }
+    ]
+  },
+  {
+    "title": "Load Test Assessment 50",
+    "subject": "Subject Code 50",
+    "type": "file",
+    "assignmentScope": "entire_course",
+    "allowedFileTypes": [
+      "pdf",
+      "docx"
+    ],
+    "assignedBatchIds": [],
+    "assignedStudentIds": [],
+    "attachmentName": "LMS_API_Documentation_50.pdf",
+    "className": "Backend Engineering - Cohort 50",
+    "dueAt": "2026-09-11T18:00",
+    "instructions": "Complete task description for assignment 50",
+    "language": "javascript",
+    "points": 100,
+    "quizFileName": "",
+    "quizQuestions": [],
+    "starterCode": "function solve(input) {\n  // Write your solution here\n}\n",
+    "status": "Published",
+    "teacherId": "teacher-user-1",
+    "testCases": [
+      {
+        "input": "input-50",
+        "expectedOutput": "output-50",
+        "isHidden": false
+      }
+    ]
+  }
+]

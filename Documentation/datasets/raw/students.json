@@ -1,0 +1,302 @@
+[
+  {
+    "name": "Student John Doe 1",
+    "email": "student.doe.1@xebia.com",
+    "cohort": "Cohort-2026-1",
+    "password": "securePassWord123!1"
+  },
+  {
+    "name": "Student John Doe 2",
+    "email": "student.doe.2@xebia.com",
+    "cohort": "Cohort-2026-2",
+    "password": "securePassWord123!2"
+  },
+  {
+    "name": "Student John Doe 3",
+    "email": "student.doe.3@xebia.com",
+    "cohort": "Cohort-2026-3",
+    "password": "securePassWord123!3"
+  },
+  {
+    "name": "Student John Doe 4",
+    "email": "student.doe.4@xebia.com",
+    "cohort": "Cohort-2026-4",
+    "password": "securePassWord123!4"
+  },
+  {
+    "name": "Student John Doe 5",
+    "email": "student.doe.5@xebia.com",
+    "cohort": "Cohort-2026-5",
+    "password": "securePassWord123!5"
+  },
+  {
+    "name": "Student John Doe 6",
+    "email": "student.doe.6@xebia.com",
+    "cohort": "Cohort-2026-6",
+    "password": "securePassWord123!6"
+  },
+  {
+    "name": "Student John Doe 7",
+    "email": "student.doe.7@xebia.com",
+    "cohort": "Cohort-2026-7",
+    "password": "securePassWord123!7"
+  },
+  {
+    "name": "Student John Doe 8",
+    "email": "student.doe.8@xebia.com",
+    "cohort": "Cohort-2026-8",
+    "password": "securePassWord123!8"
+  },
+  {
+    "name": "Student John Doe 9",
+    "email": "student.doe.9@xebia.com",
+    "cohort": "Cohort-2026-9",
+    "password": "securePassWord123!9"
+  },
+  {
+    "name": "Student John Doe 10",
+    "email": "student.doe.10@xebia.com",
+    "cohort": "Cohort-2026-10",
+    "password": "securePassWord123!10"
+  },
+  {
+    "name": "Student John Doe 11",
+    "email": "student.doe.11@xebia.com",
+    "cohort": "Cohort-2026-11",
+    "password": "securePassWord123!11"
+  },
+  {
+    "name": "Student John Doe 12",
+    "email": "student.doe.12@xebia.com",
+    "cohort": "Cohort-2026-12",
+    "password": "securePassWord123!12"
+  },
+  {
+    "name": "Student John Doe 13",
+    "email": "student.doe.13@xebia.com",
+    "cohort": "Cohort-2026-13",
+    "password": "securePassWord123!13"
+  },
+  {
+    "name": "Student John Doe 14",
+    "email": "student.doe.14@xebia.com",
+    "cohort": "Cohort-2026-14",
+    "password": "securePassWord123!14"
+  },
+  {
+    "name": "Student John Doe 15",
+    "email": "student.doe.15@xebia.com",
+    "cohort": "Cohort-2026-15",
+    "password": "securePassWord123!15"
+  },
+  {
+    "name": "Student John Doe 16",
+    "email": "student.doe.16@xebia.com",
+    "cohort": "Cohort-2026-16",
+    "password": "securePassWord123!16"
+  },
+  {
+    "name": "Student John Doe 17",
+    "email": "student.doe.17@xebia.com",
+    "cohort": "Cohort-2026-17",
+    "password": "securePassWord123!17"
+  },
+  {
+    "name": "Student John Doe 18",
+    "email": "student.doe.18@xebia.com",
+    "cohort": "Cohort-2026-18",
+    "password": "securePassWord123!18"
+  },
+  {
+    "name": "Student John Doe 19",
+    "email": "student.doe.19@xebia.com",
+    "cohort": "Cohort-2026-19",
+    "password": "securePassWord123!19"
+  },
+  {
+    "name": "Student John Doe 20",
+    "email": "student.doe.20@xebia.com",
+    "cohort": "Cohort-2026-20",
+    "password": "securePassWord123!20"
+  },
+  {
+    "name": "Student John Doe 21",
+    "email": "student.doe.21@xebia.com",
+    "cohort": "Cohort-2026-21",
+    "password": "securePassWord123!21"
+  },
+  {
+    "name": "Student John Doe 22",
+    "email": "student.doe.22@xebia.com",
+    "cohort": "Cohort-2026-22",
+    "password": "securePassWord123!22"
+  },
+  {
+    "name": "Student John Doe 23",
+    "email": "student.doe.23@xebia.com",
+    "cohort": "Cohort-2026-23",
+    "password": "securePassWord123!23"
+  },
+  {
+    "name": "Student John Doe 24",
+    "email": "student.doe.24@xebia.com",
+    "cohort": "Cohort-2026-24",
+    "password": "securePassWord123!24"
+  },
+  {
+    "name": "Student John Doe 25",
+    "email": "student.doe.25@xebia.com",
+    "cohort": "Cohort-2026-25",
+    "password": "securePassWord123!25"
+  },
+  {
+    "name": "Student John Doe 26",
+    "email": "student.doe.26@xebia.com",
+    "cohort": "Cohort-2026-26",
+    "password": "securePassWord123!26"
+  },
+  {
+    "name": "Student John Doe 27",
+    "email": "student.doe.27@xebia.com",
+    "cohort": "Cohort-2026-27",
+    "password": "securePassWord123!27"
+  },
+  {
+    "name": "Student John Doe 28",
+    "email": "student.doe.28@xebia.com",
+    "cohort": "Cohort-2026-28",
+    "password": "securePassWord123!28"
+  },
+  {
+    "name": "Student John Doe 29",
+    "email": "student.doe.29@xebia.com",
+    "cohort": "Cohort-2026-29",
+    "password": "securePassWord123!29"
+  },
+  {
+    "name": "Student John Doe 30",
+    "email": "student.doe.30@xebia.com",
+    "cohort": "Cohort-2026-30",
+    "password": "securePassWord123!30"
+  },
+  {
+    "name": "Student John Doe 31",
+    "email": "student.doe.31@xebia.com",
+    "cohort": "Cohort-2026-31",
+    "password": "securePassWord123!31"
+  },
+  {
+    "name": "Student John Doe 32",
+    "email": "student.doe.32@xebia.com",
+    "cohort": "Cohort-2026-32",
+    "password": "securePassWord123!32"
+  },
+  {
+    "name": "Student John Doe 33",
+    "email": "student.doe.33@xebia.com",
+    "cohort": "Cohort-2026-33",
+    "password": "securePassWord123!33"
+  },
+  {
+    "name": "Student John Doe 34",
+    "email": "student.doe.34@xebia.com",
+    "cohort": "Cohort-2026-34",
+    "password": "securePassWord123!34"
+  },
+  {
+    "name": "Student John Doe 35",
+    "email": "student.doe.35@xebia.com",
+    "cohort": "Cohort-2026-35",
+    "password": "securePassWord123!35"
+  },
+  {
+    "name": "Student John Doe 36",
+    "email": "student.doe.36@xebia.com",
+    "cohort": "Cohort-2026-36",
+    "password": "securePassWord123!36"
+  },
+  {
+    "name": "Student John Doe 37",
+    "email": "student.doe.37@xebia.com",
+    "cohort": "Cohort-2026-37",
+    "password": "securePassWord123!37"
+  },
+  {
+    "name": "Student John Doe 38",
+    "email": "student.doe.38@xebia.com",
+    "cohort": "Cohort-2026-38",
+    "password": "securePassWord123!38"
+  },
+  {
+    "name": "Student John Doe 39",
+    "email": "student.doe.39@xebia.com",
+    "cohort": "Cohort-2026-39",
+    "password": "securePassWord123!39"
+  },
+  {
+    "name": "Student John Doe 40",
+    "email": "student.doe.40@xebia.com",
+    "cohort": "Cohort-2026-40",
+    "password": "securePassWord123!40"
+  },
+  {
+    "name": "Student John Doe 41",
+    "email": "student.doe.41@xebia.com",
+    "cohort": "Cohort-2026-41",
+    "password": "securePassWord123!41"
+  },
+  {
+    "name": "Student John Doe 42",
+    "email": "student.doe.42@xebia.com",
+    "cohort": "Cohort-2026-42",
+    "password": "securePassWord123!42"
+  },
+  {
+    "name": "Student John Doe 43",
+    "email": "student.doe.43@xebia.com",
+    "cohort": "Cohort-2026-43",
+    "password": "securePassWord123!43"
+  },
+  {
+    "name": "Student John Doe 44",
+    "email": "student.doe.44@xebia.com",
+    "cohort": "Cohort-2026-44",
+    "password": "securePassWord123!44"
+  },
+  {
+    "name": "Student John Doe 45",
+    "email": "student.doe.45@xebia.com",
+    "cohort": "Cohort-2026-45",
+    "password": "securePassWord123!45"
+  },
+  {
+    "name": "Student John Doe 46",
+    "email": "student.doe.46@xebia.com",
+    "cohort": "Cohort-2026-46",
+    "password": "securePassWord123!46"
+  },
+  {
+    "name": "Student John Doe 47",
+    "email": "student.doe.47@xebia.com",
+    "cohort": "Cohort-2026-47",
+    "password": "securePassWord123!47"
+  },
+  {
+    "name": "Student John Doe 48",
+    "email": "student.doe.48@xebia.com",
+    "cohort": "Cohort-2026-48",
+    "password": "securePassWord123!48"
+  },
+  {
+    "name": "Student John Doe 49",
+    "email": "student.doe.49@xebia.com",
+    "cohort": "Cohort-2026-49",
+    "password": "securePassWord123!49"
+  },
+  {
+    "name": "Student John Doe 50",
+    "email": "student.doe.50@xebia.com",
+    "cohort": "Cohort-2026-50",
+    "password": "securePassWord123!50"
+  }
+]

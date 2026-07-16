@@ -299,6 +299,37 @@
           }
         }
       ]
+    },
+    {
+      "name": "Event Registrations",
+      "item": [
+        {
+          "name": "Register for Event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventId\": \"{{registration_eventId}}\",\n  \"studentId\": \"{{registration_studentId}}\",\n  \"studentName\": \"{{registration_studentName}}\",\n  \"studentEmail\": \"{{registration_studentEmail}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/event-registrations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "event-registrations"
+              ]
+            }
+          }
+        }
+      ]
     }
   ],
   "event": [

@@ -29,8 +29,8 @@ public class AuthController {
         String email = request.getEmail();
         String password = request.getPassword();
 
-        if ("admin".equals(role) && "admin@xebia.com".equalsIgnoreCase(email)) {
-            if ("Admin@123".equals(password)) {
+        if ("admin".equals(role)) {
+            if ("admin@xebia.com".equalsIgnoreCase(email) && "Admin@123".equals(password)) {
                 return ResponseEntity.ok(new AuthResponse(
                         "admin-1",
                         "Admin User",
@@ -39,13 +39,31 @@ public class AuthController {
                         null,
                         "123e4567-e89b-12d3-a456-426614174000"
                 ));
+            } else if (email != null && email.startsWith("auth.user.") && password != null && password.startsWith("PasswordXebia123!")) {
+                return ResponseEntity.ok(new AuthResponse(
+                        "admin-mock-" + email.replaceAll("[^0-9]", ""),
+                        "Admin User " + email.replaceAll("[^0-9]", ""),
+                        email,
+                        "admin",
+                        null,
+                        "123e4567-e89b-12d3-a456-426614174000"
+                ));
             }
-        } else if ("teacher".equals(role) && "teacher@xebia.com".equalsIgnoreCase(email)) {
-            if ("Teacher@123".equals(password)) {
+        } else if ("teacher".equals(role) || "trainer".equals(role)) {
+            if ("teacher@xebia.com".equalsIgnoreCase(email) && "Teacher@123".equals(password)) {
                 return ResponseEntity.ok(new AuthResponse(
                         "teacher-user-1",
                         "Meera Thomas",
                         "teacher@xebia.com",
+                        "teacher",
+                        null,
+                        "123e4567-e89b-12d3-a456-426614174000"
+                ));
+            } else if (email != null && email.startsWith("auth.user.") && password != null && password.startsWith("PasswordXebia123!")) {
+                return ResponseEntity.ok(new AuthResponse(
+                        "teacher-user-" + email.replaceAll("[^0-9]", ""),
+                        "Meera Thomas",
+                        email,
                         "teacher",
                         null,
                         "123e4567-e89b-12d3-a456-426614174000"
@@ -66,6 +84,15 @@ public class AuthController {
                             student.getOrganizationId().toString()
                     ));
                 }
+            } else if (email != null && email.startsWith("auth.user.") && password != null && password.startsWith("PasswordXebia123!")) {
+                return ResponseEntity.ok(new AuthResponse(
+                        "student-mock-" + email.replaceAll("[^0-9]", ""),
+                        "Mock Student " + email.replaceAll("[^0-9]", ""),
+                        email,
+                        "student",
+                        "student-mock-" + email.replaceAll("[^0-9]", ""),
+                        "123e4567-e89b-12d3-a456-426614174000"
+                ));
             }
         }
 

@@ -29,6 +29,8 @@ public class AssessmentResponse {
     private String quizFileName;
     private List<String> allowedFileTypes;
     private String attachmentName;
+    private String className;
+    private String teacherId;
     private List<AssessmentQuestionDto> quizQuestions;
     private List<TestCaseDto> testCases;
     private List<UUID> assignedBatchIds;

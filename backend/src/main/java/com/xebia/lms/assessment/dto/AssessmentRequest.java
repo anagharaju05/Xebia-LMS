@@ -49,6 +49,10 @@ public class AssessmentRequest {
 
     private String attachmentName;
 
+    private String className;
+
+    private String teacherId;
+
     private List<AssessmentQuestionDto> quizQuestions;
 
     private List<TestCaseDto> testCases;

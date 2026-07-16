@@ -1,0 +1,652 @@
+[
+  {
+    "name": "Subject Area 1",
+    "description": "Curriculum details for subject area 1",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 2",
+    "description": "Curriculum details for subject area 2",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 3",
+    "description": "Curriculum details for subject area 3",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 4",
+    "description": "Curriculum details for subject area 4",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 5",
+    "description": "Curriculum details for subject area 5",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 6",
+    "description": "Curriculum details for subject area 6",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 7",
+    "description": "Curriculum details for subject area 7",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 8",
+    "description": "Curriculum details for subject area 8",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 9",
+    "description": "Curriculum details for subject area 9",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 10",
+    "description": "Curriculum details for subject area 10",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 11",
+    "description": "Curriculum details for subject area 11",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 12",
+    "description": "Curriculum details for subject area 12",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 13",
+    "description": "Curriculum details for subject area 13",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 14",
+    "description": "Curriculum details for subject area 14",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 15",
+    "description": "Curriculum details for subject area 15",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 16",
+    "description": "Curriculum details for subject area 16",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 17",
+    "description": "Curriculum details for subject area 17",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 18",
+    "description": "Curriculum details for subject area 18",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 19",
+    "description": "Curriculum details for subject area 19",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 20",
+    "description": "Curriculum details for subject area 20",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 21",
+    "description": "Curriculum details for subject area 21",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 22",
+    "description": "Curriculum details for subject area 22",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 23",
+    "description": "Curriculum details for subject area 23",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 24",
+    "description": "Curriculum details for subject area 24",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 25",
+    "description": "Curriculum details for subject area 25",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 26",
+    "description": "Curriculum details for subject area 26",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 27",
+    "description": "Curriculum details for subject area 27",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 28",
+    "description": "Curriculum details for subject area 28",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 29",
+    "description": "Curriculum details for subject area 29",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 30",
+    "description": "Curriculum details for subject area 30",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 31",
+    "description": "Curriculum details for subject area 31",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 32",
+    "description": "Curriculum details for subject area 32",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 33",
+    "description": "Curriculum details for subject area 33",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 34",
+    "description": "Curriculum details for subject area 34",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 35",
+    "description": "Curriculum details for subject area 35",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 36",
+    "description": "Curriculum details for subject area 36",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 37",
+    "description": "Curriculum details for subject area 37",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 38",
+    "description": "Curriculum details for subject area 38",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 39",
+    "description": "Curriculum details for subject area 39",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 40",
+    "description": "Curriculum details for subject area 40",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 41",
+    "description": "Curriculum details for subject area 41",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 42",
+    "description": "Curriculum details for subject area 42",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 43",
+    "description": "Curriculum details for subject area 43",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 44",
+    "description": "Curriculum details for subject area 44",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 45",
+    "description": "Curriculum details for subject area 45",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 46",
+    "description": "Curriculum details for subject area 46",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 47",
+    "description": "Curriculum details for subject area 47",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 48",
+    "description": "Curriculum details for subject area 48",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 49",
+    "description": "Curriculum details for subject area 49",
+    "color": "#4D5E6F",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  },
+  {
+    "name": "Subject Area 50",
+    "description": "Curriculum details for subject area 50",
+    "color": "#1A2B3C",
+    "lessons": 0,
+    "assignments": 0,
+    "quizzes": 0,
+    "files": 0,
+    "liveSessions": 0,
+    "assignedBatchIds": [
+      "batch-backend-7"
+    ]
+  }
+]
