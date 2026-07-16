@@ -267,6 +267,38 @@
           }
         }
       ]
+    },
+    {
+      "name": "Announcements",
+      "item": [
+        {
+          "name": "Create Announcement",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"\",\n  \"title\": \"{{announcement_title}}\",\n  \"message\": \"{{announcement_message}}\",\n  \"batchId\": \"{{announcement_batchId}}\",\n  \"author\": \"{{announcement_author}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/batches/announcements",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "batches",
+                "announcements"
+              ]
+            }
+          }
+        }
+      ]
     }
   ],
   "event": [
