@@ -301,6 +301,37 @@
       ]
     },
     {
+      "name": "Events",
+      "item": [
+        {
+          "name": "Create Event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{registration_eventId}}\",\n  \"title\": \"Data Driven Test Event\",\n  \"description\": \"Event created for registration verification.\",\n  \"startTime\": \"2026-07-24T10:00:00\",\n  \"endTime\": \"2026-07-24T12:00:00\",\n  \"eventType\": \"WORKSHOP\",\n  \"locationOrLink\": \"https://meet.google.com/abc-defg-hij\",\n  \"status\": \"SCHEDULED\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "events"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "Event Registrations",
       "item": [
         {
