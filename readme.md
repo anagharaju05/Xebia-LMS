@@ -98,6 +98,7 @@ DB_PORT=5432
 DB_NAME=lms_course
 DB_USERNAME=postgres
 DB_PASSWORD=your_postgres_password
+REDIS_URL=redis://localhost:6379
 ```
 
 ---
@@ -109,8 +110,10 @@ DB_PASSWORD=your_postgres_password
 * Java 17
 * Node.js v18+
 * PostgreSQL v14+
+* Redis
 * Maven
 * Git
+* Docker (optional)
 
 ---
 
@@ -221,6 +224,12 @@ http://127.0.0.1:5173
 | `/api/management/students`         | Admin student APIs   |
 | `/api/portal/students/{studentId}` | Student portal APIs  |
 | `/api/submodules`                  | Submodule operations |
+| `/api/batches`                     | Batch management     |
+| `/api/events`                      | Event management     |
+| `/api/event-registrations`         | Event Registrations  |
+| `/api/assessments`                 | Assessment handling  |
+| `/api/portal/files`                | File management      |
+| `/api/health`                      | Health status        |
 
 ---
 
@@ -253,6 +262,8 @@ PostgreSQL Database
 * Modular Architecture
 * Swagger Documentation
 * Scalable Backend
+* Redis Caching
+* Docker Deployment
 
 ---
 
@@ -260,10 +271,8 @@ PostgreSQL Database
 
 * JWT Authentication
 * RBAC Authorization
-* Docker Deployment
 * CI/CD Pipelines
 * Kubernetes Support
-* Redis Caching
 * Email Services
 * Cloud Deployment
 * Advanced Analytics
