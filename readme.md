@@ -281,31 +281,31 @@ PostgreSQL Database
 
 # Contribution Workflow
 
-1. Fork the repository (if you are an external contributor) or clone the repository.
-2. Create a new branch from `develop`.
+1. Fork the repository on GitHub.
+2. Clone your fork and create a new feature branch from `main`:
 
 ```bash
-git checkout develop
-git pull origin develop
+git checkout main
+git pull origin main
 git checkout -b feature/your-feature-name
 ```
 
-3. Make your changes and commit them.
+3. Make your changes and commit them following clear commit message guidelines.
 
 ```bash
 git add .
-git commit -m "Add: README documentation improvements"
+git commit -m "docs: improve README documentation workflow"
 ```
 
-4. Push your branch to GitHub.
+4. Push your feature branch to your GitHub fork:
 
 ```bash
 git push origin feature/your-feature-name
 ```
 
-5. Create a Pull Request (PR) from your feature branch to `develop`.
-6. Get your code reviewed and approved.
-7. Merge the Pull Request.
+5. Open a Pull Request (PR) from your feature branch to the `main` branch of the original repository.
+6. Await code review and address any feedback provided by the maintainers.
+7. Once approved, your PR will be merged into `main`.
 
 ---
 
