@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Xebia LMS Database ERD</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f9; text-align: center; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; }
+        h1 { color: #333; }
+        p { color: #666; margin-bottom: 20px; }
+        .mermaid { text-align: center; }
+        .btn { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; }
+        .btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Xebia LMS Backend Database - ER Diagram</h1>
+        <p>This is the Entity-Relationship Diagram mapping out the PostgreSQL database schema.</p>
+        <div class="mermaid" id="erd-diagram">
+erDiagram
+    %% CURRICULUM DOMAIN
+    categories {
+        UUID id PK
+        UUID organization_id
+        UUID parent_category_id FK
+        VARCHAR name
+        VARCHAR status
+    }
+    categories ||--o{ categories : "parent_category_id"
+
+    courses {
+        UUID id PK
+        UUID organization_id
+        UUID category_id FK
+        UUID trainer_id
+        VARCHAR course_code
+        VARCHAR course_name
+    }
+    categories ||--o{ courses : "category_id"
+
+    modules {
+        UUID id PK
+        UUID course_id FK
+        VARCHAR name
+        INTEGER position
+    }
+    courses ||--o{ modules : "course_id"
+
+    submodules {
+        UUID id PK
+        UUID module_id FK
+        VARCHAR name
+        INTEGER position
+    }
+    modules ||--o{ submodules : "module_id"
+
+    contents {
+        UUID id PK
+        UUID submodule_id FK
+        VARCHAR content_type
+        VARCHAR title
+        INTEGER position
+    }
+    submodules ||--o{ contents : "submodule_id"
+
+    %% STUDENT DOMAIN
+    students {
+        UUID id PK
+        UUID organization_id
+        VARCHAR name
+        VARCHAR email
+        VARCHAR cohort
+        VARCHAR status
+    }
+
+    student_courses {
+        UUID student_id FK
+        VARCHAR course_slug
+    }
+    students ||--o{ student_courses : "enrolled_in"
+
+    student_assignments {
+        VARCHAR id PK
+        UUID student_id FK
+        VARCHAR course_slug
+        VARCHAR title
+        VARCHAR status
+        INTEGER score
+    }
+    students ||--o{ student_assignments : "has"
+
+    student_completed_lessons {
+        UUID student_id FK
+        VARCHAR lesson_id
+    }
+    students ||--o{ student_completed_lessons : "completes"
+
+    student_assessment_results {
+        UUID id PK
+        UUID student_id FK
+        VARCHAR assessment_id
+        INTEGER score
+        VARCHAR status
+    }
+    students ||--o{ student_assessment_results : "takes"
+
+    student_notifications {
+        VARCHAR id PK
+        UUID student_id FK
+        VARCHAR title
+        BOOLEAN is_read
+    }
+    students ||--o{ student_notifications : "receives"
+
+    student_feedback {
+        VARCHAR id PK
+        UUID student_id FK
+        VARCHAR course_id
+        INTEGER rating
+    }
+    students ||--o{ student_feedback : "gives"
+
+    %% COMMENTS & Q&A DOMAIN
+    lesson_comments {
+        VARCHAR id PK
+        VARCHAR lesson_slug
+        VARCHAR author_name
+        TEXT text
+    }
+
+    lesson_comment_replies {
+        VARCHAR id PK
+        VARCHAR comment_id FK
+        VARCHAR author_name
+        TEXT text
+    }
+    lesson_comments ||--o{ lesson_comment_replies : "replies_to"
+
+    student_questions {
+        UUID id PK
+        UUID organization_id
+        UUID student_id FK
+        VARCHAR subject
+        TEXT content
+        TEXT answer
+    }
+    students ||--o{ student_questions : "asks"
+
+    %% ASSESSMENTS DOMAIN
+    assessments {
+        UUID id PK
+        UUID organization_id
+        VARCHAR title
+        VARCHAR type
+        INTEGER points
+        VARCHAR status
+    }
+    
+    assessment_questions {
+        UUID id PK
+        UUID assessment_id FK
+        TEXT prompt
+        VARCHAR answer
+    }
+    assessments ||--o{ assessment_questions : "contains"
+
+    assessment_question_options {
+        UUID assessment_question_id FK
+        VARCHAR option_text
+    }
+    assessment_questions ||--o{ assessment_question_options : "has_options"
+
+    assessment_test_cases {
+        UUID id PK
+        UUID assessment_id FK
+        TEXT input
+        TEXT expected_output
+    }
+    assessments ||--o{ assessment_test_cases : "has_test_cases"
+
+    assessment_student_allocations {
+        UUID assessment_id FK
+        UUID student_id FK
+    }
+    assessments ||--o{ assessment_student_allocations : "assigned_to"
+    students ||--o{ assessment_student_allocations : "assigned_to"
+
+    %% EVENTS DOMAIN
+    events {
+        UUID id PK
+        UUID organization_id
+        VARCHAR title
+        TIMESTAMP start_time
+        TIMESTAMP end_time
+        VARCHAR event_type
+        UUID course_id FK
+    }
+    courses ||--o{ events : "hosts"
+        </div>
+        <br>
+        <button class="btn" onclick="downloadSVG()">Download Diagram as SVG Image</button>
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        
+        function downloadSVG() {
+            const svgElement = document.querySelector('.mermaid svg');
+            if (!svgElement) {
+                alert('Diagram is still rendering. Please wait a second and try again.');
+                return;
+            }
+            
+            // Serialize SVG
+            const serializer = new XMLSerializer();
+            let source = serializer.serializeToString(svgElement);
+            
+            // Add xml namespace if not present
+            if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+                source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+            }
+            
+            // Add xml declaration
+            source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+            
+            // Convert to data uri
+            const url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
+            
+            // Trigger download
+            const downloadLink = document.createElement("a");
+            downloadLink.href = url;
+            downloadLink.download = "Xebia_LMS_ERD.svg";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+    </script>
+</body>
+</html>

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import {
   ArrowLeft, CalendarClock, CheckCircle2, Clock3, Code2, Download, ExternalLink,
   FileSpreadsheet, FileText, HelpCircle, LoaderCircle, MessageCircleQuestion, Paperclip, Play,
-  Search, Send, Trophy, Upload, XCircle
+  Search, Send, Trophy, Upload, UploadCloud, XCircle
 } from "lucide-react";
 import CertificateGenerator from "./CertificateGenerator.jsx";
 

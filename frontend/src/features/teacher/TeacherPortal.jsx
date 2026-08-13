@@ -110,6 +110,10 @@ function AssessmentEditor({ initial, onClose, onSave, showToast, batchStore, stu
       setError("Title, subject, instructions, and deadline are required.");
       return;
     }
+    if (!form.assignmentScope) {
+      setError("Please select who should receive this assessment.");
+      return;
+    }
     if (form.type === "quiz" && !form.quizQuestions?.length) {
       setError("Import an Excel or CSV file containing at least one valid quiz question.");
       return;
@@ -123,7 +127,10 @@ function AssessmentEditor({ initial, onClose, onSave, showToast, batchStore, stu
       : form.assignmentScope === "selected_batch"
         ? [...new Set(batchStore.state.batches.filter((batch) => form.assignedBatchIds.includes(batch.id)).flatMap((batch) => batch.studentIds))]
         : form.assignedStudentIds;
-    onSave({ ...form, assignedStudentIds, status, points: Number(form.points) });
+    
+    const formattedDueAt = form.dueAt.length === 16 ? `${form.dueAt}:00` : form.dueAt;
+    
+    onSave({ ...form, dueAt: formattedDueAt, assignedStudentIds, status, points: Number(form.points) });
     showToast?.(form.id ? "Assessment updated" : status === "Published" ? "Assessment published" : "Draft saved");
     onClose();
   }

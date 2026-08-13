@@ -3,6 +3,18 @@ import { INITIAL_NOTIFICATIONS, INITIAL_COMMENTS } from "./student.data.js";
 
 const API_ENABLED = import.meta.env.VITE_ENABLE_API === "true";
 
+function ensureUUID(id) {
+  if (!id) return crypto.randomUUID();
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (uuidRegex.test(id)) return id;
+  let hashStr = "";
+  for (let i = 0; i < 32; i += 1) {
+    const charCode = id.charCodeAt(i % id.length) || 0;
+    hashStr += ((charCode * (i + 1)) % 16).toString(16);
+  }
+  return `${hashStr.slice(0, 8)}-${hashStr.slice(8, 12)}-4${hashStr.slice(12, 15)}-a${hashStr.slice(15, 18)}-${hashStr.slice(18, 30)}`;
+}
+
 export function useStudentPortal(user) {
   const [studentState, setStudentState] = useState({
     completedLessonIds: [],
@@ -18,7 +30,7 @@ export function useStudentPortal(user) {
     assessmentAverage: 0
   });
   
-  const studentId = user?.studentId || user?.id || "student-aarav"; // Fallback for mock user id if missing
+  const studentId = ensureUUID(user?.studentId || user?.id || "student-aarav"); // Fallback for mock user id if missing
   const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8080";
   const BASE_URL = `${baseUrl}/api/portal/students/${studentId}`;
   

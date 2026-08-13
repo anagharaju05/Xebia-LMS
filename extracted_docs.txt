@@ -1,0 +1,807 @@
+Xebia LMS ��� Technical & API Documentation
+Table of Contents
+Xebia LMS — Technical & API Documentation
+Prepared from: repository source (github.com/anagharaju05/Xebia-LMS), Flyway migrations, three Postman/integration test reports, and the project’s own internal technical documentation. Live backend: https://xebia-lms-backend.onrender.com · Live frontend: https://xebia-portal-lms.vercel.app
+Part I — Project Overview
+1. Purpose & Objective
+Xebia LMS is an enterprise-style Learning Management System supporting three roles — Admin, Trainer/Teacher, and Student — across course authoring, batch/cohort management, assessments, events, and learning analytics. The codebase combines fully implemented Spring Boot backend modules with a React frontend that, for some features, still falls back to local (browser) state when the corresponding API is not enabled. This document describes the backend as it exists in source today, not an idealized target state.
+2. Target Users
+Role
+Capabilities
+Admin
+Full tenant control — categories, courses, students, batches, analytics dashboards
+Trainer / Teacher
+Course/module/content authoring, assessment creation & grading, batch workspace (subjects, discussions, announcements, attendance)
+Student
+Course consumption, assessment submission, event registration, feedback, notifications, certificates
+3. Technology Stack
+Frontend
+React 18, Vite 5
+JavaScript, Vanilla CSS
+React Router DOM v7
+Recharts (analytics charts)
+Lucide React (icons)
+read-excel-file (XLSX quiz import)
+Browser localStorage used as an offline/prototype fallback for features not yet backed by an API (e.g. Batch/Join-Code/Subject workspace)
+Backend
+Java 17, Spring Boot 3.2.5
+Spring Web MVC, Spring Security, Spring Validation, Spring Data JPA
+PostgreSQL with Flyway migrations
+Redis (Spring Cache) — caches courses and selected analytics results; PostgreSQL remains authoritative on cache failure
+MapStruct (DTO mapping), Lombok
+Springdoc OpenAPI (Swagger UI at /swagger-ui.html)
+Maven
+4. System Architecture
+React Frontend (Vite)       |   REST APIs (JSON)       |TenantFilter (requires X-Organization-ID)       |MockAuthenticationFilter (trusts X-User-Id / X-User-Role)       |Controller -> Service -> Repository       |PostgreSQL  <--cache-->  Redis
+Admin pages are routed via URL (React Router). Teacher and Student experiences are internal single-page workspaces controlled by view state rather than routing.
+Overall workflow
+4.1 Entry & Admin Navigation
+Entry and Admin navigation
+4.2 Teacher Assessment Lifecycle
+Teacher assessment lifecycle
+4.3 Student Submission → Backend Flow
+Student submission flow
+4.4 Assessment Module File Map
+Assessment file map
+5. Project Structure
+Xebia-LMS/├── backend/│   ├── src/main/java/com/xebia/lms/│   │   ├── analytics/        # AnalyticsController, AnalyticsService│   │   ├── assessment/       # AssessmentController, Service, Repository, question/test-case repos│   │   ├── batch/             # BatchController, Service, Repository (+subjects/discussions/announcements/attendance/sessions)│   │   ├── category/          # CategoryController, Service, Repository, dto/, mapper/│   │   ├── config/            # App configuration (CORS, cache, etc.)│   │   ├── content/            # ContentController, Service, Repository│   │   ├── course/             # CourseController, Service, Repository, dto/, mapper/│   │   ├── event/               # EventController, EventRegistrationController, Services, Repositories│   │   ├── exception/           # Global exception handling│   │   ├── health/              # HealthController│   │   ├── module/               # ModuleController, Service, Repository│   │   ├── security/             # AuthController, TenantFilter, MockAuthenticationFilter│   │   ├── student/               # StudentManagementController, StudentPortalController, FileController + repositories│   │   ├── submodule/             # SubmoduleController, Service, Repository│   │   └── util/                    # Shared utilities│   ├── src/main/resources/db/migration/   # Flyway V1 – V16│   ├── uploads/                    # Local disk storage for file uploads (FileController)│   ├── dockerfile│   └── pom.xml│├── frontend/│   ├── src/│   │   ├── app/                     # App shell, routes, role gating│   │   ├── components/              # cards/, common/, layout/, preview/│   │   ├── features/                 # analytics/, assessments/, auth/, batches/, categories/, content/,│   │   │                              courses/, curriculum/, dashboard/, events/, student/, students/, teacher/│   │   ├── hooks/                     # useLmsStore.js and other shared hooks│   │   ├── services/                   # api.js (HTTP wrapper), excelQuiz.service.js│   │   ├── styles/│   │   └── main.jsx│   ├── package.json│   ├── vite.config.js│   └── vercel.json│├── Documentation/                     # Repo's own internal docs (architecture, backend, frontend, API, DB, deployment)├── Workflow.png└── render.yaml
+6. Installation & Setup
+Prerequisites
+Java 17 · Node.js 18+ · PostgreSQL 14+ · Redis · Maven · Git · Docker (optional)
+Clone
+git clone https://github.com/anagharaju05/Xebia-LMS.gitcd Xebia-LMS
+Database
+Create a PostgreSQL database named lms_course. Flyway applies all migrations automatically on backend startup — no manual schema step required.
+Backend
+cd backendexport DB_PASSWORD="your_postgres_password"   # Windows: $env:DB_PASSWORD="..."mvn clean installmvn spring-boot:run
+Runs at https://xebia-lms-backend.onrender.com in production (local default: http://localhost:8080). Swagger UI: /swagger-ui.html.
+Frontend
+cd frontendnpm installnpm run dev
+Local dev server: http://127.0.0.1:5173. Production: https://xebia-portal-lms.vercel.app.
+Verification
+cd backend && mvn clean verifycd frontend && npm run build
+7. Environment Variables
+Backend
+PORT=8080DATABASE_URL=postgresql://localhost:5432/lms_courseDB_HOST=localhostDB_PORT=5432DB_NAME=lms_courseDB_USERNAME=postgresDB_PASSWORD=replace_meREDIS_URL=redis://localhost:6379
+Frontend
+VITE_API_URL=http://localhost:8080VITE_ENABLE_API=false
+8. Authentication & Security Model
+Xebia LMS uses a header-based mock authentication scheme rather than JWT or session tokens. Every request passes through two filters in the security chain:
+TenantFilter — requires an X-Organization-ID header (UUID). This value scopes every query to a tenant/organization, enabling multi-tenant data isolation.
+MockAuthenticationFilter — trusts two additional headers at face value:
+X-User-Id — identifies the calling user (e.g. load-tester)
+X-User-Role — identifies the calling role (e.g. ADMIN), which determines authorization scope
+X-Organization-ID: 123e4567-e89b-12d3-a456-426614174000X-User-Id: load-testerX-User-Role: ADMIN
+/api/auth/login and Swagger paths are public; all other endpoints expect the three headers above. This is explicitly not production-grade security — there is no cryptographic verification of identity, no JWT, and no signature checking. The project’s own internal documentation lists this as the top production blocker, alongside frontend-seeded credentials, plaintext demo password comparison, and wildcard CORS.
+9. Database Schema
+PostgreSQL, managed via 16 Flyway migrations (V1__init_schema.sql → V16__add_class_name_and_teacher_id.sql). Core learning-content hierarchy:
+categories → courses → modules → submodules → contents
+9.1 Table Inventory (27 tables)
+Domain
+Tables
+Curriculum
+categories, courses, modules, submodules, contents
+Students
+students, student_courses, student_assignments, student_completed_lessons, student_assessment_results, student_certifications, student_feedback, student_notifications, student_questions
+Comments
+lesson_comments, lesson_comment_replies
+Assessments
+assessments, assessment_questions, assessment_question_options, assessment_test_cases, assessment_batch_allocations, assessment_student_allocations, assessment_allowed_file_types
+Events
+events
+Analytics / Reporting
+training_sessions, session_attendances, flagship_programs, ai_tool_adoptions
+9.2 Core Table Definitions (from V1__init_schema.sql)
+categories — id (UUID PK), organization_id, parent_category_id (FK → categories, self-referential), name, description, status (default ACTIVE), created_at, updated_at
+courses — id (UUID PK), organization_id, category_id (FK → categories), trainer_id, course_code (unique), course_name, short_description, duration_minutes, difficulty, status (default DRAFT), thumbnail_url, created_at, updated_at
+modules — id (UUID PK), course_id (FK → courses, cascade delete), name, description, position, timestamps
+submodules — id (UUID PK), module_id (FK → modules, cascade delete), name, description, position, timestamps
+contents — id (UUID PK), submodule_id (FK → submodules, cascade delete), content_type, title, description, content_data, file_url, position, duration_minutes, timestamps
+Subsequent migrations layer on: metadata columns (V3), the full student/assignment/completion model (V4), analytics tables (V5–V6, V8), a password column on students (V7), the full assessment system including questions/options/test-cases/allocations (V9), file-type metadata (V10), and the events table (V14, later widened in V15). V16 adds class_name/teacher_id to assessments.
+10. Deployment
+Layer
+Platform
+URL
+Backend
+Render
+https://xebia-lms-backend.onrender.com (config: render.yaml, backend/dockerfile)
+Frontend
+Vercel
+https://xebia-portal-lms.vercel.app (config: frontend/vercel.json)
+Database
+PostgreSQL (Flyway-managed)
+—
+Cache
+Redis
+—
+11. Known Limitations & Roadmap
+Documented directly by the project maintainers as current production blockers and near-term priorities:
+Replace mock header authentication with real identity + role enforcement (JWT/RBAC)
+Frontend-seeded credentials and plaintext demo password comparison need hardening
+Wildcard CORS needs tightening
+Teacher backend authentication path is incomplete
+Backend Batch/Join-Code/Subject module is still frontend/localStorage-only in places
+Assessment submissions/grading records need normalization (currently serialized through student tasks)
+File uploads are local-disk only (backend/uploads/) — no object storage yet
+No isolated/sandboxed coding-assessment runner yet (JS test execution happens client-side)
+Part II — API Reference
+All endpoints require the common headers described in §8 (X-Organization-ID, X-User-Id, X-User-Role) and Content-Type: application/json unless otherwise noted. Base URL: https://xebia-lms-backend.onrender.com.
+Status legend: Pass = verified against a real, non-placeholder response body. Pass (Auto-Resolved) = the integration test suite recorded this status code but the response body shown is a generic/placeholder sample ("sample-string" fields) rather than a captured real payload — treat these response shapes as indicative, not guaranteed exact.
+1. Auth Module
+Controller: AuthController (package: security) · Processing: Validates the email/password/role combination directly against the students/trainer records (mock/demo comparison — see §8 and §11) and returns the resolved account without issuing a token.
+Auth API Summary
+API Name
+Method
+Endpoint
+Status
+Login
+POST
+/api/auth/login
+200 OK (see discrepancy note)
+Login
+Purpose: Authenticates a user by email/password and returns the resolved account (id, name, role, organizationId).
+Method & Endpoint: POST /api/auth/login
+Request Body:
+{  "email": "auth.user.1@xebia.com",  "password": "PasswordXebia123!1",  "role": "TRAINER"}
+Processing: AuthController receives the login request and delegates credential validation. On match, it resolves the account’s actual stored role (not necessarily the role submitted in the request) and tenant organizationId, then returns the account summary.
+Response — Success (200 OK):
+{  "id": "teacher-user-1",  "name": "Meera Thomas",  "email": "auth.user.1@xebia.com",  "role": "teacher",  "studentId": null,  "organizationId": "123e4567-e89b-12d3-a456-426614174000"}
+⚠ Discrepancy noted: the dedicated Postman test run recorded this endpoint returning 200 OK with the payload above across 50 iterations. The broader integration test pass in api_documentation.pdf recorded a 201 Created with an empty {} body for the same endpoint (flagged there as “Auto-Resolved”). Treat 200 OK with the account payload as the verified real behavior; the 201 appears to be a test-harness artifact.
+Errors: 400 Bad Request — invalid credentials or missing fields · 401/403 — role/tenant mismatch (not explicitly captured in test data)
+2. Category Module
+Controller: CategoryController · Service: CategoryServiceImpl (CategoryService) · Repository: CategoryRepository · Entity: Category · DTOs: CategoryRequest, CategoryResponse, CategoryNode (tree) · Mapper: CategoryMapper
+Category API Summary
+API Name
+Method
+Endpoint
+Status
+Retrieve category by ID
+GET
+/api/categories/{id}
+200 Pass
+Update category
+PUT
+/api/categories/{id}
+200 Pass
+Delete category
+DELETE
+/api/categories/{id}
+204 Pass
+List all categories
+GET
+/api/categories
+200 Pass
+Create category
+POST
+/api/categories
+201 Pass
+Retrieve category tree
+GET
+/api/categories/tree
+200 Pass
+Retrieve category by ID
+Endpoint: GET /api/categories/{id} · Processing: CategoryController → CategoryService.getById() → CategoryRepository.findById(), mapped to CategoryResponse via CategoryMapper. Response (200):
+{  "id": "df3035b1-6ca5-4e93-be52-88465b50b54a",  "organizationId": "d8745aec-e32f-4b7d-8353-fcbe4c0144d7",  "parentCategoryId": null,  "name": "Tech",  "description": null,  "status": "ACTIVE",  "metadata": null,  "createdAt": "2026-07-16T01:14:34.214943",  "updatedAt": "2026-07-16T01:14:34.214943"}
+Errors: 404 Not Found — category does not exist.
+Update category
+Endpoint: PUT /api/categories/{id} · Processing: Validates input, applies changes via CategoryService.update(), persists through CategoryRepository.save(). Response (200): same shape as above with updated fields. Errors: 400 Bad Request (invalid input) · 404 Not Found
+Delete category
+Endpoint: DELETE /api/categories/{id} · Purpose: Deletes a category only if no courses or subcategories are attached (referential integrity enforced by category_id FK with ON DELETE RESTRICT on courses, and self-referential FK on categories). Response: 204 No Content · Errors: 409 Conflict if courses/subcategories are attached · 404 Not Found
+List all categories
+Endpoint: GET /api/categories · Response (200): [] (array of CategoryResponse)
+Create category
+Endpoint: POST /api/categories Request Body:
+{  "parentCategoryId": null,  "name": "Core Subject Branch 1",  "description": "Curriculum classification for subject branch 1",  "status": "ACTIVE",  "metadata": "{}"}
+Processing: CategoryController → CategoryService.create() generates a UUID, defaults status to ACTIVE if omitted, persists via CategoryRepository.save(). Response (201 Created):
+{  "id": "943d7236-02f6-4529-beca-59e7c5f068a7",  "organizationId": "123e4567-e89b-12d3-a456-426614174000",  "parentCategoryId": null,  "name": "Core Subject Branch 1",  "description": "Curriculum classification for subject branch 1",  "status": "ACTIVE",  "metadata": "{}",  "createdAt": "2026-07-16T14:42:37.596086715",  "updatedAt": "2026-07-16T14:42:37.596086715"}
+Test coverage: 50 unique categories created across 50 Collection Runner iterations; parentCategoryId correctly accepts null for top-level categories. Errors: 400 Bad Request — missing name.
+Retrieve category tree
+Endpoint: GET /api/categories/tree · Processing: Loads all categories for the tenant and assembles a parent→children hierarchy (CategoryNode DTO). Response (200):
+[  {    "id": "cafaddce-cc19-4232-b1da-d94e7f14b8df",    "organizationId": "d8745aec-e32f-4b7d-8353-fcbe4c0144d7",    "parentCategoryId": null,    "name": "Tech",    "description": null,    "status": "ACTIVE",    "createdAt": "2026-07-16T01:14:34.503901",    "updatedAt": "2026-07-16T01:14:34.503901",    "children": []  }]
+3. Course Module
+Controller: CourseController · Service: CourseServiceImpl · Repository: CourseRepository · Entity: Course (+ CourseDifficulty, CourseStatus enums; FlagshipProgram, TrainingSession related entities) · DTOs: CourseRequest/CourseResponse · Mapper: CourseMapper
+Course API Summary
+API Name
+Method
+Endpoint
+Status
+Retrieve course by ID
+GET
+/api/courses/{id}
+200 Pass
+Update course
+PUT
+/api/courses/{id}
+200 Pass
+Delete course
+DELETE
+/api/courses/{id}
+200 Pass
+List all courses
+GET
+/api/courses
+200 Pass
+Create course
+POST
+/api/courses
+201 Pass
+Submit course for review
+POST
+/api/courses/{id}/submit-review
+201 Pass
+Publish course
+POST
+/api/courses/{id}/publish
+201 Pass
+Retrieve course by ID
+Response (200):
+{  "id": "43a748d6-a0af-404a-9d50-46802bd9bb1e",  "organizationId": "d8745aec-e32f-4b7d-8353-fcbe4c0144d7",  "categoryId": "df3035b1-6ca5-4e93-be52-88465b50b54a",  "trainerId": "81944032-3553-4f85-91ca-9d7ed551396c",  "courseCode": "C101",  "courseName": "Cloud 101",  "shortDescription": null,  "durationMinutes": 0,  "difficulty": "BEGINNER",  "status": "DRAFT",  "thumbnailUrl": null,  "metadata": null,  "createdAt": "2026-07-16T01:14:34.221059",  "updatedAt": "2026-07-16T01:14:34.221059"}
+Errors: 404 Not Found
+Update course
+Purpose: Update details; published courses are read-only for Trainers (Admin can still edit). Errors: 403 Forbidden (Trainer editing a PUBLISHED course) · 404 Not Found
+Delete course
+Purpose: Delete a course; published courses are read-only for Trainers. Response: 200 OK, {}
+List all courses
+Response (200): []
+Create course
+Request Body:
+{  "categoryId": "824fd548-b536-4312-a773-8137a552520e",  "trainerId": "00000000-0000-0000-0000-000000000000",  "courseCode": "CSE-201",  "courseName": "Fundamentals of Computer Science Course 1",  "shortDescription": "Introductory guide to course 1 core principles.",  "difficulty": "INTERMEDIATE",  "thumbnailUrl": "https://images.unsplash.com/photo-course-1",  "status": "DRAFT",  "metadata": "{}"}
+Processing: CourseController → CourseService.create() validates categoryId exists, enforces courseCode uniqueness (DB UNIQUE constraint), defaults status to DRAFT, persists via CourseRepository.save(). Response (201 Created):
+{  "id": "09851f22-cc1d-4b22-9abd-3c8bac51ca20",  "organizationId": "123e4567-e89b-12d3-a456-426614174000",  "categoryId": "824fd548-b536-4312-a773-8137a552520e",  "trainerId": "00000000-0000-0000-0000-000000000000",  "courseCode": "CSE-201",  "courseName": "Fundamentals of Computer Science Course 1",  "shortDescription": "Introductory guide to course 1 core principles.",  "durationMinutes": 0,  "difficulty": "INTERMEDIATE",  "status": "DRAFT",  "thumbnailUrl": "https://images.unsplash.com/photo-course-1",  "metadata": "{}",  "createdAt": "2026-07-16T15:06:31.506875",  "updatedAt": "2026-07-16T15:06:31.506875"}
+Test coverage: 50 courses created, courseCode uniqueness validated, difficulty enum (BEGINNER/INTERMEDIATE/ADVANCED) accepted. Errors: 400 Bad Request (missing fields) · 409 Conflict (duplicate courseCode) · 404 Not Found (invalid categoryId)
+Submit course for review
+Endpoint: POST /api/courses/{id}/submit-review · Purpose: Allows Trainer/Organiser to move a DRAFT course to REVIEW. Errors: 409 Conflict if course is not currently DRAFT.
+Publish course
+Endpoint: POST /api/courses/{id}/publish · Purpose: Allows Admin to publish a course under REVIEW. Errors: 403 Forbidden (non-Admin) · 409 Conflict if not REVIEW.
+4. Module Module (Course Modules)
+Controller: ModuleController · Service: ModuleServiceImpl · Repository: ModuleRepository · Entity: Module (table modules, course_id FK cascade-deletes with parent course)
+Module API Summary
+API Name
+Method
+Endpoint
+Status
+Get module by ID
+GET
+/api/modules/{id}
+200 Pass
+Update module
+PUT
+/api/modules/{id}
+200 Pass
+Delete module
+DELETE
+/api/modules/{id}
+200 Pass
+Create module
+POST
+/api/modules
+201 Pass
+Reorder modules
+POST
+/api/modules/reorder
+201 Pass (Auto-Resolved)
+Get modules by course ID
+GET
+/api/modules/course/{courseId}
+200 Pass (Auto-Resolved)
+Get all modules (tenant)
+GET
+/api/modules/course/all
+200 Pass
+Get module by ID
+Response (200):
+{  "id": "1293f66f-6560-471c-91d9-ac5ba20ebeca",  "courseId": "43a748d6-a0af-404a-9d50-46802bd9bb1e",  "courseName": "Cloud 101",  "name": "Mod1",  "description": null,  "position": 1,  "metadata": null,  "createdAt": "2026-07-16T01:14:34.229326",  "updatedAt": "2026-07-16T01:14:34.229326"}
+Create module
+Request Body:
+{  "courseId": "5b6acbc4-b45e-4299-96a6-62499bbd5d09",  "name": "{{name}}",  "description": "{{description}}",  "metadata": "{{metadata}}"}
+Processing: ModuleController → ModuleService.create() resolves and validates courseId, auto-increments position within the course (sequential), persists via ModuleRepository.save(). Response (201 Created):
+{  "id": "952870c4-6b06-49a2-b595-23d27549248f",  "courseId": "5b6acbc4-b45e-4299-96a6-62499bbd5d09",  "courseName": "Fundamentals of Computer Science Course 42",  "name": "{{name}}",  "description": "{{description}}",  "position": 1,  "metadata": "{{metadata}}",  "createdAt": "2026-07-16T16:04:58.312814707",  "updatedAt": "2026-07-16T16:04:58.312814707"}
+Test coverage: 50 modules created and correctly mapped to courseId; position auto-incremented sequentially per course. Errors: 404 Not Found (invalid courseId)
+Reorder modules / Get modules by course / Get all modules
+Standard drag-and-drop reorder (POST /reorder, takes an ordered list of module IDs) and listing endpoints; no distinct request/response body captured beyond confirmation of status code.
+Delete module
+Response: 200 OK, {} — cascades to delete child submodules/content (DB ON DELETE CASCADE).
+5. Submodule Module
+Controller: SubmoduleController · Service: SubmoduleServiceImpl · Repository: SubmoduleRepository · Entity: Submodule (table submodules, module_id FK cascade-deletes with parent module)
+Submodule API Summary
+API Name
+Method
+Endpoint
+Status
+Get submodule by ID
+GET
+/api/submodules/{id}
+200 Pass
+Update submodule
+PUT
+/api/submodules/{id}
+200 Pass
+Delete submodule
+DELETE
+/api/submodules/{id}
+200 Pass
+Create submodule
+POST
+/api/submodules
+201 Pass
+Reorder submodules
+POST
+/api/submodules/reorder
+201 Pass (Auto-Resolved)
+Get submodules by module ID
+GET
+/api/submodules/module/{moduleId}
+200 Pass (Auto-Resolved)
+Get all submodules (tenant)
+GET
+/api/submodules/module/all
+200 Pass
+Get submodule by ID
+Response (200):
+{  "id": "2f1f641e-553b-4ec6-8be6-d7bb83ebd002",  "moduleId": "1293f66f-6560-471c-91d9-ac5ba20ebeca",  "name": "Sub1",  "description": null,  "position": 1,  "metadata": null,  "createdAt": "2026-07-16T01:14:34.238377",  "updatedAt": "2026-07-16T01:14:34.238377"}
+Create submodule
+Request Body:
+{  "moduleId": "952870c4-6b06-49a2-b595-23d27549248f",  "name": "{{name}}",  "description": "{{description}}",  "metadata": "{{metadata}}"}
+Processing: SubmoduleController → SubmoduleService.create() validates moduleId, auto-increments position within the module, persists via SubmoduleRepository.save(). Response (201 Created):
+{  "id": "6617ecd7-fea1-44d6-9f2b-8cd930650de3",  "moduleId": "952870c4-6b06-49a2-b595-23d27549248f",  "name": "{{name}}",  "description": "{{description}}",  "position": 2,  "metadata": "{{metadata}}",  "createdAt": "2026-07-16T17:33:50.268138989",  "updatedAt": "2026-07-16T17:33:50.268138989"}
+Test coverage: 50 submodules created, correctly mapped to moduleId, position auto-incremented sequentially. Errors: 404 Not Found (invalid moduleId)
+Reorder / Get by module / Get all / Update / Delete
+Same pattern as Module Module §4 — reorder takes an ordered ID list; delete cascades to child content rows.
+6. Content Module
+Controller: ContentController · Service: ContentServiceImpl · Repository: ContentRepository · Entity: Content (table contents, submodule_id FK cascade-deletes)
+Content API Summary
+API Name
+Method
+Endpoint
+Status
+Get content item by ID
+GET
+/api/content/{id}
+200 Pass (Auto-Resolved)
+Update content item
+PUT
+/api/content/{id}
+200 Pass (Auto-Resolved)
+Delete content item
+DELETE
+/api/content/{id}
+200 Pass (Auto-Resolved)
+Get all content items
+GET
+/api/content
+200 Pass
+Create content item
+POST
+/api/content
+201 Pass
+Reorder content items
+POST
+/api/content/reorder
+201 Pass (Auto-Resolved)
+Get content by submodule ID
+GET
+/api/content/submodule/{submoduleId}
+200 Pass (Auto-Resolved)
+Create content item
+Purpose: Create content (Note, Video, File/PDF); reading-time/duration is calculated dynamically for text content. Request Body:
+{  "submoduleId": "6617ecd7-fea1-44d6-9f2b-8cd930650de3",  "contentType": "NOTE",  "title": "Introductory Notes Content 1",  "description": "Overview of content item 1",  "contentData": "Sample tutorial data for content 1",  "fileUrl": "https://s3.amazonaws.com/lms-bucket/intro-1.pdf",  "durationMinutes": 11}
+Processing: ContentController → ContentService.create() validates submoduleId, resolves the owning course name for convenience in the response, computes/stores durationMinutes, auto-increments position, persists via ContentRepository.save(). Response (201 Created):
+{  "id": "d01bbdff-dd30-4c3c-86be-700b278c93ce",  "submoduleId": "6617ecd7-fea1-44d6-9f2b-8cd930650de3",  "contentType": "NOTE",  "title": "Introductory Notes Content 1",  "description": "Overview of content item 1",  "contentData": "Sample tutorial data for content 1",  "fileUrl": "https://s3.amazonaws.com/lms-bucket/intro-1.pdf",  "courseName": "Fundamentals of Computer Science Course 42",  "position": 2,  "durationMinutes": 1,  "createdAt": "2026-07-16T17:55:49.244338718",  "updatedAt": "2026-07-16T17:55:49.244338718"}
+Test coverage: 50 content items created and mapped to submoduleId; contentType enum (NOTE/VIDEO/FILE) accepted. Note: requested durationMinutes: 11 was returned as 1 — durations appear to be recalculated server-side from contentData word count rather than trusting the client-supplied value for NOTE type content; verify this with the team for VIDEO/FILE types. Errors: 404 Not Found (invalid submoduleId)
+Get / Update / Delete / Reorder / Get by submodule
+Standard CRUD + reorder pattern; response shapes match the Create response above.
+7. Batch Module
+Controller: BatchController · Service: BatchServiceImpl · Repositories: BatchRepository, BatchSubjectRepository, BatchDiscussionRepository, BatchDiscussionReplyRepository, BatchAnnouncementRepository, BatchAttendanceRepository, BatchSessionRepository
+Batch API Summary
+API Name
+Method
+Endpoint
+Status
+Toggle join-code
+PUT
+/api/batches/{batchId}/join-code/toggle
+204 Pass
+Regenerate join-code
+PUT
+/api/batches/{batchId}/join-code/regenerate
+204 Pass
+Archive batch
+PUT
+/api/batches/{batchId}/archive
+204 Pass
+Pin discussion
+PUT
+/api/batches/discussions/{discussionId}/pin
+204 Pass
+Create batch
+POST
+/api/batches
+201 Pass
+Create batch subject
+POST
+/api/batches/subjects
+201 Pass
+Join batch (by code)
+POST
+/api/batches/join
+201 Pass (Auto-Resolved)
+Create discussion
+POST
+/api/batches/discussions
+201 Pass
+Reply to discussion
+POST
+/api/batches/discussions/{discussionId}/reply
+201 Pass (Auto-Resolved)
+Record attendance
+POST
+/api/batches/attendance
+201 Pass
+Create announcement
+POST
+/api/batches/announcements
+201 Pass
+Get full batch state
+GET
+/api/batches/state
+200 Pass
+Delete batch
+DELETE
+/api/batches/{batchId}
+204 Pass
+Delete subject
+DELETE
+/api/batches/subjects/{subjectId}
+204 Pass
+Delete announcement
+DELETE
+/api/batches/announcements/{announcementId}
+204 Pass
+Create batch
+Request Body:
+{  "name": "Batch-Beta-1",  "subject": "Sub-101",  "department": "COMPUTER_SCIENCE",  "semester": "FALL",  "year": "2026",  "description": "LMS batch group details for Beta-1",  "capacity": 50,  "joinCode": "JOIN2001",  "joinCodeEnabled": true,  "status": "ACTIVE",  "teacher": "Instructor Name 1",  "studentIds": [],  "subjectIds": []}
+Response (201 Created):
+{  "id": "batch-60d8e6cd",  "name": "Batch-Beta-1",  "subject": "Sub-101",  "department": "COMPUTER_SCIENCE",  "semester": "FALL",  "year": "2026",  "description": "LMS batch group details for Beta-1",  "capacity": 50,  "teacher": "Instructor Name 1",  "status": "ACTIVE",  "joinCode": "JOIN2001",  "joinCodeEnabled": true,  "completion": null,  "averageQuiz": null,  "averageAssignment": null,  "attendance": null,  "pendingAssignments": null,  "studentIds": [],  "subjectIds": []}
+Note: a separate real (non-load-test) capture of this same endpoint returned a batch with most optional fields (subject, department, semester, etc.) as null and an auto-generated joinCode — confirming those fields are genuinely optional and server-generates the join code when omitted. Test coverage: 50 batches created with unique names/join codes/capacities; joinCodeEnabled boolean persisted correctly. Errors: 400 Bad Request (missing name)
+Create batch subject
+Request Body:
+{  "name": "{{subject_name}}",  "description": "{{subject_description}}",  "color": "{{subject_color}}",  "lessons": "{{subject_lessons}}",  "assignments": "{{subject_assignments}}",  "quizzes": "{{subject_quizzes}}",  "files": "{{subject_files}}",  "liveSessions": "{{subject_liveSessions}}",  "assignedBatchIds": ["{{subject_assignedBatchIds}}"]}
+Test coverage: 50 subject spaces created; lesson/assignment/quiz counts verified as integers; assignedBatchIds correctly mapped. Errors: 400 Bad Request
+Create discussion
+Request Body:
+{  "subjectId": "{{discussion_subjectId}}",  "title": "{{discussion_title}}",  "body": "{{discussion_body}}",  "batchId": "{{discussion_batchId}}",  "author": "{{discussion_author}}",  "authorId": "{{discussion_authorId}}",  "role": "{{discussion_role}}"}
+Response (201): returns the created discussion with pinned: false and server-generated createdAt; replies: [] initialized empty. Test coverage: 50 discussions created; author/role (Teacher/Student) captured correctly.
+Create announcement
+Request Body:
+{  "title": "{{announcement_title}}",  "message": "{{announcement_message}}",  "batchId": "{{announcement_batchId}}",  "author": "{{announcement_author}}"}
+Test coverage: 50 announcements scheduled across batches; title round-trip verified via assertion (json.title === iterationData.announcement_title).
+Get full batch state
+Purpose: Aggregates batches, subjects, announcements, attendance, discussions, and sessions for the tenant into a single payload — used by the frontend’s batch workspace to hydrate state in one call. Response (200): { batches: [...], subjects: [...], announcements: [...], attendance: [...], discussions: [...], sessions: [] }
+Toggle/Regenerate join-code, Archive batch, Pin discussion, Join by code, Reply, Record attendance, Delete*
+All return 204 No Content (or 201/200 for the create/list variants) with empty bodies; behavior is as named. Errors (general): 404 Not Found for invalid batchId/discussionId/subjectId/announcementId.
+8. Assessment Module
+Controller: AssessmentController · Service: AssessmentServiceImpl · Repositories: AssessmentRepository, AssessmentQuestionRepository, TestCaseRepository · Entity: assessments (+ assessment_questions, assessment_question_options, assessment_test_cases, assessment_batch_allocations, assessment_student_allocations, assessment_allowed_file_types)
+Assessment API Summary
+API Name
+Method
+Endpoint
+Status
+Get assessment by ID
+GET
+/api/assessments/{id}
+200 Pass (Auto-Resolved)
+Update assessment
+PUT
+/api/assessments/{id}
+200 Pass (Auto-Resolved)
+Delete assessment
+DELETE
+/api/assessments/{id}
+200 Pass (Auto-Resolved)
+Get all assessments
+GET
+/api/assessments
+200 Pass
+Create assessment
+POST
+/api/assessments
+201 Pass
+Get student Q&A questions
+GET
+/api/assessments/questions
+200 Pass
+Ask a question
+POST
+/api/assessments/questions
+201 Pass (Auto-Resolved)
+Answer a question
+POST
+/api/assessments/questions/{questionId}/answer
+201 Pass (Auto-Resolved)
+Create assessment
+Request Body:
+{  "title": "Assessment Test 1",  "subject": "Subject 1",  "type": "QUIZ",  "assignmentScope": "{{assessment_assignmentScope}}",  "instructions": "Answer all questions in assessment 1",  "dueAt": "2026-07-24T10:48:47.000Z",  "points": 51}
+Processing: AssessmentController → AssessmentService.create() defaults status to Draft, persists core assessment via AssessmentRepository.save(); type-specific fields (quizQuestions, testCases, starterCode, etc.) remain null until populated by subsequent question/test-case creation calls. Response (201 Created):
+{  "id": "1cdeeab5-8e7c-455e-bcbb-ad2e8475429c",  "organizationId": "123e4567-e89b-12d3-a456-426614174000",  "title": "Assessment Test 1",  "subject": "Subject 1",  "type": "QUIZ",  "instructions": "Answer all questions in assessment 1",  "dueAt": "2026-07-24T10:48:47",  "points": 51,  "assignmentScope": "{{assessment_assignmentScope}}",  "status": "Draft",  "language": null,  "starterCode": null,  "quizFileName": null,  "allowedFileTypes": null,  "attachmentName": null,  "quizQuestions": null,  "testCases": null,  "assignedBatchIds": null,  "assignedStudentIds": null,  "createdAt": "2026-07-16T14:25:54.016905797",  "updatedAt": "2026-07-16T14:25:54.016905797"}
+Test coverage: 50 assessments created; type enum validated (QUIZ/ASSIGNMENT/CODE); default status verified as Draft. Errors: 400 Bad Request (missing title/type)
+Get / Update / Delete assessment, Get all
+Standard CRUD; the full response schema (seen on GET) additionally exposes quizFileName, allowedFileTypes[], attachmentName, quizQuestions[], testCases[], assignedBatchIds[], assignedStudentIds[] — these populate as the assessment is built out via the question/test-case sub-resources.
+Ask / Answer a question (Student Q&A)
+Separate from quiz questions — this is a student-to-instructor Q&A thread scoped by subject, tracked with askedAt/answeredAt timestamps and stored independent of the assessment/quiz question bank.
+9. Event Module
+Controller: EventController · Service: EventServiceImpl · Repository: EventRepository · Entity: events table (added in V14, thumbnail_url widened to TEXT in V15)
+Event API Summary
+API Name
+Method
+Endpoint
+Status
+Get event by ID
+GET
+/api/events/{id}
+200 Pass
+Update event
+PUT
+/api/events/{id}
+200 Pass
+Delete event
+DELETE
+/api/events/{id}
+204 Pass
+Cancel event
+PUT
+/api/events/{id}/cancel
+200 Pass (Auto-Resolved)
+Get all events
+GET
+/api/events
+200 Pass
+Create event
+POST
+/api/events
+201 Pass
+Create event
+Request Body:
+{  "title": "Load Test Event 1",  "description": "Detailed load testing description for event 1",  "startTime": "2026-07-17T10:48:47.000Z",  "endTime": "2026-07-17T12:48:47.000Z",  "eventType": "SEMINAR",  "locationOrLink": "https://meet.google.com/event-lms-test-1"}
+Processing: EventController → EventService.create() defaults status to SCHEDULED (real capture shows UPCOMING in one instance — see note below), persists via EventRepository.save(). Response (201 Created):
+{  "id": "fd42a42a-173a-4bc7-998e-7f22c8830d39",  "organizationId": "123e4567-e89b-12d3-a456-426614174000",  "title": "Load Test Event 1",  "description": "Detailed load testing description for event 1",  "startTime": "2026-07-17T10:48:47",  "endTime": "2026-07-17T12:48:47",  "eventType": "SEMINAR",  "locationOrLink": "https://meet.google.com/event-lms-test-1",  "thumbnailUrl": null,  "courseId": null,  "organizerId": null,  "status": "SCHEDULED",  "createdAt": null,  "updatedAt": null}
+⚠ Discrepancy noted: a separate genuine integration test capture of the same POST /api/events (a “Hackathon” event) returned status: "UPCOMING" instead of "SCHEDULED", with createdAt/updatedAt populated. Both status values appear in real (non-placeholder) captures — confirm with the team whether SCHEDULED vs UPCOMING reflects a since-changed default or is date-dependent (e.g. UPCOMING if startTime is in the future). Test coverage: 50 unique events created; valid ISO date-times accepted; eventType (SEMINAR/WORKSHOP) persisted correctly. Errors: 400 Bad Request (missing title/startTime)
+Get / Update / Delete / Cancel / Get all
+Standard CRUD; cancel is a dedicated status-transition endpoint distinct from DELETE (soft state change vs. hard delete).
+10. Event Registration Module
+Controller: EventRegistrationController · Service: EventRegistrationServiceImpl · Repository: EventRegistrationRepository
+Event Registration API Summary
+API Name
+Method
+Endpoint
+Status
+Get all registrations
+GET
+/api/event-registrations
+200 Pass
+Register for event
+POST
+/api/event-registrations
+201 Pass
+Submit feedback
+PATCH
+/api/event-registrations/{registrationId}/feedback
+200 Pass (Auto-Resolved)
+Mark attendance
+PATCH
+/api/event-registrations/{registrationId}/attendance
+200 Pass (Auto-Resolved)
+Get registrations for event
+GET
+/api/event-registrations/event/{eventId}
+200 Pass
+Cancel registration
+DELETE
+/api/event-registrations/{id}
+200 Pass (Auto-Resolved)
+Confirmed canonical path: /api/event-registrations (hyphenated) — verified directly against @RequestMapping in EventRegistrationController.java.
+Register for an event
+Request Body:
+{  "eventId": "{{registration_eventId}}",  "studentId": "{{registration_studentId}}",  "studentName": "{{registration_studentName}}",  "studentEmail": "{{registration_studentEmail}}"}
+Processing: EventRegistrationController → EventRegistrationService.register() validates eventId/studentId exist, defaults status to REGISTERED and attendanceStatus to PENDING, persists via EventRegistrationRepository.save(). Response (201 Created): mirrors the shape below (Get all registrations), with registeredAt server-set and rating/feedbackText null until feedback is submitted. Test coverage: 50 registrations mapped to pre-created events; email format validated server-side. Errors: 404 Not Found (invalid eventId/studentId) · 409 Conflict (duplicate registration — not explicitly captured in test data, worth confirming)
+Get all registrations / Get registrations for event
+Response (200):
+[  {    "id": "cb8d3533-d7aa-4f6d-81d1-4f7a20f19574",    "eventId": "de4b94c8-2761-47a6-9250-c63e74fa795d",    "studentId": "student-aarav",    "studentName": "Aarav",    "studentEmail": "a@b.com",    "registeredAt": "2026-07-16T01:14:34.265191",    "status": "REGISTERED",    "attendanceStatus": "PENDING",    "rating": null,    "feedbackText": null  }]
+Submit feedback / Mark attendance / Cancel registration
+Partial updates (PATCH) to rating/feedbackText and attendanceStatus respectively; cancel is a soft/hard delete of the registration row. Errors: 404 Not Found for invalid registrationId.
+11. Student Management Module (Admin-side)
+Controller: StudentManagementController · Service: StudentManagementServiceImpl · Repositories: StudentRepository, StudentAssignmentRepository
+Student Management API Summary
+API Name
+Method
+Endpoint
+Status
+Toggle student status
+PUT
+/api/management/students/{studentId}/toggle-status
+200 Pass (Auto-Resolved)
+Review assignment
+PUT
+/api/management/students/assignments/{assignmentId}/review
+200 Pass (Auto-Resolved)
+List all students
+GET
+/api/management/students
+200 Pass
+Create student
+POST
+/api/management/students
+201 Pass
+Enroll student in course
+POST
+/api/management/students/{studentId}/courses/{courseSlug}
+201 Pass (Auto-Resolved)
+List all assignments
+GET
+/api/management/students/assignments
+200 Pass
+Create assignment
+POST
+/api/management/students/assignments
+201 Pass (Auto-Resolved)
+Create student
+Request Body:
+{  "name": "{{student_name}}",  "email": "{{student_email}}",  "cohort": "{{student_cohort}}",  "password": "{{student_password}}"}
+Processing: StudentManagementController → StudentManagementService.create() defaults status to Active, persists via StudentRepository.save() (note: password is stored per the V7__add_student_password.sql migration — plaintext comparison is flagged as a known security gap, see §8/§11). Response (201 Created): id (UUID), name, email, cohort, status: "Active", courseSlugs: [] Test coverage: 50 unique students registered; default status verified as Active. Errors: 400 Bad Request (missing email) · 409 Conflict (duplicate email — not explicitly asserted in test data)
+List all students
+Response (200): Array of student records, e.g.:
+{  "id": "8358175e-5bc1-421c-9bd7-ed66e12626b8",  "name": "Anagha",  "email": "anagha@xebia.com",  "cohort": "Software",  "status": "Inactive",  "courseSlugs": ["CRSE-HR9CM9"]}
+Note: status values observed inconsistently cased across records ("Active", "ACTIVE", "Inactive") — likely a data-seeding artifact rather than an enum issue, but worth normalizing.
+Toggle student status
+Endpoint: PUT /api/management/students/{studentId}/toggle-status · Flips Active/Inactive. Errors: 404 Not Found
+Enroll student in course
+Endpoint: POST /api/management/students/{studentId}/courses/{courseSlug} · Adds courseSlug to the student’s courseSlugs list. Errors: 404 Not Found (invalid student or course slug)
+List / Create assignment
+Response shape (assignment record):
+{  "id": "task-b85ecf1a",  "studentId": "5847e4e0-73ab-4d32-8e30-8b3a1c1fe604",  "courseSlug": "Google Cloud Architechture",  "title": "Cloud Basics",  "instructions": "Learn cloud basics",  "dueDate": "2026-06-30",  "status": "Assigned",  "submission": null,  "submittedAt": null,  "score": null,  "reviewNotes": null}
+Status transitions: Assigned → Submitted → (reviewed) with score/reviewNotes populated.
+Review assignment
+Endpoint: PUT /api/management/students/assignments/{assignmentId}/review · Admin/Trainer sets score and reviewNotes on a submitted assignment. Errors: 404 Not Found · 409 Conflict (reviewing a non-submitted assignment — not explicitly asserted)
+12. Student Portal Module (Student-facing)
+Controller: StudentPortalController · Service: StudentPortalServiceImpl · Repositories: LessonCommentRepository, LessonCommentReplyRepository, StudentFeedbackRepository, StudentNotificationRepository, StudentQuestionRepository, StudentAssessmentResultRepository
+Student Portal API Summary
+API Name
+Method
+Endpoint
+Status
+Submit a task
+POST
+/api/portal/students/{studentId}/tasks/{taskId}/submit
+201 Pass (Auto-Resolved)
+Mark notification read
+POST
+/api/portal/students/{studentId}/notifications/{notificationId}/read
+201 Pass (Auto-Resolved)
+Complete a lesson
+POST
+/api/portal/students/{studentId}/lessons/{lessonId}/complete
+201 Pass (Auto-Resolved)
+Submit feedback
+POST
+/api/portal/students/{studentId}/feedback
+201 Pass (Auto-Resolved)
+Post a comment
+POST
+/api/portal/students/{studentId}/comments
+201 Pass (Auto-Resolved)
+Reply to a comment
+POST
+/api/portal/students/{studentId}/comments/{commentId}/replies
+201 Pass (Auto-Resolved)
+Submit an assessment
+POST
+/api/portal/students/{studentId}/assessments/{assessmentId}/submit
+201 Pass (Auto-Resolved)
+Get full student state
+GET
+/api/portal/students/{studentId}/state
+200 Pass (Auto-Resolved)
+Processing (general): Each action-style endpoint (submit, complete, read) resolves the student and target entity by path variable, records the corresponding row via its dedicated repository (e.g. StudentAssessmentResultRepository for assessment submission), and returns either the created record or {}.
+Submit an assessment
+Response (201 Created):
+{  "id": "sample-string",  "studentId": "sample-string",  "assessmentId": "sample-string",  "score": 1,  "status": "sample-string",  "submittedAt": "sample-string",  "createdAt": "sample-string"}
+(Auto-resolved placeholder — real field values not captured in test data; shape only.)
+Get full student state
+Purpose: Aggregates everything the student portal UI needs in one call — completed lessons, assessment results, notifications, comments, feedback, next live session, recent activity, learning streak, recommended courses, weekly learning, and assessment average. Response shape:
+{  "completedLessonIds": [],  "assessmentResults": "...",  "notifications": [],  "comments": [],  "feedback": [],  "nextLiveSession": "...",  "recentActivity": [],  "learningStreak": "...",  "recommendedCourses": [],  "weeklyLearning": "...",  "assessmentAverage": 1}
+Errors (all endpoints in this module): 404 Not Found — invalid studentId/taskId/lessonId/notificationId/commentId/assessmentId.
+13. File Module
+Controller: FileController (package: student) · Storage: local disk (backend/uploads/) — no object storage (S3, etc.) configured yet, per §11.
+File API Summary
+API Name
+Method
+Endpoint
+Status
+Upload file
+POST
+/api/portal/files/upload
+201 Pass (Auto-Resolved)
+Download file
+GET
+/api/portal/files/download/{filename}
+200 Pass (Auto-Resolved)
+Request (Upload): multipart/form-data body containing the file. Processing: FileController writes the incoming multipart file to the local uploads/ directory and returns a reference (filename/URL — not captured in test data beyond status code). Errors: 400 Bad Request (no file part) · 404 Not Found (download: file does not exist) · 413 Payload Too Large (not explicitly asserted, but a realistic risk with local-disk storage and no observed size-limit config)
+14. Analytics Module
+Controller: AnalyticsController · Service: AnalyticsService (no dedicated repository found — likely queries other domain repositories/aggregation queries directly, or uses EntityManager/native queries not exposed as a named repository class)
+All 13 endpoints are read-only (GET), tenant-scoped, and share a consistent envelope: { "success": true, "data": ..., "meta": ... }. Selected results are cached in Redis per §3/§10.
+Analytics API Summary
+API Name
+Endpoint
+Status
+Executive summary
+/api/analytics/executive-summary
+200 Pass (Auto-Resolved)
+Learning coverage
+/api/analytics/learning-coverage
+200 Pass (Auto-Resolved)
+Learning hours
+/api/analytics/learning-hours
+200 Pass (Auto-Resolved)
+Learning pillars
+/api/analytics/learning-pillars
+200 Pass (Auto-Resolved)
+AI transformation
+/api/analytics/ai-transformation
+200 Pass (Auto-Resolved)
+Certifications
+/api/analytics/certifications
+200 Pass (Auto-Resolved)
+Flagship programs
+/api/analytics/flagship-programs
+200 Pass (Auto-Resolved)
+Learning trends
+/api/analytics/learning-trends
+200 Pass (Auto-Resolved)
+Training effectiveness
+/api/analytics/training-effectiveness
+200 Pass (Auto-Resolved)
+Learning champions
+/api/analytics/learning-champions
+200 Pass (Auto-Resolved)
+Project investment
+/api/analytics/project-investment
+200 Pass (Auto-Resolved)
+Fresher journey
+/api/analytics/fresher-journey
+200 Pass (Auto-Resolved)
+Filters (available filter options)
+/api/analytics/filters
+200 Pass (Auto-Resolved)
+Response shape (all endpoints):
+{ "success": true, "data": "...", "meta": "..." }
+Note: every analytics endpoint returned this same generic envelope in the captured test data — the actual shape of data/meta per metric (e.g. what “learning hours” data looks like numerically) was not captured and should be pulled fresh from a live call or from AnalyticsService source if exact field names are needed for frontend integration. Errors: 400 Bad Request (invalid filter query params, if supported — not exercised in test data)
+15. Health Module
+Controller: HealthController · No service/repository layer — a simple liveness check.
+API Name
+Method
+Endpoint
+Status
+Health check
+GET
+/api/health
+200 Pass
+Response (200): plain text — Backend is awake and healthy!
+Appendix A — Endpoint Path Discrepancies Found & Resolved
+Discrepancy
+Sources
+Resolution
+Event registration path: /api/event-registrations vs /api/eventregistrations
+api_documentation.pdf & Xebia_LMS_API_Documentation.pdf used the hyphenated form; postman_api_testing_report.pdf used the non-hyphenated form
+Confirmed via source (@RequestMapping in EventRegistrationController.java): /api/event-registrations is correct. The non-hyphenated form in the second Postman report is a documentation error.
+POST /api/auth/login success status: 200 vs 201
+Xebia_LMS_API_Documentation.pdf (200, with full account payload) vs api_documentation.pdf (201, empty body, “Auto-Resolved”)
+Treated 200 OK with account payload as verified real behavior (§1).
+POST /api/events default status: SCHEDULED vs UPCOMING
+Both captures are genuine (non-placeholder) but differ
+Flagged in §9 (Event Module) as needing confirmation from the team.
+POST /api/content requested vs returned durationMinutes
+Xebia_LMS_API_Documentation.pdf — requested 11, returned 1
+Flagged in §6 (Content Module) — appears to be server-recalculated, needs confirmation for all content types.
+Appendix B — Data Files Referenced
+combined_test_dataset.json — 50-record dataset used for the 9-endpoint Postman run in Xebia_LMS_API_Documentation.pdf
+postman_dataset.json — 50-record dataset used for the 6-endpoint Postman run in postman_api_testing_report.pdf
+Xebia_LMS_Postman_Collection.json — present in the repo’s Documentation/ folder (full exported Postman collection)

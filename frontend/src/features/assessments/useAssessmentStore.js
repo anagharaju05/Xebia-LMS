@@ -83,7 +83,7 @@ export function useAssessmentStore() {
             studentId: sub.studentId,
             studentName: sub.studentName || "Student",
             score: sub.score,
-            status: sub.status === "Reviewed" ? "Graded" : sub.status,
+            status: (sub.status === "Reviewed" || submissionData.type === "quiz") ? "Graded" : sub.status,
             feedback: sub.reviewNotes || "",
             submission: sub.submission || "",
             submittedAt: sub.submittedAt || "",
