@@ -260,7 +260,7 @@ export function useAssessmentStore() {
         const serialized = JSON.stringify({
           ...submissionData,
           fileUrl,
-          assessmentId: payload.assessmentId,
+          assessmentId,
           attemptCount
         });
 

@@ -330,7 +330,11 @@ function SubmissionsPage({ state, onGrade, showToast, students, batches = [] }) 
   const [reviewing, setReviewing] = useState(null);
   const assessment = state.assessments.find((item) => item.id === assessmentId);
   
-  const relevantStudentIds = new Set(assessment?.assignedStudentIds || []);
+  const relevantStudentIds = new Set(
+    assessment?.assignmentScope === "entire_course"
+      ? students.map((s) => s.id)
+      : assessment?.assignedStudentIds || []
+  );
   if (batchId !== "all") {
     const selectedBatch = batches.find((b) => b.id === batchId);
     if (selectedBatch) {
