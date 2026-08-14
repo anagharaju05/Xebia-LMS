@@ -4,6 +4,7 @@ import {
   FileSpreadsheet, FileText, HelpCircle, LoaderCircle, MessageCircleQuestion, Paperclip, Play,
   Search, Send, Trophy, Upload, UploadCloud, XCircle
 } from "lucide-react";
+import { ensureUUID } from "../students/studentManagement.data.js";
 import CertificateGenerator from "./CertificateGenerator.jsx";
 
 const TYPE_META = {
@@ -167,8 +168,8 @@ export default function StudentAssessments({ assessmentStore, batchStore, user, 
   const [filter, setFilter] = useState("All");
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("deadline");
-  const studentId = user.studentId || user.id;
-  const studentBatchIds = batchStore.state.batches.filter((batch) => batch.studentIds.includes(studentId)).map((batch) => batch.id);
+  const studentId = ensureUUID(user.studentId || user.id);
+  const studentBatchIds = batchStore.state.batches.filter((batch) => batch.studentIds.includes(studentId) || batch.studentIds.includes(user.studentId || user.id)).map((batch) => batch.id);
   const assessments = useMemo(() => assessmentStore.state.assessments.filter((item) => {
     if (item.status !== "Published") return false;
     const scope = item.assignmentScope || "selected_students";
