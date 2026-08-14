@@ -4,7 +4,20 @@ import {
   FileSpreadsheet, FileText, HelpCircle, LoaderCircle, MessageCircleQuestion, Paperclip, Play,
   Search, Send, Trophy, Upload, UploadCloud, XCircle
 } from "lucide-react";
-import { ensureUUID } from "../students/studentManagement.data.js";
+function ensureUUID(id) {
+  if (!id) return "00000000-0000-0000-0000-000000000000";
+  if (id.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) return id;
+  const mockMap = {
+    "student-aarav": "38f094c8-9a6c-4eac-a04a-a016709c1018",
+    "student-priya": "38f094c8-043c-4dac-a04a-a010e81a1018",
+    "student-daniel": "38f094c8-4aac-418d-a058-f84ec8ea7078",
+    "subject-spring": "1ab81638-b834-466f-a086-24eec8bc2c8e",
+    "subject-java": "1ab81638-b834-466f-a086-24eec8bc2c5e",
+    "subject-system": "1ab81638-b834-466f-a086-24eec8bc2c2e",
+    "subject-react": "1ab81638-b834-466f-a086-24eec8bc2cfe"
+  };
+  return mockMap[id] || "00000000-0000-0000-0000-000000000000";
+}
 import CertificateGenerator from "./CertificateGenerator.jsx";
 
 const TYPE_META = {
