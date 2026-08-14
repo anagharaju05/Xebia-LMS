@@ -78,6 +78,7 @@ export function useAssessmentStore() {
           }
 
           return {
+            ...submissionData,
             id: sub.id,
             assessmentId: assessmentId,
             studentId: sub.studentId,
@@ -86,8 +87,7 @@ export function useAssessmentStore() {
             status: (sub.status === "Reviewed" || submissionData.type === "quiz") ? "Graded" : sub.status,
             feedback: sub.reviewNotes || "",
             submission: sub.submission || "",
-            submittedAt: sub.submittedAt || "",
-            ...submissionData
+            submittedAt: sub.submittedAt || ""
           };
         })
       }));
