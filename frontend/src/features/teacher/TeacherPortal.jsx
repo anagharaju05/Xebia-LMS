@@ -4,15 +4,20 @@ import {
   ClipboardList, Clock3, Code2, ExternalLink, FilePenLine, FileSpreadsheet, FileText, GraduationCap,
   HelpCircle, Inbox, LogOut, Menu, MessageCircleQuestion, Moon, MoreVertical,
   Layers3, Paperclip, Pencil, Plus, RotateCcw, Search, Send, Sun, Trash2, Upload, Users,
-  X, XCircle, Archive, MapPin, Clock
+  X, XCircle, Archive, MapPin, Clock, Palette, Monitor
 } from "lucide-react";
 import { ASSESSMENT_TYPES, createBlankAssessment } from "../assessments/assessment.data.js";
 import { parseQuizSpreadsheet, QUIZ_EXCEL_COLUMNS } from "../../services/excelQuiz.service.js";
 import TeacherBatchWorkspace from "./TeacherBatchWorkspace.jsx";
 import { useStudentManagement } from "../students/useStudentManagement.js";
+import WhiteboardCanvas from "./whiteboard/WhiteboardCanvas.jsx";
+import SavedNotesLibrary from "./whiteboard/SavedNotesLibrary.jsx";
+import { useWhiteboardStore } from "./whiteboard/useWhiteboardStore.js";
+import "../../styles/whiteboard.css";
 
 const VIEWS = {
   DASHBOARD: "dashboard",
+  WHITEBOARD: "whiteboard",
   ASSESSMENTS: "assessments",
   SUBMISSIONS: "submissions",
   QUESTIONS: "questions",
@@ -211,6 +216,7 @@ function TeacherDashboard({ state, onNavigate, onCreate, user }) {
     <section className="teacher-page">
       <div className="teacher-hero"><div><span>{today}</span><h1>Good afternoon, {firstName}.</h1><p>Here’s what needs your attention across your classes.</p><button onClick={onCreate}><Plus /> Create assessment</button></div><GraduationCap /></div>
       <div className="teacher-metrics">
+        <button onClick={() => onNavigate(VIEWS.WHITEBOARD)}><span className="purple"><Palette /></span><div><strong>Whiteboard</strong><small>Interactive & Share</small></div><ChevronRight /></button>
         <button onClick={() => onNavigate(VIEWS.ASSESSMENTS)}><span className="purple"><ClipboardList /></span><div><strong>{published.length}</strong><small>Live assessments</small></div><ChevronRight /></button>
         <button onClick={() => onNavigate(VIEWS.SUBMISSIONS)}><span className="orange"><Inbox /></span><div><strong>{awaiting.length}</strong><small>Awaiting review</small></div><ChevronRight /></button>
         <button onClick={() => onNavigate(VIEWS.SUBMISSIONS)}><span className="green"><CheckCircle2 /></span><div><strong>{graded.length}</strong><small>Graded submissions</small></div><ChevronRight /></button>
@@ -604,7 +610,10 @@ function TeacherEventsView({ store }) {
 
 export default function TeacherPortal({ store, assessmentStore, batchStore, theme, onThemeToggle, user, onLogout, showToast }) {
   const { management: { students } } = useStudentManagement();
+  const whiteboardStore = useWhiteboardStore(user);
   const [view, setView] = useState(VIEWS.DASHBOARD);
+  const [wbSubTab, setWbSubTab] = useState("canvas"); // "canvas" or "library"
+  const [loadedWhiteboardNote, setLoadedWhiteboardNote] = useState(null);
   const [editor, setEditor] = useState(null);
   const [mobileNav, setMobileNav] = useState(false);
   const ThemeIcon = theme === "dark" ? Sun : Moon;
@@ -612,6 +621,7 @@ export default function TeacherPortal({ store, assessmentStore, batchStore, them
   const awaiting = assessmentStore.state.submissions.filter((item) => item.status === "Submitted").length;
   const nav = [
     [VIEWS.DASHBOARD, BarChart3, "Overview"],
+    [VIEWS.WHITEBOARD, Palette, "Whiteboard & Share"],
     [VIEWS.BATCHES, Layers3, "Batches"],
     [VIEWS.SUBJECTS, BookOpen, "Subjects"],
     [VIEWS.ASSESSMENTS, ClipboardList, "Assessments"],
@@ -632,6 +642,48 @@ export default function TeacherPortal({ store, assessmentStore, batchStore, them
     <div className="teacher-main"><header className="teacher-topbar"><button className="teacher-menu" onClick={() => setMobileNav(true)}><Menu /></button><div><strong>{nav.find((item) => item[0] === view)?.[2]}</strong><span>Teacher workspace</span></div><div><button onClick={onThemeToggle} title="Toggle theme"><ThemeIcon /></button><button className="notification-button" onClick={() => setView(VIEWS.QUESTIONS)}><Bell />{unanswered > 0 && <span>{unanswered}</span>}</button><div className="teacher-top-profile"><b>{user?.name?.charAt(0) || "M"}</b><span><strong>{user?.name || "Meera Thomas"}</strong><small>Teacher</small></span></div></div></header>
       <main>
         {view === VIEWS.DASHBOARD && <TeacherDashboard state={assessmentStore.state} user={user} onNavigate={setView} onCreate={() => setEditor(createBlankAssessment())} />}
+        {view === VIEWS.WHITEBOARD && (
+          <section className="teacher-page">
+            <div style={{ display: "flex", gap: "10px", marginBottom: "16px" }}>
+              <button
+                className={`wb-btn ${wbSubTab === "canvas" ? "primary" : ""}`}
+                onClick={() => setWbSubTab("canvas")}
+              >
+                <Palette size={16} /> Interactive Whiteboard
+              </button>
+              <button
+                className={`wb-btn ${wbSubTab === "library" ? "primary" : ""}`}
+                onClick={() => setWbSubTab("library")}
+              >
+                <BookOpen size={16} /> Saved Notes Library ({whiteboardStore.savedNotes.length})
+              </button>
+            </div>
+
+            {wbSubTab === "canvas" ? (
+              <WhiteboardCanvas
+                user={user}
+                onSaveNote={whiteboardStore.saveNote}
+                onExportPNG={whiteboardStore.exportAsPNG}
+                onExportPDF={whiteboardStore.exportAsPDF}
+                showToast={showToast}
+                loadedNote={loadedWhiteboardNote}
+              />
+            ) : (
+              <SavedNotesLibrary
+                notes={whiteboardStore.savedNotes}
+                onLoadNote={(note) => {
+                  setLoadedWhiteboardNote(note);
+                  setWbSubTab("canvas");
+                  showToast?.(`Loaded "${note.title}" onto canvas`);
+                }}
+                onDeleteNote={whiteboardStore.deleteNote}
+                onExportPNG={whiteboardStore.exportAsPNG}
+                onExportPDF={whiteboardStore.exportAsPDF}
+                user={user}
+              />
+            )}
+          </section>
+        )}
         {view === VIEWS.ASSESSMENTS && <AssessmentsPage state={assessmentStore.state} onCreate={() => setEditor(createBlankAssessment())} onEdit={setEditor} onDelete={requestDelete} onStatus={(id, status) => { assessmentStore.setAssessmentStatus(id, status); showToast?.(status === "Published" ? "Assessment published" : "Moved to drafts"); }} />}
         {view === VIEWS.SUBMISSIONS && <SubmissionsPage state={assessmentStore.state} onGrade={assessmentStore.gradeSubmission} showToast={showToast} students={students} batches={batchStore.state.batches} />}
         {view === VIEWS.QUESTIONS && <QuestionsPage state={assessmentStore.state} onAnswer={assessmentStore.answerQuestion} showToast={showToast} />}
